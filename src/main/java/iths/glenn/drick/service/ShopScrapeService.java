@@ -6,9 +6,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 public class ShopScrapeService {
-    public void scrapeAll() {
+    public void scrapeAll() throws IOException {
         Document doc;
         doc = Jsoup.connect("https://www.systembolaget.se/api/assortment/products/xml").get();
     }
