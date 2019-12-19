@@ -1,20 +1,26 @@
 package iths.glenn.drick.controller;
 
+import iths.glenn.drick.entity.DrinkEntity;
+import iths.glenn.drick.service.DriveinbottleshopScraper;
 import iths.glenn.drick.service.SystembolagetScraper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/scrape")
 public class ScrapeController {
 
-    SystembolagetScraper shopScraper;
+    SystembolagetScraper systembolagetScraper;
+    DriveinbottleshopScraper driveinbottleshopScraper;
 
-    public ScrapeController(SystembolagetScraper shopScraper) {
-        this.shopScraper = shopScraper;
+    public ScrapeController(SystembolagetScraper systembolagetScraper, DriveinbottleshopScraper driveinbottleshopScraper) {
+        this.systembolagetScraper = systembolagetScraper;
+        this.driveinbottleshopScraper = driveinbottleshopScraper;
     }
 
     /* StoreStorage storeStorage;
@@ -25,12 +31,25 @@ public class ScrapeController {
         this.scraper = scraper;
     } */
 
-    @GetMapping("/all")
-    public void scrapeAll() {
+    @GetMapping("/systembolaget")
+    public List<DrinkEntity> scrapeAll() {
         try {
-            shopScraper.scrapeSystembolaget();
+            return systembolagetScraper.scrape();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return Collections.emptyList();
     }
+
+    @GetMapping("/driveinbottleshop")
+    public List<DrinkEntity> scrapeDriveinbottleshop() {
+        try {
+            return driveinbottleshopScraper.scrape();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+
 }
