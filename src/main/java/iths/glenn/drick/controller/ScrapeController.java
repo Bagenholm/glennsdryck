@@ -1,17 +1,19 @@
 package iths.glenn.drick.controller;
 
-import iths.glenn.drick.service.ShopScrapeService;
+import iths.glenn.drick.service.SystembolagetScraper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/scrape")
 public class ScrapeController {
 
-    ShopScrapeService shopScraper;
+    SystembolagetScraper shopScraper;
 
-    public ScrapeController(ShopScrapeService shopScraper) {
+    public ScrapeController(SystembolagetScraper shopScraper) {
         this.shopScraper = shopScraper;
     }
 
@@ -25,6 +27,10 @@ public class ScrapeController {
 
     @GetMapping("/all")
     public void scrapeAll() {
-
+        try {
+            shopScraper.scrapeSystembolaget();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

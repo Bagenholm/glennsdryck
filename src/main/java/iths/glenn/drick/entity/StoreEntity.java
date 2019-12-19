@@ -6,6 +6,4 @@ import java.util.ArrayList;
 
 @Data
 public class StoreEntity {
-    String name;
-    String drinks;
 }
