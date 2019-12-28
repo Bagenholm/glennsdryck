@@ -35,8 +35,8 @@ public class SystembolagetScraper implements ScraperService{
     }
 
     public DrinkEntity makeDrink(Element article) {
-        String name = article.getElementsByTag("Namn").text()
-                + " " + article.getElementsByTag("Namn2").text();
+        String name = (article.getElementsByTag("Namn").text()
+                + " " + article.getElementsByTag("Namn2").text()).trim();
         String type = article.getElementsByTag("Varugrupp").text();
         String subtype = article.getElementsByTag("Typ").text();
         float pricePerLitre = Float.parseFloat(article.getElementsByTag("PrisPerLiter").text());
