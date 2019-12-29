@@ -2,6 +2,7 @@ package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.model.DrinkModel;
+import iths.glenn.drick.repository.DrinkStorage;
 import iths.glenn.drick.repository.StoreStorage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class SystembolagetScraper implements ScraperService{
+
+    public DrinkStorage drinkStorage;
 
     @Override
     public List<DrinkEntity> scrape() throws IOException {
