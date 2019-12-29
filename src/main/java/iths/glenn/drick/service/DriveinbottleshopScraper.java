@@ -212,7 +212,7 @@ public class DriveinbottleshopScraper implements ScraperService {
     private DrinkEntity makeDrink(Element article) {
         String name = article.getElementsByTag("h3").text();
 
-        return new DrinkEntity("", "", "", 44.4f, 44.4f);
+        return new DrinkEntity("", "", "", 44.4f, 44.4f, 44.4f);
     }
 
 }

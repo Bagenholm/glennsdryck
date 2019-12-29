@@ -3,7 +3,6 @@ package iths.glenn.drick.service;
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.model.DrinkModel;
 import iths.glenn.drick.repository.DrinkStorage;
-import iths.glenn.drick.repository.StoreStorage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,6 +20,10 @@ public class SystembolagetScraper implements ScraperService{
 
     public DrinkStorage drinkStorage;
 
+    public SystembolagetScraper(DrinkStorage drinkStorage) {
+        this.drinkStorage = drinkStorage;
+    }
+
     @Override
     public List<DrinkEntity> scrape() throws IOException {
         ArrayList<DrinkEntity> drinksList = new ArrayList<>();
@@ -34,6 +37,8 @@ public class SystembolagetScraper implements ScraperService{
                 //.filter(article -> article.getElementsByTag("Utgått").equals("0"))
                 .forEach(article -> drinks.add(makeDrink(article)));
 
+        drinkStorage.saveAll(drinks);
+
         return drinks;
     }
 
@@ -45,7 +50,10 @@ public class SystembolagetScraper implements ScraperService{
         float pricePerLitre = Float.parseFloat(article.getElementsByTag("PrisPerLiter").text());
         String alcoholString = article.getElementsByTag("Alkoholhalt").text();
         float alcohol = Float.parseFloat(alcoholString.substring(0, (alcoholString.length() - 1)));
-        return new DrinkEntity(name, type, subtype, pricePerLitre, alcohol);
+        String volumeString = article.getElementsByTag("Volymiml").text();
+        float volume = Float.parseFloat(volumeString);
+
+        return new DrinkEntity(name, type, subtype, pricePerLitre, alcohol, volume);
     }
 
 }
