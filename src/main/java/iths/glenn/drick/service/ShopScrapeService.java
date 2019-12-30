@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShopScrapeService {
 
-    StoreStorage storeStorage;
+   // StoreStorage storeStorage;
 
-    public ShopScrapeService(StoreStorage storeStorage) {
+  /*  public ShopScrapeService(StoreStorage storeStorage) {
         this.storeStorage = storeStorage;
-    }
+    }*/
 
 
 }
