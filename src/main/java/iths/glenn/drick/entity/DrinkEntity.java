@@ -19,14 +19,16 @@ public class DrinkEntity {
     String subtype;
     float volume; // in millilitres
     float pricePerLitre, alcohol;
+    float price;
 
-    public DrinkEntity(String name, String type, String subtype, float pricePerLitre, float alcohol, float volume) {
+    public DrinkEntity(String name, String type, String subtype, float price, float pricePerLitre, float alcohol, float volume) {
         this.name = name;
         this.subtype = subtype;
         this.type = type;
         this.pricePerLitre = pricePerLitre;
         this.alcohol = alcohol;
         this.volume = volume;
+        this.price = price;
         this.key = name + volume + alcohol;
     }
 

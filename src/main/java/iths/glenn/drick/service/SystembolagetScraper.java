@@ -47,13 +47,14 @@ public class SystembolagetScraper implements ScraperService{
                 + " " + article.getElementsByTag("Namn2").text()).trim();
         String type = article.getElementsByTag("Varugrupp").text();
         String subtype = article.getElementsByTag("Typ").text();
+        float price = Float.parseFloat(article.getElementsByTag("Prisinklmoms").text());
         float pricePerLitre = Float.parseFloat(article.getElementsByTag("PrisPerLiter").text());
         String alcoholString = article.getElementsByTag("Alkoholhalt").text();
         float alcohol = Float.parseFloat(alcoholString.substring(0, (alcoholString.length() - 1)));
         String volumeString = article.getElementsByTag("Volymiml").text();
         float volume = Float.parseFloat(volumeString);
 
-        return new DrinkEntity(name, type, subtype, pricePerLitre, alcohol, volume);
+        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume);
     }
 
 }
