@@ -1,173 +1,156 @@
-Document doc;
-        doc = Jsoup.parse("<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Urquell Pilsner\" href=\"http://driveinbottleshop.dk/?produkt=urquell-pilsner\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2019/05/Urquell-pilsner-ny-d--se-Gennemsigtig-87x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=urquell-pilsner\">Urquell Pilsner</a></h3> \n" +
-                "  <h4>10.95 DKK</h4> \n" +
-                "  <p>Øl, ljus,Tjeckien,&nbsp;Plzen , 57cl, 4,4%alk. Pilsner Urquell är den ursprungliga lager från Plzen i Tjeckien! Bryggeriet Plzenský Prazdroj revolutionerade öl bryggning år 1842 genom att göra v... <a href=\"http://driveinbottleshop.dk/?produkt=urquell-pilsner\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"77479\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"The Tail Of A Whale\" href=\"http://driveinbottleshop.dk/?produkt=the-tail-of-a-whale\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/11/Tail-of-a-whale-130x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=the-tail-of-a-whale\">The Tail Of A Whale</a></h3> \n" +
-                "  <h4>10.95 DKK</h4> \n" +
-                "  <p>Ljus veteöl, 33 cl, 4,8 % alk, Brutal Brewing, Sverige En frisk humleblommig doft med tydliga inslag av citrus och grapefrukt. Smaken är humlearomatisk med en lätt balanserad maltighet med en l... <a href=\"http://driveinbottleshop.dk/?produkt=the-tail-of-a-whale\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"76190\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"A Ship Full Of IPA\" href=\"http://driveinbottleshop.dk/?produkt=a-ship-full-of-ipa\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/11/A-ship-full-of-IPA-130x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=a-ship-full-of-ipa\">A Ship Full Of IPA</a></h3> \n" +
-                "  <h4>10.95 DKK</h4> \n" +
-                "  <p>Ljus öl, 33cl, 5,8% Alk, Brutal brewing, Sverige Kraftig humlearomatisk med inslag av grape, melon och citrus. Maltig med en kraftig markerad humlebeska och angenäm humlearom med inslag av grape... <a href=\"http://driveinbottleshop.dk/?produkt=a-ship-full-of-ipa\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"76191\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Lucky Buddha\" href=\"http://driveinbottleshop.dk/?produkt=lucky-buddha\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2015/10/lucky_buddha-133x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=lucky-buddha\">Lucky Buddha</a></h3> \n" +
-                "  <h4>11.95 DKK</h4> \n" +
-                "  <p>Ljus öl, 33 cl, 4,7 % alk, Kina <span id=\"result_box\" class=\"\" lang=\"sv\">Lucky Buddha är ett äkta asiatiskt lager med mycket smak och en ren, ren finish. Lucky Buddha är 100% naturlig, ren och ... <a href=\"http://driveinbottleshop.dk/?produkt=lucky-buddha\">Se detaljer</a></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"74213\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Clausthaler Premium Alkoholfrei 50 cl.\" href=\"http://driveinbottleshop.dk/?produkt=clausthaler-premium-alkoholfrei-50-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/08/Clausthaler-alkoholfri-130x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=clausthaler-premium-alkoholfrei-50-cl\">Clausthaler Premium Alkoholfrei 50 cl.</a></h3> \n" +
-                "  <h4>11.95 DKK</h4> \n" +
-                "  <p>Ljus öl, 50 cl, 0,45 % alkohol, Bayern, Tyskland En ljus frisk helmaltsöl som passar vid alla de tillfällen då det är gott med en kall öl. Clausthaler är bryggd enligt den bayerska renhetsla... <a href=\"http://driveinbottleshop.dk/?produkt=clausthaler-premium-alkoholfrei-50-cl\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"75802\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"San Miguel Especial 50 cl.\" href=\"http://driveinbottleshop.dk/?produkt=san-miguel-especial-50-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2015/06/San-Miguel-Da--se-50cl-130x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=san-miguel-especial-50-cl\">San Miguel Especial 50 cl.</a></h3> \n" +
-                "  <h4>11.95 DKK</h4> \n" +
-                "  <p>Ljus öl, 50 cl, 5,4 % alk, Spanien IBU: 25 Ljus mild öl från Spanien. En lageröl med rund mild smak och en fin skumkrona. Ganska liten beska med bra sädeskaraktär och en aning citrus. En k... <a href=\"http://driveinbottleshop.dk/?produkt=san-miguel-especial-50-cl\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"73768\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Flensburger Gold 33 cl\" href=\"http://driveinbottleshop.dk/?produkt=flensburger-gold-33-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2012/03/flensburger-gold-107x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=flensburger-gold-33-cl\">Flensburger Gold 33 cl</a></h3> \n" +
-                "  <h4>12.95 DKK</h4> \n" +
-                "  <p>Ljust öl, 33 cl, Tyskland <span id=\"result_box\" class=\"\" lang=\"sv\"><span class=\"\">Brewed med lätt karamellmalt och bara de finaste doftpoporna.</span> <span class=\"\">En mycket lätt, tunn öl med... <a href=\"http://driveinbottleshop.dk/?produkt=flensburger-gold-33-cl\">Se detaljer</a></span></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"68910\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Corona Extra\" href=\"http://driveinbottleshop.dk/?produkt=corona-ekstra\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2013/08/corona_extra-126x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=corona-ekstra\">Corona Extra</a></h3> \n" +
-                "  <h4>12.95 DKK</h4> \n" +
-                "  <p>Ljus öl, 33 cl, Mexiko, 4,5% alk. <span id=\"result_box\" class=\"\" lang=\"sv\">Corona Extra är en importerad mexikansk pilsner öl. Den gyllene ölen är livlig och ger en skarp vit skumkrona. Doften... <a href=\"http://driveinbottleshop.dk/?produkt=corona-ekstra\">Se detaljer</a></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"71726\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Paulaner burk, Hefeweizen, Bayern\" href=\"http://driveinbottleshop.dk/?produkt=paulaner-burk\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2018/01/Paulaner-hefe-gennemsigtig-78x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=paulaner-burk\">Paulaner burk, Hefeweizen, Bayern</a></h3> \n" +
-                "  <h4>12.95 DKK</h4> \n" +
-                "  <p>Tyskland, veteöl, ljus, 33cl, 5,6% alk. Tysk ljus veteöl med sin naturliga jästfällning. Fruktig mild smak med en lätt citruston. Paulaner startades av de fattiga munkarna på ett kloster i... <a href=\"http://driveinbottleshop.dk/?produkt=paulaner-burk\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"76455\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Flensburger Pilsner\" href=\"http://driveinbottleshop.dk/?produkt=flensburger-pilsner\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2018/01/flensburger-pilsener-med-glas-gennemsigtig-130x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=flensburger-pilsner\">Flensburger Pilsner</a></h3> \n" +
-                "  <h4>12.95 DKK</h4> \n" +
-                "  <p>Mörk Öl, 33 cl, Tyskland, 4,8% alk. <span id=\"result_box\" class=\"\" lang=\"sv\"><span class=\"alt-edited\">Dess ovanligt skarp kryddig doft och användningen av utvalda sorter av humle står för god ... <a href=\"http://driveinbottleshop.dk/?produkt=flensburger-pilsner\">Se detaljer</a></span></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"76501\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n");
-
-        Elements articles = doc.getElementsByClass("product-search");
-
-        articles.forEach(System.out::println);
-
-
-
-        //System.err.println(articles.get(0).getElementsByTag("p").text());
-
-        articles.forEach(article -> {
-            System.err.println(article.getElementsByTag("p").text());
-            String alkoholhalt = article.getElementsByTag("p").text();
-            int percIndex = alkoholhalt.indexOf("%");
-            int minIndex = percIndex-6;
-            if(minIndex >= 0) {
-                String substring = alkoholhalt.substring(minIndex, percIndex + 1);
-                System.err.println(substring);
-                substring.
-            }
-        });
-        ArrayList<DrinkEntity> drinks = new ArrayList<>();
-        //drinks.forEach(System.out::println);
+<article class="product-search"> 
+ <a class="thumbnail" title="Breezer Strawberry" href="http://driveinbottleshop.dk/?produkt=breezer-strawberry" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/10/breezer_strawberry-130x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=breezer-strawberry">Breezer Strawberry</a></h3> 
+  <h4>11.95 DKK</h4> 
+  <p>Alkoläsk, 27,5 cl, 4 % alk, Tyskland <span id="result_box" class="" lang="sv"><span class="alt-edited">Stor doftande doft med tydlig karaktär av jordgubbar och inslag av blodapelsin.</span>Se detaljer</span></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="75971"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Breezer Mango" href="http://driveinbottleshop.dk/?produkt=breezer-mango" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2018/01/Breezer-mango-gennemsigtig-48x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=breezer-mango">Breezer Mango</a></h3> 
+  <h4>11.95 DKK</h4> 
+  <p>Alkoläsk, 27,5 cl, 4 % alk, Tyskland <span id="result_box" class="" lang="sv"><span class="alt-edited">Bacardi Breezer mango har en stor fruktig doft med karaktär av mango och lite orange.</span>... <a href="http://driveinbottleshop.dk/?produkt=breezer-mango">Se detaljer</a></span></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="76559"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Breezer Pineapple" href="http://driveinbottleshop.dk/?produkt=breezer-ananas" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/breezer_pineapple-130x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=breezer-ananas">Breezer Pineapple</a></h3> 
+  <h4>11.95 DKK</h4> 
+  <p>Alkoläsk, 27,5 cl, 4 % alk, Tyskland <span id="result_box" class="" lang="sv"><span class="alt-edited">Bacardi Breezer Ananas är en ananas versionen av den populära alkoläsk.</span> Den har en ... <a href="http://driveinbottleshop.dk/?produkt=breezer-ananas">Se detaljer</a></span></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="65101"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Breezer Lime" href="http://driveinbottleshop.dk/?produkt=breezer-lime" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/breezer_lime-130x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=breezer-lime">Breezer Lime</a></h3> 
+  <h4>11.95 DKK</h4> 
+  <p>Alkoläsk, 27,5 cl, 4 % alk, Tyskland <span id="result_box" class="" lang="sv"><span class="alt-edited">Bacardi Breezer Lime har en uppfriskande doft av lime och har en lätt syrligt smak av lime
+     <!--... <a href="http://driveinbottleshop.dk/?produkt=breezer-lime"-->Se detaljer</span></span></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="65207"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Breezer Watermelon" href="http://driveinbottleshop.dk/?produkt=breezer-watermelon" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/breezer_watermelon-130x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=breezer-watermelon">Breezer Watermelon</a></h3> 
+  <h4>11.95 DKK</h4> 
+  <p>Alkoläsk, 27,5 cl, 4% alk, Tyskland <span id="result_box" class="" lang="sv"><span class="">Bacardi breezer watermelon har en doft av melon, apelsin och papaya.</span> <span class="alt-edited">De... <a href="http://driveinbottleshop.dk/?produkt=breezer-watermelon">Se detaljer</a></span></span></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="65843"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Breezer Orange" href="http://driveinbottleshop.dk/?produkt=breezer-tropical-orange" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2012/07/breezer_orange-130x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=breezer-tropical-orange">Breezer Orange</a></h3> 
+  <h4>11.95 DKK</h4> 
+  <p>Alkoläsk, 27,5 cl, 4 % alk, Tyskland <span id="result_box" class="" lang="sv">Bacardi Brezzer Orango har en stor fruktig smak med karaktäristisk natur av apelsin, element i citron.</span> 
+   <spa... <a href="http://driveinbottleshop.dk/?produkt=breezer-tropical-orange">
+    Se detaljer
+   </spa...></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="69459"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Smirnoff Ice 27,5cl" href="http://driveinbottleshop.dk/?produkt=smirnoff-ice" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2013/02/smirnoff_ice-110x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=smirnoff-ice">Smirnoff Ice 27,5cl</a></h3> 
+  <h4>12.95 DKK</h4> 
+  <p>Alkoläsk, 27,5 &nbsp;cl, 4 % Alc. <span id="result_box" class="" lang="sv"><span class="alt-edited">En vodka blandad dryck med den klassiska smaken av citron</span></span> <span id="result_box" cla... <a href="http://driveinbottleshop.dk/?produkt=smirnoff-ice">Se detaljer</span></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="65404"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Somersby Apple 24 Burkar" href="http://driveinbottleshop.dk/?produkt=somersby-apple-24-burkar" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2013/05/somersby_apple-150x116.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=somersby-apple-24-burkar">Somersby Apple 24 Burkar</a></h3> 
+  <h4>189.95 DKK</h4> 
+  <p>Äpplecider, 24 x 33 cl, 4,5 % alk Tillgången på de olika smakerna på cider kan variera. Om du vill vara säker på att en viss smak finns i butiken ring oss gärna och fråga. Pant tillkomme... <a href="http://driveinbottleshop.dk/?produkt=somersby-apple-24-burkar">Se detaljer</a></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="71276"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Somersby Elderflower/Lime 24 burkar" href="http://driveinbottleshop.dk/?produkt=somersby-elderflowerlime-24-burkar" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2015/03/Somersby-elderflower-lime-130x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=somersby-elderflowerlime-24-burkar">Somersby Elderflower/Lime 24 burkar</a></h3> 
+  <h4>189.95 DKK</h4> 
+  <p>Cider med &nbsp;fläderbloms och limesmak, 24 x 33 cl, 4,5 % alk Tillgången på de olika smakerna på cider kan variera. Om du vill vara säker på att en viss smak finns i butiken ring oss gärna och... <a href="http://driveinbottleshop.dk/?produkt=somersby-elderflowerlime-24-burkar">Se detaljer</a></p> 
+  <form class="add-to-cart"> 
+   <label for="qty">Kvantitet</label> 
+   <input type="text" class="text" name="qty" value="1"> 
+   <input type="hidden" name="product_id" value="73538"> 
+   <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+   <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+  </form> 
+ </section> 
+</article>
+<article class="product-search"> 
+ <a class="thumbnail" title="Briska Päroncider 24 burkar" href="http://driveinbottleshop.dk/?produkt=briska-paroncider-24-burkar" style="background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2018/02/Briska-paeron-cider-gennemsigtig-130x130.png)"></a> 
+ <section class="info"> 
+  <h3><a href="http://driveinbottleshop.dk/?produkt=briska-paroncider-24-burkar">Briska Päroncider 24 burkar</a></h3> 
+  <h4>189.95 DKK</h4> 
+  <p>Cider, Sverige, 33cl, 4,5% alk. Mycket fruktig, söt smak med tydlig karaktär av päron, inslag av gröna äpplen och vingummi. Serveras vid 6-8°C som sällskapsdryck. <b>Pris på Systemet for... <a href="http://driveinbottleshop.dk/?produkt=briska-paroncider-24-burkar">Se detaljer</a></b></p>
+  <b> 
+   <form class="add-to-cart"> 
+    <label for="qty">Kvantitet</label> 
+    <input type="text" class="text" name="qty" value="1"> 
+    <input type="hidden" name="product_id" value="76720"> 
+    <input type="hidden" name="ajaxurl" value="http://driveinbottleshop.dk/wp-admin/admin-ajax.php"> 
+    <input type="submit" class="submit" name="submit_to_cart" value="Lägg i shoppinglista"> 
+   </form> </b>
+ </section>
+ <b> </b>
+</article>
