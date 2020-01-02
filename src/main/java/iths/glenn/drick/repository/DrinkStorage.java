@@ -1,10 +1,8 @@
 package iths.glenn.drick.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import iths.glenn.drick.entity.DrinkEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface DrinkStorage {
-    List findAll();
-}
+public interface DrinkStorage extends JpaRepository<DrinkEntity, String>{ }
