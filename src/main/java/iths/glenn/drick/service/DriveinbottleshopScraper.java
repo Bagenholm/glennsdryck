@@ -8,7 +8,6 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -20,9 +19,8 @@ public class DriveinbottleshopScraper implements ScraperService {
 
 
         //ArrayList<DrinkEntity> drinks = new ArrayList<>();
-
-        //scrapeDrinksTest("Vin", "Mousserande");
-        //getElementsByTextForHtmlParse("http://driveinbottleshop.dk/category/vin/mousserande-viner/");
+        //drinks = scrapeDrinksTest("Vin", "Rött vin");
+        //getElementsByTextForHtmlParse("http://driveinbottleshop.dk/category/vin/roda-viner/portugal/");
         return drinks;
     }
 
@@ -33,6 +31,17 @@ public class DriveinbottleshopScraper implements ScraperService {
         drinks.addAll(scrapeDrinks("Öl", "Veteöl", "http://driveinbottleshop.dk/category/ol-cider/veteol/"));
         drinks.addAll(scrapeDrinks("Alkoläsk och Cider", "", "http://driveinbottleshop.dk/category/ol-cider/alkolask-cider/"));
         drinks.addAll(scrapeDrinks("Vin", "Mousserande", "http://driveinbottleshop.dk/category/vin/mousserande-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/argentina/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/australien/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/chile/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/frankrike/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/italien/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/nya-zeeland/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/osterrike-roda-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/portugal/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/spanien/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/sydafrika/"));
+
         return drinks;
     }
 
@@ -44,152 +53,62 @@ public class DriveinbottleshopScraper implements ScraperService {
         System.out.println(articles);
     }
 
-    private void scrapeDrinksTest(String type, String subtype) {
+    private ArrayList<DrinkEntity> scrapeDrinksTest(String type, String subtype) {
         Document doc = Jsoup.parse("<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Henkell Trocken 200 ml.\" href=\"http://driveinbottleshop.dk/?produkt=henkell-trocken-200-ml\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/Henkell-Trocken-86x130.png)\"></a> \n" +
+                " <a class=\"thumbnail\" title=\"Vidigal Reserva\" href=\"http://driveinbottleshop.dk/?produkt=vidigal-reserva\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2012/01/Vidigal_Reserva-83x130.png)\"></a> \n" +
                 " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=henkell-trocken-200-ml\">Henkell Trocken 200 ml.</a></h3> \n" +
-                "  <h4>19.95 DKK</h4> \n" +
-                "  <p>Tyskland, 11,5% Alc. Halvtorrt mousserande vin En mycket lætt mousse. Doften ær lætt och har något av gul frukt øver sig. Smaken ær frisk och lætt, det fimms en liten rest av jæstsmak kvar. E... <a href=\"http://driveinbottleshop.dk/?produkt=henkell-trocken-200-ml\">Se detaljer</a></p> \n" +
+                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=vidigal-reserva\">Vidigal Reserva</a></h3> \n" +
+                "  <h4>59.95 DKK</h4> \n" +
+                "  <p>Rött fylligt vin, 75 cl, 12,5 % alk, Lisboa, Portugal. Mycket mörk och kraftig färg. Doften är något knuten, men det kan anas dofter av mörka bär och svarta vingummin. Sm,aken är desto gene... <a href=\"http://driveinbottleshop.dk/?produkt=vidigal-reserva\">Se detaljer</a></p> \n" +
                 "  <form class=\"add-to-cart\"> \n" +
                 "   <label for=\"qty\">Kvantitet</label> \n" +
                 "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"65636\"> \n" +
+                "   <input type=\"hidden\" name=\"product_id\" value=\"68011\"> \n" +
                 "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
                 "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
                 "  </form> \n" +
                 " </section> \n" +
                 "</article>\n" +
                 "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Pol Clement, 20 cl\" href=\"http://driveinbottleshop.dk/?produkt=pol-clement-o2-l\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2012/01/pol_clemente_liten-106x130.png)\"></a> \n" +
+                " <a class=\"thumbnail\" title=\"My Pride Wine Duoro Red\" href=\"http://driveinbottleshop.dk/?produkt=my-pride-wine-duoro-red\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/09/My-Pride-R-d-353x310-148x130.png)\"></a> \n" +
                 " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=pol-clement-o2-l\">Pol Clement, 20 cl</a></h3> \n" +
-                "  <h4>22.95 DKK</h4> \n" +
-                "  <p>Mousserande torrt vin, 20 cl, 10,5 % alk, Frankrike Druva: Ugni Blanc och Chenin Blanc Det här vinet görs främst på druvor från Loire. CFGV som gör det här vinet är väl förankrat med m... <a href=\"http://driveinbottleshop.dk/?produkt=pol-clement-o2-l\">Se detaljer</a></p> \n" +
+                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=my-pride-wine-duoro-red\">My Pride Wine Duoro Red</a></h3> \n" +
+                "  <h4>59.95 DKK</h4> \n" +
+                "  <p>Fylligt rött vin, 75 cl, 12,5 % alk, Duoro, Portugal Druvor: &nbsp;Touriga Franca, Touriga Nacional and Tinta Roriz. En generös doft med mogna mörka bär men också kryddiga dofter som peppar, kryd... <a href=\"http://driveinbottleshop.dk/?produkt=my-pride-wine-duoro-red\">Se detaljer</a></p> \n" +
                 "  <form class=\"add-to-cart\"> \n" +
                 "   <label for=\"qty\">Kvantitet</label> \n" +
                 "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"68203\"> \n" +
+                "   <input type=\"hidden\" name=\"product_id\" value=\"75857\"> \n" +
                 "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
                 "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
                 "  </form> \n" +
                 " </section> \n" +
                 "</article>\n" +
                 "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Asti Gancia 20 cl.\" href=\"http://driveinbottleshop.dk/?produkt=asti-gancia-4x20-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/11/asti-Gancia-130x130.png)\"></a> \n" +
+                " <a class=\"thumbnail\" title=\"Vallado Duoro\" href=\"http://driveinbottleshop.dk/?produkt=vallado-duoro\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/11/Vallado-douro-130x130.png)\"></a> \n" +
                 " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=asti-gancia-4x20-cl\">Asti Gancia 20 cl.</a></h3> \n" +
-                "  <h4>24.95 DKK</h4> \n" +
-                "  <p>Asti spumante, Italien, 7,5% alk. Søtt mousserande vin. En lætt och fin mousse. Doften ær lætt med en mycket trevlig muscatkaraktær. Smaken ær typisk før ett Asti-vin, mycket trevlig kara... <a href=\"http://driveinbottleshop.dk/?produkt=asti-gancia-4x20-cl\">Se detaljer</a></p> \n" +
+                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=vallado-duoro\">Vallado Duoro</a></h3> \n" +
+                "  <h4>89.95 DKK</h4> \n" +
+                "  <p>Fylligt rött vin, 75 cl, 13,5 % alk, Duoro Portugal Druvor: Touriga Franca, Touriga Nacional, Tinta Roriz En generös doft med fruktiga toner av bland annat svarta vinbär. Smaken är fyllig, kra... <a href=\"http://driveinbottleshop.dk/?produkt=vallado-duoro\">Se detaljer</a></p> \n" +
                 "  <form class=\"add-to-cart\"> \n" +
                 "   <label for=\"qty\">Kvantitet</label> \n" +
                 "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"67549\"> \n" +
+                "   <input type=\"hidden\" name=\"product_id\" value=\"76240\"> \n" +
                 "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
                 "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
                 "  </form> \n" +
                 " </section> \n" +
                 "</article>\n" +
                 "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Martini Asti 20 cl\" href=\"http://driveinbottleshop.dk/?produkt=martini-asti-20-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2018/02/martini-asti-20cl-gennemsigtig-130x130.png)\"></a> \n" +
+                " <a class=\"thumbnail\" title=\"Vidigal Reserva, 6 st\" href=\"http://driveinbottleshop.dk/?produkt=reserva-vigigal-6-st\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/12/Vidigal_Reserva-83x130.png)\"></a> \n" +
                 " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=martini-asti-20-cl\">Martini Asti 20 cl</a></h3> \n" +
-                "  <h4>24.95 DKK</h4> \n" +
-                "  <p>Asti, Italien, 20cl , 7,5 % alc. <span id=\"result_box\" class=\"\" lang=\"sv\">När du häller det här läckra mousserande vinet i glasögonen kan du njuta av många bubblor som tillsammans bildar ett ... <a href=\"http://driveinbottleshop.dk/?produkt=martini-asti-20-cl\">Se detaljer</a></span></p> \n" +
+                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=reserva-vigigal-6-st\">Vidigal Reserva, 6 st</a></h3> \n" +
+                "  <h4>359.75 DKK</h4> \n" +
+                "  <p>Rött fylligt vin, 75 cl, 12,5 % alk, Lisboa, Portugal. Mycket mörk och kraftig färg. Doften är något knuten, men det&nbsp;kan anas dofter&nbsp;av mörka bär och svarta vingummin. Sm,aken är desto ge... <a href=\"http://driveinbottleshop.dk/?produkt=reserva-vigigal-6-st\">Se detaljer</a></p> \n" +
                 "  <form class=\"add-to-cart\"> \n" +
                 "   <label for=\"qty\">Kvantitet</label> \n" +
                 "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"76704\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Canti Prosecco Extra Dry 20 cl.\" href=\"http://driveinbottleshop.dk/?produkt=canti-prosecco-extra-dry-20-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/04/Canti-prosecco-20-cl.-130x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=canti-prosecco-extra-dry-20-cl\">Canti Prosecco Extra Dry 20 cl.</a></h3> \n" +
-                "  <h4>29.95 DKK</h4> \n" +
-                "  <p>Torrt mousserande vin, <strong>20 cl</strong>. 11 % alk, Italien... <a href=\"http://driveinbottleshop.dk/?produkt=canti-prosecco-extra-dry-20-cl\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"75519\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Verdi Raspberry Sparkletini\" href=\"http://driveinbottleshop.dk/?produkt=verdi-raspberry-75-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/Verdi-raspberry-117x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=verdi-raspberry-75-cl\">Verdi Raspberry Sparkletini</a></h3> \n" +
-                "  <h4>39.95 DKK</h4> \n" +
-                "  <p>Mousserande fruktdrink, 75 cl, 5 % alk, Italien <span id=\"result_box\" class=\"\" lang=\"sv\">Sparkletini hallon av värde är härligt färskt med en ren och lätt smak av hallon. En vacker spumante... <a href=\"http://driveinbottleshop.dk/?produkt=verdi-raspberry-75-cl\">Se detaljer</a></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"65738\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Verdi Peach Sparkletini\" href=\"http://driveinbottleshop.dk/?produkt=verdi-peach-75-cl\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/Verdi-peach-112x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=verdi-peach-75-cl\">Verdi Peach Sparkletini</a></h3> \n" +
-                "  <h4>39.95 DKK</h4> \n" +
-                "  <p>Mousserande fruktdrink, 75 cl, 5 % alk, Italien <span id=\"result_box\" class=\"\" lang=\"sv\"><span class=\"\">Sparkletini Peach efter värde har en härlig smak av mogna, söta persikor. En vacker spuma... <a href=\"http://driveinbottleshop.dk/?produkt=verdi-peach-75-cl\">Se detaljer</a></span></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"65739\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Verdi Elderflower Sparkletini\" href=\"http://driveinbottleshop.dk/?produkt=verdi-elderflower\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2013/06/elderflower_verdi-124x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=verdi-elderflower\">Verdi Elderflower Sparkletini</a></h3> \n" +
-                "  <h4>39.95 DKK</h4> \n" +
-                "  <p>Mousserande fruktdrink, 75 cl, 5 % alk, Italien <span id=\"result_box\" class=\"\" lang=\"sv\"><span class=\"alt-edited\">Verdi fläderblom har en härlig, frisk smak av fläderblom med en trevlig välbala... <a href=\"http://driveinbottleshop.dk/?produkt=verdi-elderflower\">Se detaljer</a></span></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"71537\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Exquisit Jordgubbe\" href=\"http://driveinbottleshop.dk/?produkt=royal-jordgubbe\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/exquisit-101x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=royal-jordgubbe\">Exquisit Jordgubbe</a></h3> \n" +
-                "  <h4>39.95 DKK</h4> \n" +
-                "  <p>Mousserande fruktvin, 75 cl, 8,5 % alk, Tyskland Generös doft av&nbsp;röda bär och vilda örter. Mycket uppfriskande syra med stor koncentration, generös frukt, örtiga toner och lång eftersmak.Et... <a href=\"http://driveinbottleshop.dk/?produkt=royal-jordgubbe\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"65326\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Verdi strawberry\" href=\"http://driveinbottleshop.dk/?produkt=verdi-strawberry\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2018/01/verdi-strawberry-85x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=verdi-strawberry\">Verdi strawberry</a></h3> \n" +
-                "  <h4>39.95 DKK</h4> \n" +
-                "  <p>Mousserande fruktdrink, 75 cl, 5 % alk, Italien <span id=\"result_box\" class=\"short_text\" lang=\"sv\"><span class=\"\"><span id=\"result_box\" class=\"\" lang=\"sv\">Strawberry Sparkletini har en vacker frukt... <a href=\"http://driveinbottleshop.dk/?produkt=verdi-strawberry\">Se detaljer</a></span></span></span></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"76349\"> \n" +
+                "   <input type=\"hidden\" name=\"product_id\" value=\"67654\"> \n" +
                 "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
                 "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
                 "  </form> \n" +
@@ -198,13 +117,16 @@ public class DriveinbottleshopScraper implements ScraperService {
 
         Elements articles = doc.getElementsByClass("product-search");
 
+        ArrayList<DrinkEntity> drinks = new ArrayList<>();
         articles.forEach(article -> {
             System.err.println(article.getElementsByTag("p").text() + "\n" +
                     "Name: " + extractNameFromText(article) + "\n" +
                     "Price: " + extractPriceFromText(article) + "\n" +
                     "Alcohol: " + extractAlcoholFromText(article) + "\n" +
                     "Volume: " + extractVolumeFromText(article) );
+            drinks.add(makeDrink(article, type, subtype));
         });
+        return drinks;
     }
 
     private ArrayList<DrinkEntity> scrapeDrinks(String type, String subtype, String url) throws IOException {
@@ -255,27 +177,32 @@ public class DriveinbottleshopScraper implements ScraperService {
     }
 
     private float extractVolumeFromText(Element article) {
-        String volume = article.getElementsByTag("p").text();
-        int clCommaIndex = volume.indexOf("cl,");
+        String volumeString = article.getElementsByTag("p").text();
+        int clCommaIndex = volumeString.indexOf("cl,");
         int minIndex = clCommaIndex - 6;
         if(minIndex >= 0) {
-            String substring = volume.substring(minIndex, clCommaIndex);
-            if(is24Pack(volume, substring, article)) {
-                return Float.parseFloat(substring.replaceAll("[a-öA-Ö, ]", "")) * 24;
+            String substring = volumeString.substring(minIndex, clCommaIndex);
+            if(isMultiPack(volumeString, substring, article)) {
+                if(substring.matches(".*[0-9][x][0-9].*")) { //Prevents 6x75 from being read as 675
+                    substring = substring.trim();
+                    int numberOfBottles = Integer.parseInt(substring.substring(0,1));
+                    int volumePerBottle = Integer.parseInt(substring.substring(2));
+                    return numberOfBottles * volumePerBottle + 0f;
+                }
+                return Float.parseFloat(substring.replaceAll("[a-öA-Ö, ]", "")) * multiPackMultiplier(volumeString, substring, article);
             }
             if(substring.matches(".*([0-9],[0-9]).*")) {
                 substring = substring.replaceFirst(",", ".");
             }
             return Float.parseFloat(substring.replaceAll("[a-öA-Ö, ]", ""));
         } else if(minIndex == -7) {
-            int clPeriodIndex = volume.indexOf("cl.");
+            int clPeriodIndex = volumeString.indexOf("cl.");
             minIndex = clPeriodIndex - 6;
             if(minIndex >= 0) {
-                String substring = volume.substring(minIndex, clPeriodIndex);
+                String substring = volumeString.substring(minIndex, clPeriodIndex);
                 return Float.parseFloat(substring.replaceAll("[a-öA-Ö, ]", ""));
             }
         }
-
         String name = extractNameFromText(article);
         boolean isclVolumeInName = name.matches(".*\\b[0-9]* cl.*");
         boolean ismlVolumeInName = name.matches(".*\\b[0-9]* ml.*");
@@ -284,15 +211,33 @@ public class DriveinbottleshopScraper implements ScraperService {
         } else if(ismlVolumeInName) {
             return (Float.parseFloat(name.substring(name.indexOf(" ml") - 3, name.indexOf(" ml"))) / 10);
         }
+        if(name.contains("5 L")) {
+            return 500f;
+        }
         return 0f;
     }
 
-    private boolean is24Pack(String volume, String substring, Element article) {
+    private int multiPackMultiplier(String volumeString, String substring, Element article) {
+        if(volumeString.contains("24") || extractNameFromText(article).contains("24 burkar")) {
+            return 24;
+        } else if(volumeString.contains("6") || extractNameFromText(article).contains("6 flaskor") || extractNameFromText(article).endsWith("6 st")) {
+            return 6;
+        }
+        return 1;
+    }
+
+    private boolean isMultiPack(String volume, String substring, Element article) {
         if(substring.contains("x")) {
             if(volume.contains("24")) {
                 return true;
+            } else if(volume.contains("6")) {
+                return true;
             }
         } else if(extractNameFromText(article).contains("24 burkar")) {
+            return true;
+        } else if(extractNameFromText(article).contains("6 flaskor")) {
+            return true;
+        } else if(extractNameFromText(article).endsWith("6 st")) {
             return true;
         }
         return false;
