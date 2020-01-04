@@ -33,13 +33,9 @@ public class SystembolagetScraper implements ScraperService{
 
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
-        articles.stream()
-                //.filter(article -> article.getElementsByTag("Utgått").equals("0"))
-                .forEach(article -> drinks.add(makeDrink(article)));
+        articles.stream().forEach(article -> drinks.add(makeDrink(article)));
 
-        drinkStorage.saveAll(drinks);
-
-        return drinks;
+        return drinkStorage.saveAll(drinks);
     }
 
     public DrinkEntity makeDrink(Element article) {

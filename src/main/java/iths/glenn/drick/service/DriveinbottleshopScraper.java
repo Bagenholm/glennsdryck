@@ -1,6 +1,7 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
+import iths.glenn.drick.repository.DrinkStorage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,16 +13,24 @@ import java.util.*;
 
 @Service
 public class DriveinbottleshopScraper implements ScraperService {
+
+    DrinkStorage drinkStorage;
+
+    public DriveinbottleshopScraper(DrinkStorage drinkStorage) {
+        this.drinkStorage = drinkStorage;
+    }
+
     @Override
     public List<DrinkEntity> scrape() throws IOException {
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
+        return drinkStorage.saveAll(drinks);
 
         //ArrayList<DrinkEntity> drinks = new ArrayList<>();
         //drinks = scrapeDrinksTest("Vin", "Vitt");
         //getElementsByTextForHtmlParse("http://driveinbottleshop.dk/?s=amarula&searchsubmit=S%C3%B6k");
-        return drinks;
+
     }
 
     private ArrayList<DrinkEntity> scrapeAllDrinks() throws IOException {
@@ -86,7 +95,7 @@ public class DriveinbottleshopScraper implements ScraperService {
         return drinks;
     }
 
-    private void getElementsByTextForHtmlParse(String s) throws IOException {
+    /* private void getElementsByTextForHtmlParse(String s) throws IOException {
         Document doc;
         doc = Jsoup.connect(s).get();
         Elements articles = doc.getElementsByClass("product-search");
@@ -123,7 +132,7 @@ public class DriveinbottleshopScraper implements ScraperService {
             drinks.add(makeDrink(article, type, subtype));
         });
         return drinks;
-    }
+    } */
 
     private ArrayList<DrinkEntity> scrapeDrinks(String type, String subtype, String url) throws IOException {
         Document doc = Jsoup.connect(url).get();
@@ -168,7 +177,7 @@ public class DriveinbottleshopScraper implements ScraperService {
                     .replaceAll("[a-zA-Z %]", "")
                     .replaceAll("^[,|.]", "")
                     .replace(",", ".");
-            if(substring.equals("100")) { //Prevents case exceptions where 100% is before alcohol%, they're all 12.5.
+            if(substring.equals("100")) { //Prevents odd cases where 100% is before alcohol%, they're all 12.5.
                 return 12.5f;
             }
             try {
