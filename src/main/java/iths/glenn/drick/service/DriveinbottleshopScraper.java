@@ -19,8 +19,8 @@ public class DriveinbottleshopScraper implements ScraperService {
 
 
         //ArrayList<DrinkEntity> drinks = new ArrayList<>();
-        //drinks = scrapeDrinksTest("Vin", "Rött vin");
-        //getElementsByTextForHtmlParse("http://driveinbottleshop.dk/category/vin/roda-viner/portugal/");
+        //drinks = scrapeDrinksTest("Vin", "Vitt");
+        //getElementsByTextForHtmlParse("http://driveinbottleshop.dk/?s=amarula&searchsubmit=S%C3%B6k");
         return drinks;
     }
 
@@ -30,17 +30,58 @@ public class DriveinbottleshopScraper implements ScraperService {
         drinks.addAll(scrapeDrinks("Öl", "Ljus öl", "http://driveinbottleshop.dk/category/ol-cider/ljus-ol/"));
         drinks.addAll(scrapeDrinks("Öl", "Veteöl", "http://driveinbottleshop.dk/category/ol-cider/veteol/"));
         drinks.addAll(scrapeDrinks("Alkoläsk och Cider", "", "http://driveinbottleshop.dk/category/ol-cider/alkolask-cider/"));
-        drinks.addAll(scrapeDrinks("Vin", "Mousserande", "http://driveinbottleshop.dk/category/vin/mousserande-viner/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/argentina/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/australien/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/chile/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/frankrike/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/italien/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/nya-zeeland/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/osterrike-roda-viner/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/portugal/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/spanien/"));
-        drinks.addAll(scrapeDrinks("Vin", "Rött vin", "http://driveinbottleshop.dk/category/vin/roda-viner/sydafrika/"));
+        drinks.addAll(scrapeDrinks("Mousserande vin", "Mousserande", "http://driveinbottleshop.dk/category/vin/mousserande-viner/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/argentina/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/australien/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/chile/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/frankrike/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/italien/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/nya-zeeland/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/osterrike-roda-viner/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/portugal/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/spanien/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/sydafrika/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/tyskland-roda-viner/"));
+        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/usa/"));
+        drinks.addAll(scrapeDrinks("Rosévin", "Rosé", "http://driveinbottleshop.dk/category/vin/rose-viner/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/argentina-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/australien-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/chile-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/frankrike-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/italien-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/nya-zealand/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/osterrike/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/spanien-portugal/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/sydafrika-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/tyskland/"));
+        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/usa-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Anissprit", "Absint", "http://driveinbottleshop.dk/category/sprit/absint/"));
+        drinks.addAll(scrapeDrinks("Aperitif och dessert", "", "http://driveinbottleshop.dk/category/sprit/apertif-digestif/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Bitter", "http://driveinbottleshop.dk/category/sprit/bitter/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Kryddad snaps", "http://driveinbottleshop.dk/category/sprit/brannvin/akvavit-ovrig-kryddad-snaps/"));
+        drinks.addAll(scrapeDrinks("Vodka", "Smaksatt", "http://driveinbottleshop.dk/category/sprit/brannvin/smaksatt-vodka/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Cognac", "http://driveinbottleshop.dk/category/sprit/cognac-calvados-brandy/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Gin", "http://driveinbottleshop.dk/category/sprit/gin/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Grappa", "http://driveinbottleshop.dk/category/sprit/grappa/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Likör", "http://driveinbottleshop.dk/category/sprit/likor/citruslik%c3%b8r/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Likör", "http://driveinbottleshop.dk/category/sprit/likor/cremelikor/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Likör", "http://driveinbottleshop.dk/category/sprit/likor/frukt-och-barlikor/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Likör", "http://driveinbottleshop.dk/category/sprit/likor/kakao-och-kaffelikor/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Likör", "http://driveinbottleshop.dk/category/sprit/likor/n%c3%b8tlik%c3%b8r/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Likör", "http://driveinbottleshop.dk/category/sprit/likor/ortlikor/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Likör", "http://driveinbottleshop.dk/category/sprit/likor/whiskylik%c3%b8r/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Rom", "http://driveinbottleshop.dk/category/sprit/rom/mork-rom/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Rom", "http://driveinbottleshop.dk/category/sprit/rom/smaksatt-rom/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Rom", "http://driveinbottleshop.dk/category/sprit/rom/vit-rom/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Tequila", "http://driveinbottleshop.dk/category/sprit/tequila/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Vodka", "http://driveinbottleshop.dk/category/sprit/vodka/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://driveinbottleshop.dk/category/sprit/whisky/irlandsk-whisky/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://driveinbottleshop.dk/category/sprit/whisky/japansk-whisky/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://driveinbottleshop.dk/category/sprit/whisky/kanadensisk-whisky/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://driveinbottleshop.dk/category/sprit/whisky/malt-whisky/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://driveinbottleshop.dk/category/sprit/whisky/skotsk-blended/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://driveinbottleshop.dk/category/sprit/whisky/svensk-whisky/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://driveinbottleshop.dk/category/sprit/whisky/whisky-fran-usa/"));
 
         return drinks;
     }
@@ -54,66 +95,21 @@ public class DriveinbottleshopScraper implements ScraperService {
     }
 
     private ArrayList<DrinkEntity> scrapeDrinksTest(String type, String subtype) {
-        Document doc = Jsoup.parse("<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Vidigal Reserva\" href=\"http://driveinbottleshop.dk/?produkt=vidigal-reserva\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2012/01/Vidigal_Reserva-83x130.png)\"></a> \n" +
+        Document doc = Jsoup.parse("<article class=\"product-search\">\n" +
+                " <a class=\"thumbnail\" title=\"Amarula\" href=\"http://driveinbottleshop.dk/?attachment_id=70844\" style=\"background-image: url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/Amarula-110x130.png)\"></a>\n" +
                 " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=vidigal-reserva\">Vidigal Reserva</a></h3> \n" +
-                "  <h4>59.95 DKK</h4> \n" +
-                "  <p>Rött fylligt vin, 75 cl, 12,5 % alk, Lisboa, Portugal. Mycket mörk och kraftig färg. Doften är något knuten, men det kan anas dofter av mörka bär och svarta vingummin. Sm,aken är desto gene... <a href=\"http://driveinbottleshop.dk/?produkt=vidigal-reserva\">Se detaljer</a></p> \n" +
+                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=amarula-70-cl\">Amarula Cream 70 cl.</a></h3>\n" +
+                "  <h4>109.95 DKK</h4>\n" +
+                "  <p>Krämig likör, 17 % alk. 70 cl, Sydafrika En cremelikör som är smaksatt med den exotiska Amarulafrukten.... <a href=\"http://driveinbottleshop.dk/?produkt=amarula-70-cl\">Se detaljer</a></p> \n" +
                 "  <form class=\"add-to-cart\"> \n" +
                 "   <label for=\"qty\">Kvantitet</label> \n" +
                 "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"68011\"> \n" +
+                "   <input type=\"hidden\" name=\"product_id\" value=\"65124\"> \n" +
                 "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
                 "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
                 "  </form> \n" +
                 " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"My Pride Wine Duoro Red\" href=\"http://driveinbottleshop.dk/?produkt=my-pride-wine-duoro-red\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/09/My-Pride-R-d-353x310-148x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=my-pride-wine-duoro-red\">My Pride Wine Duoro Red</a></h3> \n" +
-                "  <h4>59.95 DKK</h4> \n" +
-                "  <p>Fylligt rött vin, 75 cl, 12,5 % alk, Duoro, Portugal Druvor: &nbsp;Touriga Franca, Touriga Nacional and Tinta Roriz. En generös doft med mogna mörka bär men också kryddiga dofter som peppar, kryd... <a href=\"http://driveinbottleshop.dk/?produkt=my-pride-wine-duoro-red\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"75857\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Vallado Duoro\" href=\"http://driveinbottleshop.dk/?produkt=vallado-duoro\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2017/11/Vallado-douro-130x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=vallado-duoro\">Vallado Duoro</a></h3> \n" +
-                "  <h4>89.95 DKK</h4> \n" +
-                "  <p>Fylligt rött vin, 75 cl, 13,5 % alk, Duoro Portugal Druvor: Touriga Franca, Touriga Nacional, Tinta Roriz En generös doft med fruktiga toner av bland annat svarta vinbär. Smaken är fyllig, kra... <a href=\"http://driveinbottleshop.dk/?produkt=vallado-duoro\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"76240\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>\n" +
-                "<article class=\"product-search\"> \n" +
-                " <a class=\"thumbnail\" title=\"Vidigal Reserva, 6 st\" href=\"http://driveinbottleshop.dk/?produkt=reserva-vigigal-6-st\" style=\"background-image:url(http://driveinbottleshop.dk/wp-content/uploads/2011/12/Vidigal_Reserva-83x130.png)\"></a> \n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=reserva-vigigal-6-st\">Vidigal Reserva, 6 st</a></h3> \n" +
-                "  <h4>359.75 DKK</h4> \n" +
-                "  <p>Rött fylligt vin, 75 cl, 12,5 % alk, Lisboa, Portugal. Mycket mörk och kraftig färg. Doften är något knuten, men det&nbsp;kan anas dofter&nbsp;av mörka bär och svarta vingummin. Sm,aken är desto ge... <a href=\"http://driveinbottleshop.dk/?produkt=reserva-vigigal-6-st\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"67654\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article>");
+                "</article");
 
         Elements articles = doc.getElementsByClass("product-search");
 
@@ -136,6 +132,7 @@ public class DriveinbottleshopScraper implements ScraperService {
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
         articles.forEach(article -> {
+            System.err.println(article.getElementsByTag("p").text()); //TODO: Ska tas bort.
             drinks.add(makeDrink(article, type, subtype));
         });
         return drinks;
@@ -171,7 +168,14 @@ public class DriveinbottleshopScraper implements ScraperService {
                     .replaceAll("[a-zA-Z %]", "")
                     .replaceAll("^[,|.]", "")
                     .replace(",", ".");
-            return Float.parseFloat(substring);
+            if(substring.equals("100")) { //Prevents case exceptions where 100% is before alcohol%, they're all 12.5.
+                return 12.5f;
+            }
+            try {
+                return Float.parseFloat(substring);
+            } catch (NumberFormatException e) {
+                return 0f;
+            }
         }
         return 0f;
     }
@@ -193,14 +197,20 @@ public class DriveinbottleshopScraper implements ScraperService {
             }
             if(substring.matches(".*([0-9],[0-9]).*")) {
                 substring = substring.replaceFirst(",", ".");
+            } if(substring.matches(".*\\D[.].*")) { //If substring has a letter then a period, remove period to prevent 0.X instead of X.
+                substring = substring.replace(".", "");
             }
-            return Float.parseFloat(substring.replaceAll("[a-öA-Ö, ]", ""));
+            substring = substring.replaceAll("[a-öA-Ö%, ]", "");
+            if(substring.equals("")) { // Catches various typos that results in empty strings.
+                return extractVolumeFromTextOddCases(extractNameFromText(article), volumeString);
+            }
+            return Float.parseFloat(substring);
         } else if(minIndex == -7) {
             int clPeriodIndex = volumeString.indexOf("cl.");
             minIndex = clPeriodIndex - 6;
             if(minIndex >= 0) {
                 String substring = volumeString.substring(minIndex, clPeriodIndex);
-                return Float.parseFloat(substring.replaceAll("[a-öA-Ö, ]", ""));
+                return Float.parseFloat(substring.replaceAll("[a-öA-Ö%, ]", ""));
             }
         }
         String name = extractNameFromText(article);
@@ -211,8 +221,28 @@ public class DriveinbottleshopScraper implements ScraperService {
         } else if(ismlVolumeInName) {
             return (Float.parseFloat(name.substring(name.indexOf(" ml") - 3, name.indexOf(" ml"))) / 10);
         }
+        return extractVolumeFromTextOddCases(name, volumeString);
+        /* if(name.contains("5 L")) {
+            return 500f;
+        } else if(name.toLowerCase().contains("1 liter") || volumeString.toLowerCase().contains("1 liter")) {
+            return 100f;
+        } else if(volumeString.toLowerCase().contains("3 liter")) {
+            return 300f;
+        } else if(volumeString.toLowerCase().contains("0,7 liter")) {
+            return 70f;
+        }
+        return 0f; */
+    }
+
+    public float extractVolumeFromTextOddCases(String name, String volumeString) {
         if(name.contains("5 L")) {
             return 500f;
+        } else if(name.toLowerCase().contains("1 liter") || volumeString.toLowerCase().contains("1 liter")) {
+            return 100f;
+        } else if(volumeString.toLowerCase().contains("3 liter")) {
+            return 300f;
+        } else if(volumeString.toLowerCase().contains("0,7 liter")) {
+            return 70f;
         }
         return 0f;
     }
@@ -222,6 +252,8 @@ public class DriveinbottleshopScraper implements ScraperService {
             return 24;
         } else if(volumeString.contains("6") || extractNameFromText(article).contains("6 flaskor") || extractNameFromText(article).endsWith("6 st")) {
             return 6;
+        } else if(substring.contains("3x2")) {
+            return 3;
         }
         return 1;
     }
@@ -231,6 +263,8 @@ public class DriveinbottleshopScraper implements ScraperService {
             if(volume.contains("24")) {
                 return true;
             } else if(volume.contains("6")) {
+                return true;
+            } else if(volume.contains("3x2")) {
                 return true;
             }
         } else if(extractNameFromText(article).contains("24 burkar")) {
