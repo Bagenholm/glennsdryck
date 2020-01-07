@@ -1,7 +1,9 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
+import iths.glenn.drick.entity.StoreEntity;
 import iths.glenn.drick.repository.DrinkStorage;
+import iths.glenn.drick.repository.StoreStorage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,15 +18,22 @@ import java.util.stream.Collectors;
 public class DriveinbottleshopScraper implements ScraperService {
 
     DrinkStorage drinkStorage;
+    StoreStorage storeStorage;
+    StoreEntity driveinbottleshop;
 
-    public DriveinbottleshopScraper(DrinkStorage drinkStorage) {
+    public DriveinbottleshopScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
         this.drinkStorage = drinkStorage;
+        this.storeStorage = storeStorage;
     }
 
     @Override
     public List<DrinkEntity> scrape() throws IOException {
 
+        driveinbottleshop = storeStorage.findById("driveinbottleshop")
+                .orElse(new StoreEntity("driveinbottleshop", "DKK"));
+
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
+        driveinbottleshop.setDrinks(drinks);
 
         return drinkStorage.saveAll(
                 drinks.stream()

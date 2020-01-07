@@ -40,4 +40,8 @@ public class DrinkEntity {
     public String getName() {
         return name;
     }
+
+    public ArrayList<StoreEntity> getStoresList() {
+        return storesList;
+    }
 }

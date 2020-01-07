@@ -1,8 +1,10 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
+import iths.glenn.drick.entity.StoreEntity;
 import iths.glenn.drick.model.DrinkModel;
 import iths.glenn.drick.repository.DrinkStorage;
+import iths.glenn.drick.repository.StoreStorage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,9 +20,12 @@ import java.util.stream.Collectors;
 public class SystembolagetScraper implements ScraperService{
 
     public DrinkStorage drinkStorage;
+    public StoreStorage storeStorage;
+    StoreEntity systembolaget;
 
-    public SystembolagetScraper(DrinkStorage drinkStorage) {
+    public SystembolagetScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
         this.drinkStorage = drinkStorage;
+        this.storeStorage = storeStorage;
     }
 
     @Override
@@ -30,11 +35,16 @@ public class SystembolagetScraper implements ScraperService{
 
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
+        systembolaget = storeStorage.findById("systembolaget")
+                .orElse(new StoreEntity("systembolaget", "SEK"));
+
         articles.stream().forEach(article -> drinks.add(makeDrink(article)));
+
+        systembolaget.setDrinks(drinks);
 
         return drinkStorage.saveAll(
                 drinks.stream()
-                        .filter(drink -> drink.getName().trim().isEmpty())
+                        .filter(drink -> !drink.getName().trim().isEmpty())
                         .filter(drink -> drink.getAlcoholPerPrice() != 0)
                         .collect(Collectors.toList()));
     }
