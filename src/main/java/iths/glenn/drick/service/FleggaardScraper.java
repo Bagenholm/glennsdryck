@@ -34,8 +34,8 @@ public class FleggaardScraper implements ScraperService {
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
         return drinkStorage.saveAll(
-                drinks.stream().
-                        filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
+                drinks.stream()
+                        .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
                         .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
                         .collect(Collectors.toList()));
     }
@@ -50,7 +50,6 @@ public class FleggaardScraper implements ScraperService {
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
         articles.forEach(article -> {
-            System.out.println(article.getElementsByClass("productname").text());
             drinks.add(makeDrink(article, type, subtype));
         });
         return drinks;
