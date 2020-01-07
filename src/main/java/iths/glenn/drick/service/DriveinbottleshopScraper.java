@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DriveinbottleshopScraper implements ScraperService {
@@ -25,11 +26,11 @@ public class DriveinbottleshopScraper implements ScraperService {
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
-        return drinkStorage.saveAll(drinks);
-
-        //ArrayList<DrinkEntity> drinks = new ArrayList<>();
-        //drinks = scrapeDrinksTest("Vin", "Vitt");
-        //getElementsByTextForHtmlParse("http://driveinbottleshop.dk/?s=amarula&searchsubmit=S%C3%B6k");
+        return drinkStorage.saveAll(
+                drinks.stream()
+                        .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
+                        .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                        .collect(Collectors.toList()));
 
     }
 
@@ -141,7 +142,6 @@ public class DriveinbottleshopScraper implements ScraperService {
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
         articles.forEach(article -> {
-            System.err.println(article.getElementsByTag("p").text()); //TODO: Ska tas bort.
             drinks.add(makeDrink(article, type, subtype));
         });
         return drinks;
@@ -231,16 +231,6 @@ public class DriveinbottleshopScraper implements ScraperService {
             return (Float.parseFloat(name.substring(name.indexOf(" ml") - 3, name.indexOf(" ml"))) / 10);
         }
         return extractVolumeFromTextOddCases(name, volumeString);
-        /* if(name.contains("5 L")) {
-            return 500f;
-        } else if(name.toLowerCase().contains("1 liter") || volumeString.toLowerCase().contains("1 liter")) {
-            return 100f;
-        } else if(volumeString.toLowerCase().contains("3 liter")) {
-            return 300f;
-        } else if(volumeString.toLowerCase().contains("0,7 liter")) {
-            return 70f;
-        }
-        return 0f; */
     }
 
     public float extractVolumeFromTextOddCases(String name, String volumeString) {

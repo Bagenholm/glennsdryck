@@ -36,4 +36,8 @@ public class DrinkEntity {
     public float getAlcoholPerPrice() {
         return alcohol/pricePerLitre;
     }
+
+    public String getName() {
+        return name;
+    }
 }

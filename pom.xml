@@ -86,6 +86,11 @@
             <artifactId>jsoup</artifactId>
             <version>1.11.3</version>
         </dependency>
+        <dependency>
+            <groupId>io.webfolder</groupId>
+            <artifactId>ui4j-webkit</artifactId>
+            <version>4.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
