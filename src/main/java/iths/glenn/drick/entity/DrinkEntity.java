@@ -1,6 +1,7 @@
 package iths.glenn.drick.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -34,5 +35,13 @@ public class DrinkEntity {
 
     public float getAlcoholPerPrice() {
         return alcohol/pricePerLitre;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<StoreEntity> getStoresList() {
+        return storesList;
     }
 }
