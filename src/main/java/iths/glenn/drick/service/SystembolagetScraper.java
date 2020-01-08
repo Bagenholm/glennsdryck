@@ -2,7 +2,6 @@ package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.StoreEntity;
-import iths.glenn.drick.model.DrinkModel;
 import iths.glenn.drick.repository.DrinkStorage;
 import iths.glenn.drick.repository.StoreStorage;
 import org.jsoup.Jsoup;

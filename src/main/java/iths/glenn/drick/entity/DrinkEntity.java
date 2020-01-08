@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class DrinkEntity {
     private @Id String key;
 
-    ArrayList<StoreEntity> storesList;
+    ArrayList<StoreEntity> storesList = new ArrayList<>();
     String name;
     String type;
     String subtype;
