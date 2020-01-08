@@ -3,12 +3,12 @@ package iths.glenn.drick.service;
 import iths.glenn.drick.entity.DrinkEntity;
 
 public class AlcoholToGetDrunkService {
-    public double priceToGetDrunk(DrinkEntity drink, int amountOfDrunks){
+    public double priceToGetDrunk(DrinkEntity drink, int amountOfDrunks, double userWeight){
         double kronorToSpend = 0;
 
         float apk = drink.getAlcoholPerPrice() * 1000;// Get MillilitreAlcoholPerPrice
         double gramAlcoholPerPrice = apk * 0.8;
-        double promillePerPrice = gramAlcoholPerPrice / 52;
+        double promillePerPrice = gramAlcoholPerPrice / userWeight * 0.65;
 
         for(double i = 0; i < amountOfDrunks; i += promillePerPrice){
             kronorToSpend++;
@@ -16,11 +16,11 @@ public class AlcoholToGetDrunkService {
         return kronorToSpend;
     }
 
-    public int amountOfDrunksForPrice(DrinkEntity drink, double price){
+    public int amountOfDrunksForPrice(DrinkEntity drink, double price, double userWeight){
         int drunks = 0;
 
-        while(price > priceToGetDrunk(drink, 1)){
-            price -= priceToGetDrunk(drink, 1);
+        while(price > priceToGetDrunk(drink, 1, userWeight)){
+            price -= priceToGetDrunk(drink, 1, userWeight);
             drunks++;
         }
         return drunks;
