@@ -2,7 +2,7 @@ package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
 
-public class AlcoholToGetDrunkService {
+public class CalculationsService {
     public double priceToGetDrunk(DrinkEntity drink, int amountOfDrunks, double userWeight){
         double kronorToSpend = 0;
 
@@ -24,6 +24,10 @@ public class AlcoholToGetDrunkService {
             drunks++;
         }
         return drunks;
+    }
+
+    public double fuelConsumptionForTrip(double distanceInKilometer, double fuelConsumptionPerKilometer){
+        return fuelConsumptionPerKilometer * distanceInKilometer;
     }
 
     /*
