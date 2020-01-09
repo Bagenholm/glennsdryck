@@ -30,7 +30,7 @@ public class DrinkEntity {
         this.alcohol = alcohol;
         this.volume = volume;
         this.price = price;
-        this.key = name + volume + alcohol;
+        this.key = name + "-" + volume + "-" + alcohol;
     }
 
     public float getAlcoholPerPrice() {

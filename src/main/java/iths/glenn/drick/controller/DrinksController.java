@@ -33,12 +33,16 @@ public class DrinksController {
     }
 
     @GetMapping("/exchange/{currency}")
-    public Mono<String> getCurrencyExchange(@PathVariable String currency) {
+    public String getCurrencyExchange(@PathVariable String currency) {
         WebClient webClient = WebClient.create("https://api.exchangeratesapi.io/latest");
-        Flux<String> testFlux = webClient.get().uri("?base=SEK&symbols=" + currency)
-                .retrieve().bodyToFlux(String.class);
-        Mono<String> testMono = webClient.get().uri("?base=SEK&symbols=\" + currency").retrieve().bodyToMono(String.class);
-        return testMono;
+
+        Mono<String> testMono = webClient.get()
+                .uri("?base=SEK&symbols=" + currency)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        System.err.println(testMono.block());
+        return testMono.block();
         //return testFlux;
     }
 }

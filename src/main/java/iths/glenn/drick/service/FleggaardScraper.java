@@ -25,7 +25,7 @@ public class FleggaardScraper implements ScraperService {
     StoreStorage storeStorage;
     StoreEntity fleggaard;
 
-    BrowserEngine browser = BrowserFactory.getWebKit();
+    BrowserEngine browser = BrowserFactory.getWebKit(); // Throws NPE in some environments. Unclear why.
 
     public FleggaardScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
         this.drinkStorage = drinkStorage;
@@ -51,6 +51,7 @@ public class FleggaardScraper implements ScraperService {
 
 
     private ArrayList<DrinkEntity> scrapeDrinks(String type, String subtype, String url) throws IOException {
+
         Page page = browser.navigate(url);
         String htmlString = page.getDocument().queryAll(".products").toString();
         Document doc = Jsoup.parse(htmlString);
