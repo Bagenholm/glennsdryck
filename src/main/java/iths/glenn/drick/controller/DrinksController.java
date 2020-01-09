@@ -2,16 +2,15 @@ package iths.glenn.drick.controller;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.repository.DrinkStorage;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import javax.websocket.server.PathParam;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/drinks")
@@ -28,12 +27,22 @@ public class DrinksController {
         return drinkStorage.findAll();
     }
 
-    @GetMapping("/exchange/{currency}")
-    public Flux<String> getCurrencyExchange(@PathVariable String currency) {
-        WebClient webClient = WebClient.create("https://api.exchangeratesapi.io/latest");
-        Flux<String> testFlux = webClient.get().uri("?base=SEK&symbols=" + currency)
-                .retrieve().bodyToFlux(String.class);
+    @GetMapping("/bestAlcoholPrice/{amount}")
+    public List<DrinkEntity> getBestAlcoholPrice(@PathVariable int amount) {
+        return Collections.emptyList();
+    }
 
-        return testFlux;
+    @GetMapping("/exchange/{currency}")
+    public String getCurrencyExchange(@PathVariable String currency) {
+        WebClient webClient = WebClient.create("https://api.exchangeratesapi.io/latest");
+
+        Mono<String> testMono = webClient.get()
+                .uri("?base=SEK&symbols=" + currency)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        System.err.println(testMono.block());
+        return testMono.block();
+        //return testFlux;
     }
 }

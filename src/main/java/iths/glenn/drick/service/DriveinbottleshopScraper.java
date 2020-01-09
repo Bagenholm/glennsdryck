@@ -33,14 +33,16 @@ public class DriveinbottleshopScraper implements ScraperService {
                 .orElse(new StoreEntity("driveinbottleshop", "DKK"));
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
-        driveinbottleshop.setDrinks(drinks);
+        ArrayList<DrinkEntity> filteredDrinks = (ArrayList<DrinkEntity>) drinks.stream()
+                .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
+                .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                .collect(Collectors.toList());
 
-        return drinkStorage.saveAll(
-                drinks.stream()
-                        .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
-                        .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
-                        .collect(Collectors.toList()));
+        driveinbottleshop.setDrinks(filteredDrinks);
 
+        filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
+
+        return filteredDrinks;
     }
 
     private ArrayList<DrinkEntity> scrapeAllDrinks() throws IOException {
@@ -165,7 +167,7 @@ public class DriveinbottleshopScraper implements ScraperService {
 
         float pricePerLitre = 1000 / volume * price;
 
-        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume);
+        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume, driveinbottleshop);
     }
 
     private String extractNameFromText(Element article) {

@@ -13,10 +13,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,7 @@ public class FleggaardScraper implements ScraperService {
     StoreStorage storeStorage;
     StoreEntity fleggaard;
 
-    BrowserEngine browser = BrowserFactory.getWebKit();
+    BrowserEngine browser;
 
     public FleggaardScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
         this.drinkStorage = drinkStorage;
@@ -42,17 +40,25 @@ public class FleggaardScraper implements ScraperService {
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
-        fleggaard.setDrinks(drinks);
+        ArrayList<DrinkEntity> filteredDrinks = (ArrayList<DrinkEntity>) drinks.stream()
+                .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
+                .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                .collect(Collectors.toList());
 
-        return drinkStorage.saveAll(
-                drinks.stream()
+        fleggaard.setDrinks(filteredDrinks);
+
+        filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
+
+        return filteredDrinks;
+                /* drinkStorage.saveAll(drinks.stream()
                         .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
                         .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())); */
     }
 
 
     private ArrayList<DrinkEntity> scrapeDrinks(String type, String subtype, String url) throws IOException {
+        browser = BrowserFactory.getWebKit(); // Throws NPE in some environments. Unclear why.
         Page page = browser.navigate(url);
         String htmlString = page.getDocument().queryAll(".products").toString();
         Document doc = Jsoup.parse(htmlString);
@@ -545,7 +551,7 @@ public class FleggaardScraper implements ScraperService {
 
         float pricePerLitre = 1000 / volume * price;
 
-        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume);
+        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume, fleggaard);
     }
 
     private float extractPriceFromText(Element article) {

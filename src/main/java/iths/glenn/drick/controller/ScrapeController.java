@@ -26,14 +26,6 @@ public class ScrapeController {
         this.fleggaardScraper = fleggaardScraper;
     }
 
-    /* StoreStorage storeStorage;
-    ShopScrapeService scraper;
-
-    public ScrapeController(StoreStorage storeStorage, ShopScrapeService scraper) {
-        this.storeStorage = storeStorage;
-        this.scraper = scraper;
-    } */
-
     @GetMapping("/systembolaget")
     public List<DrinkEntity> scrapeAll() {
         try {
