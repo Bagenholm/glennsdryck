@@ -39,13 +39,22 @@ public class SystembolagetScraper implements ScraperService{
 
         articles.stream().forEach(article -> drinks.add(makeDrink(article)));
 
-        systembolaget.setDrinks(drinks);
+        ArrayList<DrinkEntity> filteredDrinks =
+        (ArrayList<DrinkEntity>) drinks.stream().filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
+                .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                .collect(Collectors.toList());
 
-        return drinkStorage.saveAll(
+        systembolaget.setDrinks(filteredDrinks);
+
+        filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
+
+        return filteredDrinks;
+
+        /* return drinkStorage.saveAll(
                 drinks.stream()
                         .filter(drink -> !drink.getName().trim().isEmpty())
                         .filter(drink -> drink.getAlcoholPerPrice() != 0)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())); */
     }
 
     public DrinkEntity makeDrink(Element article) {
@@ -57,7 +66,7 @@ public class SystembolagetScraper implements ScraperService{
         float alcohol = extractAlcoholFromText(article);
         float volume = extractVolumeFromText(article);
 
-        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume);
+        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume, systembolaget);
     }
 
     private float extractVolumeFromText(Element article) {
