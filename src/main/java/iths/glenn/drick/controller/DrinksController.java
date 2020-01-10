@@ -2,12 +2,13 @@ package iths.glenn.drick.controller;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.repository.DrinkStorage;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -30,6 +31,16 @@ public class DrinksController {
     @GetMapping("/bestAlcoholPrice/{amount}")
     public List<DrinkEntity> getBestAlcoholPrice(@PathVariable int amount) {
         return Collections.emptyList();
+    }
+
+    @GetMapping("/volume/{volume}")
+    public List<DrinkEntity> getByVolume(@PathVariable float volume) {
+        return drinkStorage.findByVolume(volume);
+    }
+
+    @GetMapping("/app/")
+    public List<DrinkEntity> getAllByAppAsc() {
+        return drinkStorage.findAllDrinks(JpaSort.unsafe("alcoholPerPrice").descending());
     }
 
     @GetMapping("/exchange/{currency}")
