@@ -36,6 +36,7 @@ public class DriveinbottleshopScraper implements ScraperService {
         ArrayList<DrinkEntity> filteredDrinks = (ArrayList<DrinkEntity>) drinks.stream()
                 .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
                 .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
                 .collect(Collectors.toList());
 
         driveinbottleshop.setDrinks(filteredDrinks);
