@@ -7,17 +7,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @Data
 @Entity
 @Table(name = "drinks")
 @NoArgsConstructor
-public class DrinkEntity {
+public class DrinkEntity implements Serializable {
+    static final long serialVersionUID = 1L;
     private @Id String drinkKey;
 
     //Mapped by stores
-    ArrayList<StoreEntity> storesList = new ArrayList<>();
+    ArrayList<String> storesList = new ArrayList<>();
     @Column(name = "productname")
     String name;
     @Column(name = "category")
@@ -36,9 +38,9 @@ public class DrinkEntity {
         this.alcohol = alcohol;
         this.volume = volume;
         this.price = price;
-        this.storesList.add(storeEntity);
+        this.storesList.add(storeEntity.storeName);
         this.alcoholPerPrice = alcohol / pricePerLitre;
-        this.drinkKey = storeEntity + "-" + name + "-" + volume + "-" + alcohol;
+        this.drinkKey = storeEntity.getStoreName() + "-" + name + "-" + volume + "-" + alcohol;
     }
 
     public float getAlcoholPerPrice() {
@@ -49,7 +51,7 @@ public class DrinkEntity {
         return name;
     }
 
-    public ArrayList<StoreEntity> getStoresList() {
+    public ArrayList<String> getStoresList() {
         return storesList;
     }
 }

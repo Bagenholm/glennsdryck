@@ -21,6 +21,8 @@ public class DriveinbottleshopScraper implements ScraperService {
     StoreStorage storeStorage;
     StoreEntity driveinbottleshop;
 
+    float currencyExchangeRate;
+
     public DriveinbottleshopScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
         this.drinkStorage = drinkStorage;
         this.storeStorage = storeStorage;
@@ -28,14 +30,15 @@ public class DriveinbottleshopScraper implements ScraperService {
 
     @Override
     public List<DrinkEntity> scrape() throws IOException {
-
         driveinbottleshop = storeStorage.findById("driveinbottleshop")
                 .orElse(new StoreEntity("driveinbottleshop", "DKK"));
+        currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(driveinbottleshop.getCurrency());
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
         ArrayList<DrinkEntity> filteredDrinks = (ArrayList<DrinkEntity>) drinks.stream()
                 .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
                 .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
                 .collect(Collectors.toList());
 
         driveinbottleshop.setDrinks(filteredDrinks);
@@ -163,7 +166,7 @@ public class DriveinbottleshopScraper implements ScraperService {
         String name = extractNameFromText(article);
         float alcohol = extractAlcoholFromText(article);
         float volume = extractVolumeFromText(article) * 10;
-        float price = extractPriceFromText(article);
+        float price = extractPriceFromText(article) * currencyExchangeRate;
 
         float pricePerLitre = 1000 / volume * price;
 
@@ -191,8 +194,7 @@ public class DriveinbottleshopScraper implements ScraperService {
             if(substring.equals("100")) { //Prevents odd cases where 100% is before alcohol%, they're all 12.5.
                 return 12.5f;
             }
-            try {
-                return Float.parseFloat(substring);
+            try { return Float.parseFloat(substring);
             } catch (NumberFormatException e) {
                 return 0f;
             }

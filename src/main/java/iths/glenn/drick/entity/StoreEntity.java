@@ -1,29 +1,31 @@
 package iths.glenn.drick.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
 @Table(name = "stores")
+@Getter
 @NoArgsConstructor
-public class StoreEntity {
-    @Id
-    private String name;
+public class StoreEntity implements Serializable {
+    static final long serialVersionUID = 1L;
+    @Id String storeName;
     String currency;
-    ArrayList<DrinkEntity> drinks;
+    @JsonIgnore ArrayList<DrinkEntity> drinks;
     Date lastDateScraped;
 
-    public String getName() {
-        return name;
+    public String getStoreName() {
+        return storeName;
     }
 
     public ArrayList<DrinkEntity> getDrinks() {
@@ -34,8 +36,12 @@ public class StoreEntity {
         this.drinks = drinks;
     }
 
-    public StoreEntity(String name, String currency) {
-        this.name = name;
+    public StoreEntity(String storeName, String currency) {
+        this.storeName = storeName;
         this.currency = currency;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 }

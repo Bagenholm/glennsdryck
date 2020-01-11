@@ -37,16 +37,20 @@ public class SystembolagetScraper implements ScraperService{
         systembolaget = storeStorage.findById("systembolaget")
                 .orElse(new StoreEntity("systembolaget", "SEK"));
 
-        articles.stream().forEach(article -> drinks.add(makeDrink(article)));
+        articles.forEach(article -> drinks.add(makeDrink(article)));
 
         ArrayList<DrinkEntity> filteredDrinks =
-        (ArrayList<DrinkEntity>) drinks.stream().filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
+        (ArrayList<DrinkEntity>) drinks.stream()
+                .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
                 .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
                 .collect(Collectors.toList());
 
         systembolaget.setDrinks(filteredDrinks);
-
-        filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
+        filteredDrinks.forEach(drinkEntity ->
+        {
+            drinkStorage.save(drinkEntity);
+        });
 
         return filteredDrinks;
 
