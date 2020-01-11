@@ -36,12 +36,6 @@ public class FleggaardScraper implements ScraperService {
     @Override
     public List<DrinkEntity> scrape() throws IOException {
 
-        fleggaard = storeStorage.findById("fleggaard")
-                .orElse(new StoreEntity("fleggaard", "DKK"));
-
-        currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(fleggaard.getCurrency());
-
-
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
         ArrayList<DrinkEntity> filteredDrinks = (ArrayList<DrinkEntity>) drinks.stream()
@@ -49,6 +43,9 @@ public class FleggaardScraper implements ScraperService {
                 .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
                 .collect(Collectors.toList());
 
+        fleggaard = storeStorage.findById("fleggaard")
+                .orElse(new StoreEntity("fleggaard", "DKK"));
+        currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(fleggaard.getCurrency());
         fleggaard.setDrinks(filteredDrinks);
 
         filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
@@ -635,10 +632,6 @@ public class FleggaardScraper implements ScraperService {
         return 0f;
     }
 
-    public float extractVolumeFromTextOddCases(String name, String volumeString) {
-        return 0f;
-    }
-
     private float multiPackMultiplier(String multiString, String multipackStringWithVolume) {
         int lIndex = multipackStringWithVolume.lastIndexOf('l');
         char volumePrefix = ' ';
@@ -704,9 +697,5 @@ public class FleggaardScraper implements ScraperService {
         drinks.addAll(scrapeDrinks("Sprit", "Whisky", "https://www.fleggaard.dk/pl/Sprit-Whisky_40405.aspx?locId=732"));
 
         return drinks;
-    }
-
-    private float getCurrentExchangeRate(String currency) {
-        return CurrencyExchangeRateService.exchangeRate(currency);
     }
 }

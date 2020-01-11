@@ -1,6 +1,7 @@
 package iths.glenn.drick.controller;
 
 import iths.glenn.drick.entity.DrinkEntity;
+import iths.glenn.drick.service.CalleScraper;
 import iths.glenn.drick.service.DriveinbottleshopScraper;
 import iths.glenn.drick.service.FleggaardScraper;
 import iths.glenn.drick.service.SystembolagetScraper;
@@ -19,11 +20,13 @@ public class ScrapeController {
     SystembolagetScraper systembolagetScraper;
     DriveinbottleshopScraper driveinbottleshopScraper;
     FleggaardScraper fleggaardScraper;
+    CalleScraper calleScraper;
 
-    public ScrapeController(SystembolagetScraper systembolagetScraper, DriveinbottleshopScraper driveinbottleshopScraper, FleggaardScraper fleggaardScraper) {
+    public ScrapeController(SystembolagetScraper systembolagetScraper, DriveinbottleshopScraper driveinbottleshopScraper, FleggaardScraper fleggaardScraper, CalleScraper calleScraper) {
         this.systembolagetScraper = systembolagetScraper;
         this.driveinbottleshopScraper = driveinbottleshopScraper;
         this.fleggaardScraper = fleggaardScraper;
+        this.calleScraper = calleScraper;
     }
 
     @GetMapping("/systembolaget")
@@ -50,6 +53,16 @@ public class ScrapeController {
     public List<DrinkEntity> scrapeFleggaard() {
         try {
             return fleggaardScraper.scrape();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+    @GetMapping("/calle")
+    public List<DrinkEntity> scrapeCalle() {
+        try {
+            return calleScraper.scrape();
         } catch (IOException e) {
             e.printStackTrace();
         }
