@@ -26,6 +26,7 @@ public class FleggaardScraper implements ScraperService {
     StoreEntity fleggaard;
 
     BrowserEngine browser;
+    float currencyExchangeRate;
 
     public FleggaardScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
         this.drinkStorage = drinkStorage;
@@ -37,6 +38,9 @@ public class FleggaardScraper implements ScraperService {
 
         fleggaard = storeStorage.findById("fleggaard")
                 .orElse(new StoreEntity("fleggaard", "DKK"));
+
+        currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(fleggaard.getCurrency());
+
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
@@ -50,15 +54,10 @@ public class FleggaardScraper implements ScraperService {
         filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
 
         return filteredDrinks;
-                /* drinkStorage.saveAll(drinks.stream()
-                        .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
-                        .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
-                        .collect(Collectors.toList())); */
     }
 
-
     private ArrayList<DrinkEntity> scrapeDrinks(String type, String subtype, String url) throws IOException {
-        browser = BrowserFactory.getWebKit(); // Throws NPE in some environments. Unclear why.
+        browser = BrowserFactory.getWebKit(); // Throws NPE if run on JDK11 without JavaFX added as a library
         Page page = browser.navigate(url);
         String htmlString = page.getDocument().queryAll(".products").toString();
         Document doc = Jsoup.parse(htmlString);
@@ -547,7 +546,7 @@ public class FleggaardScraper implements ScraperService {
         String name = extractNameFromText(article);
         float alcohol = extractAlcoholFromText(article);
         float volume = extractVolumeFromText(article) * 1000; //Product volume comes in litres
-        float price = extractPriceFromText(article);
+        float price = extractPriceFromText(article) * currencyExchangeRate;
 
         float pricePerLitre = 1000 / volume * price;
 
@@ -556,9 +555,20 @@ public class FleggaardScraper implements ScraperService {
 
     private float extractPriceFromText(Element article) {
         String priceTagText = article.getElementsByClass("productOnePrice").get(0).text();
-        String priceString = priceTagText.substring(priceTagText.indexOf("DKK ") + 4);
-        priceString = priceString.replace(",", ".");
-        return Float.parseFloat(priceString);
+        int dkkIndex = priceTagText.indexOf("DKK ");
+        int sekIndex = priceTagText.indexOf("SEK ");
+
+        String priceString = priceTagText.substring(dkkIndex + sekIndex + 5); //One of the indexes will be -1, allows both SEK and DKK parsing
+
+        priceString = priceString.replace(".", "").replace(",", ".");
+
+        float returnNumber = 0f;
+        try {returnNumber = Float.parseFloat(priceString);
+        } catch (NumberFormatException e){
+            System.err.println(priceTagText + " " + priceString);
+        }
+
+        return returnNumber;
     }
 
     private String extractNameFromText(Element article) {
@@ -601,9 +611,9 @@ public class FleggaardScraper implements ScraperService {
         String substring = volumeString.substring(percIndex + 1);
         int xIndex = substring.indexOf("x");
         int lIndex = substring.lastIndexOf("l");
-        int packMultiplier = 1;
+        float packMultiplier = 1f;
         if(percIndex >= 0) {
-            packMultiplier = multiPackMultiplier(substring.substring(0, xIndex + 1));
+            packMultiplier = multiPackMultiplier(substring.substring(0, xIndex + 1), substring);
         } else if (percIndex == -1) {
             return 0f;
         }
@@ -629,13 +639,20 @@ public class FleggaardScraper implements ScraperService {
         return 0f;
     }
 
-    private int multiPackMultiplier(String multiString) {
-        if(multiString.contains("c")) {
-            return Integer.parseInt(multiString.replaceAll("[a-zA-Z]", "").trim()) * 100;
-        } else if(multiString.contains("x")) {
-            return Integer.parseInt(multiString.replaceAll("x", "").trim());
+    private float multiPackMultiplier(String multiString, String multipackStringWithVolume) {
+        int lIndex = multipackStringWithVolume.lastIndexOf('l');
+        char volumePrefix = ' ';
+        if(lIndex > 0) {
+            volumePrefix = multipackStringWithVolume.charAt(lIndex - 1);
         }
-        return 1;
+        if(volumePrefix == 'c') {
+            return Float.parseFloat(multiString.replaceAll("[a-zA-Z]", "").trim()) / 100;
+        } else if(volumePrefix == 'm') {
+            return Float.parseFloat(multiString.replaceAll("[a-zA-Z]", "").trim()) / 1000;
+        } else if(multiString.contains("x")) {
+            return Float.parseFloat(multiString.replaceAll("x", "").trim());
+        }
+        return 1f;
     }
 
     private boolean isMultiPack() {
@@ -687,5 +704,9 @@ public class FleggaardScraper implements ScraperService {
         drinks.addAll(scrapeDrinks("Sprit", "Whisky", "https://www.fleggaard.dk/pl/Sprit-Whisky_40405.aspx?locId=732"));
 
         return drinks;
+    }
+
+    private float getCurrentExchangeRate(String currency) {
+        return CurrencyExchangeRateService.exchangeRate(currency);
     }
 }

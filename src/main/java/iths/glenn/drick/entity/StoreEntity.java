@@ -1,6 +1,7 @@
 package iths.glenn.drick.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "stores")
+@Getter
 @NoArgsConstructor
 public class StoreEntity implements Serializable {
     static final long serialVersionUID = 1L;
@@ -37,5 +39,9 @@ public class StoreEntity implements Serializable {
     public StoreEntity(String storeName, String currency) {
         this.storeName = storeName;
         this.currency = currency;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 }
