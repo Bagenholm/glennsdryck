@@ -36,6 +36,10 @@ public class FleggaardScraper implements ScraperService {
     @Override
     public List<DrinkEntity> scrape() throws IOException {
 
+        fleggaard = storeStorage.findById("fleggaard")
+                .orElse(new StoreEntity("fleggaard", "DKK"));
+        currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(fleggaard.getCurrency());
+
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
         ArrayList<DrinkEntity> filteredDrinks = (ArrayList<DrinkEntity>) drinks.stream()
@@ -43,9 +47,6 @@ public class FleggaardScraper implements ScraperService {
                 .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
                 .collect(Collectors.toList());
 
-        fleggaard = storeStorage.findById("fleggaard")
-                .orElse(new StoreEntity("fleggaard", "DKK"));
-        currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(fleggaard.getCurrency());
         fleggaard.setDrinks(filteredDrinks);
 
         filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));

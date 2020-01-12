@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +35,6 @@ public class CalleScraper implements ScraperService{
         calle = storeStorage.findById("calle")
                 .orElse(new StoreEntity("calle", "EUR"));
         currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(calle.getCurrency());
-
-        //getElementsByTextForHtmlParse("https://calle.ee/?id=37&cat=27");
-        //scrapeDrinksTest("Vin", "Rött vin");
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
@@ -960,7 +955,6 @@ public class CalleScraper implements ScraperService{
     }
 
     private DrinkEntity makeDrink(Element article, String type, String subtype) {
-        System.err.println(article.getElementsByTag("h1").text());
         String name = extractNameFromText(article);
         float alcohol = extractAlcoholFromText(article);
         float volume = extractVolumeFromText(article);
@@ -974,18 +968,35 @@ public class CalleScraper implements ScraperService{
     private float extractVolumeFromText(Element article) {
         String volumeString = article.getElementsByTag("h1").text();
         int lIndex = volumeString.lastIndexOf('l');
+        if(lIndex == -1) {
+            return 0f;
+        }
         char volumePrefix = volumeString.charAt(lIndex - 1);
-        if(!String.valueOf(volumePrefix).matches("[cm ]")) {  //If lIndex is not the last l in volumeString the volume
-            lIndex = volumeString.substring(lIndex).lastIndexOf('l'); // Second from last 'l'
+        if(!String.valueOf(volumePrefix).matches("[cm ]")) {  //If lIndex is not the last l in volumeString the volume, i. e. 'cl', 'ml' or ' l'.
+            lIndex = volumeString.substring(0, lIndex).lastIndexOf('l'); // Second from last 'l'.
         }
         int spaceBeforeVolumeIndex = volumeString.substring(0, lIndex).lastIndexOf(' ');
-        int multiPackMultiplier = extractMultiPackMultiplier(volumeString.substring(spaceBeforeVolumeIndex, lIndex));
+        int multiPackMultiplier = 1;
+        if(isUsualDescription(spaceBeforeVolumeIndex, lIndex)) {
+            String packAndVolumeString = volumeString.substring(spaceBeforeVolumeIndex, lIndex);
+            multiPackMultiplier = extractMultiPackMultiplier(packAndVolumeString);
+        } else {
+            volumeString = volumeString.substring(0, lIndex);
+            lIndex = volumeString.lastIndexOf('l');
+        }
         int volumeMultiplier = volumePrefixMultiplier(volumeString, volumePrefix) * multiPackMultiplier;
-        volumeString = volumeString.substring(spaceBeforeVolumeIndex, lIndex)
+        if(multiPackMultiplier > 1) {
+            volumeString = volumeString.substring(volumeString.lastIndexOf('x'), lIndex); //Prevents 24x33 to be read as 2433
+        } else {
+            volumeString = volumeString.substring(spaceBeforeVolumeIndex, lIndex);
+        }
+        volumeString = volumeString
                 .replaceAll("[a-öA-Ö %]", "")
                 .replace(",", ".");
-        return Float.parseFloat(volumeString) * volumeMultiplier;
-
+        if(volumeString.matches("[\\d]+")) {
+            return Float.parseFloat(volumeString) * volumeMultiplier;
+        }
+        return 0f;
     }
 
     private int extractMultiPackMultiplier(String volumeString) {
@@ -1003,10 +1014,8 @@ public class CalleScraper implements ScraperService{
         } else if(volumePrefix == 'm') {
             return 1;
         } else if(String.valueOf(volumePrefix).matches("[0-9]")) {
-            System.out.println("In litres? " + volumeString);
             return 1000;
         }
-        System.err.println(volumeString + ": " + volumePrefix + ": No volume prefix?");
         return 1;
     }
 
@@ -1014,7 +1023,7 @@ public class CalleScraper implements ScraperService{
         String alcoholString = article.getElementsByTag("h1").text();
         int percIndex = alcoholString.indexOf('%');
         int lIndex = alcoholString.lastIndexOf('l');
-        if(isUsualDescription(percIndex, lIndex)) {
+        if(isUsualDescription(lIndex, percIndex)) {
             String alcoholSubString = alcoholString.substring(lIndex + 1, percIndex).trim();
             alcoholSubString = alcoholSubString.replace(",", ".").replaceAll("[a-zA-Z ]", "");
             return Float.parseFloat(alcoholSubString);
@@ -1033,13 +1042,16 @@ public class CalleScraper implements ScraperService{
         return 0;
     }
 
-    private boolean isUsualDescription(int percIndex, int lIndex) {
-        return (percIndex > 0 && lIndex > 0 && percIndex > lIndex);
+    private boolean isUsualDescription(int lowerIndex, int higherIndex ) {
+        return (higherIndex > 0 && lowerIndex> 0 && higherIndex > lowerIndex);
     }
 
     private String extractNameFromText(Element article) {
         String nameString = article.getElementsByTag("h1").text();
         int lIndex = nameString.lastIndexOf('l');
+        if(lIndex == -1) {
+            return "";
+        }
         int spaceBeforeVolume = nameString.substring(0, lIndex).lastIndexOf(' ');
         return nameString.substring(0, spaceBeforeVolume);
     }
