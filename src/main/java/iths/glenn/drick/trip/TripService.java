@@ -9,9 +9,9 @@ public interface TripService {
 
     List<TripEntity> listAllTrips();
     List<TripModel> listAllTripsToDestination(String destination);
-    TripModel getTripById(String tripId);
+    TripModel getTripById(TripId tripId);
     TripModel addTrip(TripEntity tripEntity);
-    void removeTrip(String tripId);
-    TripModel updateTrip(String tripId, TripEntity tripEntity) throws Exception;
-    TripModel updateTripPartially(String tripId, UpdateTripRequest updateTripRequest);
+    void removeTrip(TripId tripId);
+    TripModel updateTrip(TripId tripId, TripEntity tripEntity) throws Exception;
+    TripModel updateTripPartially(TripId tripId, UpdateTripRequest updateTripRequest);
 }

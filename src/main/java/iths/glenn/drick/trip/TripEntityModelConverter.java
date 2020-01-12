@@ -12,10 +12,10 @@ public class TripEntityModelConverter {
 
         TripModel tripModel = new TripModel();
 
-        tripModel.setStartPoint(tripEntity.getStartPoint());
-        tripModel.setEndPoint(tripEntity.getEndPoint());
-        tripModel.setTripInfo(tripEntity.getTripInfo());
-        tripModel.setWayOfTravel(tripEntity.getWayOfTravel());
+        tripModel.setStartPoint(tripEntity.getTripId().getStartPoint());
+        tripModel.setEndPoint(tripEntity.getTripId().getEndPoint());
+        tripModel.setTripInfo(tripEntity.getTripId().getTripInfo());
+        tripModel.setWayOfTravel(tripEntity.getTripId().getWayOfTravel());
         tripModel.setMinTravellingTime(tripEntity.getMinTravellingTime());
         tripModel.setMaxTravellingTime(tripEntity.getMaxTravellingTime());
         tripModel.setTotalDistanceInKM(tripEntity.getTotalDistanceInKM());
