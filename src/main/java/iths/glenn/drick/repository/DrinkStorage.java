@@ -22,4 +22,7 @@ public interface DrinkStorage extends JpaRepository<DrinkEntity, String> {
     @Query(value = "Select d FROM DrinkEntity d")
     List<DrinkEntity> findAllDrinks(Sort sort);
 
+    @Query(value = "Select d FROM DrinkEntity d WHERE (INSTR(d.name, ?1) > 0 OR INSTR(?1, d.name) > 0 AND d.drinkKey NOT LIKE 'stena%')")
+    List<DrinkEntity> findByPartialNameNotStena(String name);
+
 }
