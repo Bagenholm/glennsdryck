@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public class UpdateTripRequest {
 
-    String id;
+    TripId tripId;
     String startPoint;
     String endPoint;
     String tripInfo;
@@ -22,12 +22,12 @@ public class UpdateTripRequest {
     public UpdateTripRequest() {
     }
 
-    public Optional<String> getId() {
-        return Optional.ofNullable(id);
+    public Optional<TripId> getTripId() {
+        return Optional.ofNullable(tripId);
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTripId(TripId tripId) {
+        this.tripId = tripId;
     }
 
     public Optional<String> getStartPoint() {
