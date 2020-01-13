@@ -1,5 +1,5 @@
 package iths.glenn.drick.security;
-/*
+
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class AuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
     @Override
     public void afterPropertiesSet() {
-        setRealmName("Baeldung");
+        setRealmName("Yikers");
         super.afterPropertiesSet();
     }
-}*/
+}
