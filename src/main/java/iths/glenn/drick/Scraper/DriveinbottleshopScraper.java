@@ -60,8 +60,6 @@ public class DriveinbottleshopScraper implements ScraperService {
                 .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
                 .collect(Collectors.toList());
 
-        driveinbottleshop.setDrinks(filteredDrinks);
-
         filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
         driveinbottleshop.setInstanceLastScrapedToNow();
         storeStorage.save(driveinbottleshop);
