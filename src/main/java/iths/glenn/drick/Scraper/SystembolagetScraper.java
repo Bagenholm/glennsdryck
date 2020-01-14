@@ -32,8 +32,7 @@ public class SystembolagetScraper implements ScraperService {
 
     @Override
     public List<DrinkEntity> start() throws IOException {
-        systembolaget = storeStorage.findById("systembolaget")
-                .orElse(new StoreEntity("systembolaget", "SEK"));
+        systembolaget = getStore();
 
         if (systembolaget.isScrapedRecently()) {
             return drinkStorage.findByStore(systembolaget.getStoreName());
@@ -41,7 +40,13 @@ public class SystembolagetScraper implements ScraperService {
         return scrape();
     }
 
+    public StoreEntity getStore() {
+        return storeStorage.findById("systembolaget")
+                .orElse(new StoreEntity("systembolaget", "SEK"));
+    }
+
     public List<DrinkEntity> scrape() throws IOException {
+        systembolaget = getStore();
         Document doc = Jsoup.connect("https://www.systembolaget.se/api/assortment/products/xml").get();
         Elements articles = doc.getElementsByTag("Artikel");
 
