@@ -1,7 +1,5 @@
-package iths.glenn.drick.service;
+package iths.glenn.drick.Scraper;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import iths.glenn.drick.entity.DrinkEntity;
@@ -10,9 +8,14 @@ import iths.glenn.drick.repository.DrinkStorage;
 import iths.glenn.drick.repository.StoreStorage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,20 +23,27 @@ import java.util.stream.Collectors;
 @Service
 public class StenalineScraper implements ScraperService {
 
+    @Autowired
     DrinkStorage drinkStorage;
+    @Autowired
     StoreStorage storeStorage;
     StoreEntity stenaline;
 
-    public StenalineScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
-        this.drinkStorage = drinkStorage;
-        this.storeStorage = storeStorage;
-    }
+    Logger logger = LoggerFactory.getLogger(StenalineScraper.class);
 
     @Override
-    public List<DrinkEntity> scrape() throws IOException {
+    public List<DrinkEntity> start() throws IOException {
         stenaline = storeStorage.findById("stenaline")
                 .orElse(new StoreEntity("stenaline", "SEK"));
 
+        if(stenaline.isScrapedRecently()) {
+            logger.info("Stenaline scraped recently. Fetching from DB.");
+            return drinkStorage.findByStore("stenaline");
+        }
+        return scrape();
+    }
+
+    public List<DrinkEntity> scrape() throws IOException {
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
         drinks.forEach(drink -> extractAndSetAlcoholFromOtherStores(drink));
@@ -44,12 +54,10 @@ public class StenalineScraper implements ScraperService {
                 .collect(Collectors.toList());
 
         filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
+        stenaline.setInstanceLastScrapedToNow();
+        storeStorage.save(stenaline);
 
         return filteredDrinks;
-
-        //return drinks;
-
-       // scrapeDrinksTest("http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=2b128b55-93f8-4cf8-8653-88a6d420efa8&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0", "Öl", "");
     }
 
     private void extractAndSetAlcoholFromOtherStores(DrinkEntity drink) {
@@ -62,10 +70,10 @@ public class StenalineScraper implements ScraperService {
     private ArrayList<DrinkEntity> scrapeAllDrinks() throws IOException {
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
-        drinks.addAll(scrapeDrinks("Öl", "", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=2b128b55-93f8-4cf8-8653-88a6d420efa8&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
-        drinks.addAll(scrapeDrinks("Vin", "", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=7347a5b8-1a92-4151-93ea-1e273801c9d8&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
-        drinks.addAll(scrapeDrinks("Whisky", "", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=ed2ea570-4102-4caa-8b10-0acd68c937d0&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
-        drinks.addAll(scrapeDrinks("Övrig sprit", "", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=17bda0d6-bde5-449d-9d5d-d31183b85581&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
+        drinks.addAll(scrapeDrinks("Öl", "Övrigt", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=2b128b55-93f8-4cf8-8653-88a6d420efa8&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
+        drinks.addAll(scrapeDrinks("Vin", "Övrigt", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=7347a5b8-1a92-4151-93ea-1e273801c9d8&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
+        drinks.addAll(scrapeDrinks("Sprit", "Whisky", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=ed2ea570-4102-4caa-8b10-0acd68c937d0&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
+        drinks.addAll(scrapeDrinks("Sprit", "Övrigt", "http://shopping.stenaline.se/api/search?CMS_SearchString=&Id=ddefd7a0885f494a915638bbb6759bfe&cid=17bda0d6-bde5-449d-9d5d-d31183b85581&ProductSetId=00000000-0000-0000-0000-000000000000&FromPrice=0&ToPrice=0"));
 
         return drinks;
     }
@@ -81,27 +89,6 @@ public class StenalineScraper implements ScraperService {
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
         jsonNode.forEach(node -> drinks.add(makeDrink(node, type, subtype)));
-
-        return drinks;
-    }
-
-    private ArrayList<DrinkEntity> scrapeDrinksTest(String url, String type, String subtype) throws IOException {
-        ArrayList<DrinkEntity> drinks = new ArrayList<>();
-
-        Document doc;
-        doc = Jsoup.connect(url).ignoreContentType(true).get();
-        String jsonString = doc.getElementsByTag("body").text();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(jsonString).get("products");
-
-        jsonNode.forEach(node -> {
-            System.err.println(node.toPrettyString() + "\n" +
-                    "Name: " + extractNameFromText(node) + "\n" +
-                    "Price: " + extractPriceFromText(node) + "\n" +
-                    "Volume: " + extractVolumeFromText(node) );
-            drinks.add(makeDrink(node, "Öl", ""));
-        });
 
         return drinks;
     }

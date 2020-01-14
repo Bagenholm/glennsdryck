@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.repository.DrinkStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +21,8 @@ import java.util.*;
 @RequestMapping("/drinks")
 public class DrinksController {
 
+    @Autowired
     DrinkStorage drinkStorage;
-
-    public DrinksController(DrinkStorage drinkStorage) {
-        this.drinkStorage = drinkStorage;
-    }
 
     @GetMapping("")
     public List<DrinkEntity> getAll() {
