@@ -35,8 +35,7 @@ public class DriveinbottleshopScraper implements ScraperService {
 
     @Override
     public List<DrinkEntity> start() throws IOException {
-        driveinbottleshop = storeStorage.findById("driveinbottleshop")
-                .orElse(new StoreEntity("driveinbottleshop", "DKK"));
+        driveinbottleshop = getStore();
 
         if(driveinbottleshop.isScrapedRecently()) {
             logger.info("Driveinbottleshop scraped recently. Fetching from DB.");
@@ -45,7 +44,13 @@ public class DriveinbottleshopScraper implements ScraperService {
         return scrape();
     }
 
+    public StoreEntity getStore() {
+        return storeStorage.findById("driveinbottleshop")
+                .orElse(new StoreEntity("driveinbottleshop", "DKK"));
+    }
+
     public List<DrinkEntity> scrape() throws IOException {
+        driveinbottleshop = getStore();
         currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(driveinbottleshop.getCurrency());
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();

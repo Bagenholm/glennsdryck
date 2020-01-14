@@ -33,8 +33,7 @@ public class StenalineScraper implements ScraperService {
 
     @Override
     public List<DrinkEntity> start() throws IOException {
-        stenaline = storeStorage.findById("stenaline")
-                .orElse(new StoreEntity("stenaline", "SEK"));
+        stenaline = getStore();
 
         if(stenaline.isScrapedRecently()) {
             logger.info("Stenaline scraped recently. Fetching from DB.");
@@ -43,7 +42,13 @@ public class StenalineScraper implements ScraperService {
         return scrape();
     }
 
+    public StoreEntity getStore() {
+        return storeStorage.findById("stenaline")
+                .orElse(new StoreEntity("stenaline", "SEK"));
+    }
+
     public List<DrinkEntity> scrape() throws IOException {
+        stenaline = getStore();
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
 
         drinks.forEach(drink -> extractAndSetAlcoholFromOtherStores(drink));

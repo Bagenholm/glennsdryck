@@ -39,8 +39,7 @@ public class FleggaardScraper implements ScraperService {
 
     @Override
     public List<DrinkEntity> start() throws IOException {
-        fleggaard = storeStorage.findById("fleggaard")
-                .orElse(new StoreEntity("fleggaard", "DKK"));
+        fleggaard = getStore();
 
         if(fleggaard.isScrapedRecently()) {
             logger.info("Fleggaard scraped recently. Fetching from DB.");
@@ -49,7 +48,13 @@ public class FleggaardScraper implements ScraperService {
         return scrape();
     }
 
+    public StoreEntity getStore() {
+        return storeStorage.findById("fleggaard")
+                .orElse(new StoreEntity("fleggaard", "DKK"));
+    }
+
     public List<DrinkEntity> scrape() throws IOException {
+        fleggaard = getStore();
         currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(fleggaard.getCurrency());
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
