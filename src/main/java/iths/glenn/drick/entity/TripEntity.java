@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import iths.glenn.drick.trip.TripId;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.EmbeddedId;
@@ -16,16 +17,26 @@ import java.time.Duration;
 @Entity
 @Table(name = "trips")
 @Data
+@NoArgsConstructor
 @Getter
 @Setter
 public class TripEntity implements Serializable {
+
+
+    //TODO: Sätta @Column(name = {name}) på alla fält?   t.ex. name = trip_id   eller  min_travelling_time
+    //TODO: behövs @MapsId??    för composite keys    eller är detta bara när man behöver en till separat klass? i databasen
+    //TODO: ...räknas TripId som en sån extra klass?   den separata klassen ska va typ om relationen mellan 2 entiteter ska ha ett attribut
+
+
 
     @EmbeddedId
     private TripId tripId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+   // @Pattern(message = "Wrong format of duration for minTravellingTime", regexp = "PTnHnM")
     private Duration minTravellingTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+    //@Pattern(message = "Wrong format of duration for maxTravellingTime", regexp = "PTnHnM")
     private Duration maxTravellingTime;
     private double totalDistanceInKM;
     @NotNull(message = "distanceByCarInKM of the trip must be included in request body")
@@ -35,10 +46,6 @@ public class TripEntity implements Serializable {
     private double maxTripCharges;
     private int minCapacityInKilos;
     private int maxCapacityInKilos;
-
-    public TripEntity() {
-        //this.id = startPoint + "-" + endPoint + "-" + tripInfo + "-" + wayOfTravel;  //TODO: Ta bort?
-    }
 
     public TripEntity(TripId tripId, Duration minTravellingTime, Duration maxTravellingTime, double totalDistanceInKM, double distanceByCarInKM, double minTripCharges, double maxTripCharges, int minCapacityInKilos, int maxCapacityInKilos) {
         this.tripId = tripId;
@@ -58,4 +65,9 @@ public class TripEntity implements Serializable {
         // ...av den servicen för att hämta ut med de långa id:t
     }
 
+   // @ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "stores")   //TODO: Detta??
+   // private StoreEntity storEntity;
+
+    //TODO: implementera hashcode och equals metoder??
 }

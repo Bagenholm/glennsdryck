@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TripEntityModelConverter {
 
-    public TripModel tripEntityToModel(TripEntity tripEntity) {
+    public static TripModel tripEntityToModel(TripEntity tripEntity) {
 
         TripModel tripModel = new TripModel();
 
@@ -28,7 +28,7 @@ public class TripEntityModelConverter {
         return tripModel;
     }
 
-    public List<TripModel> tripListToModel(List<TripEntity> tripEntityList) {
+    public static List<TripModel> tripListToModel(List<TripEntity> tripEntityList) {
 
         List<TripModel> tripModelList = new ArrayList<>();
 
