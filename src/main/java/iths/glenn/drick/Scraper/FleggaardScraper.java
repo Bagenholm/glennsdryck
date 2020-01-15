@@ -157,7 +157,11 @@ public class FleggaardScraper implements ScraperService {
         int lIndex = substring.lastIndexOf("l");
         float packMultiplier = 1f;
         if(percIndex >= 0) {
-            packMultiplier = multiPackMultiplier(substring.substring(0, xIndex + 1), substring);
+            if(xIndex > 0) {
+                packMultiplier = multiPackMultiplier(substring.substring(0, xIndex + 1), substring);
+            } else {
+                packMultiplier = multiPackMultiplier("1", substring);
+            }
         } else if (percIndex == -1) {
             return 0f;
         }
