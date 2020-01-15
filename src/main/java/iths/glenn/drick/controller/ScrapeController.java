@@ -31,7 +31,7 @@ public class ScrapeController {
     @Autowired
     ScrapeSender messageSender;
 
-    @Scheduled(fixedDelay = 172800000L, initialDelay = 10000L)
+    //@Scheduled(fixedDelay = 172800000L, initialDelay = 10000L)
     @GetMapping("/all")
     public void scrapeAll() {
         messageSender.sendScrapeToQueue(systembolagetScraper);
