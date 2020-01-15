@@ -1,52 +1,86 @@
- package iths.glenn.drick.security;
+package iths.glenn.drick.security;
 
-/*
+import iths.glenn.drick.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    // SQL database needs an authority(username, authority) table.
 
-    private static final String ENCODED_PASSWORD = "$2a$10$AIUufK8g6EFhBcumRRV2L.AQNz3Bjp7oDQVFiO5JJMBFZQ6x2/R/2";
+    @Autowired
+    private UserPrincipalDetailsService userPrincipalDetailsService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
+    @Autowired
+    private DataSource dataSource;
+
+    public WebSecurityConfig(UserPrincipalDetailsService customUserDetailsService) {
+        this.userPrincipalDetailsService = userPrincipalDetailsService;
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication().dataSource(dataSource)
+                .withUser("user").password("password").roles("USER")
+                .and()
+                .withUser("admin").password("password").roles("USER", "ADMIN");
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-                .antMatchers("/","/scrape").permitAll()
+        http.cors().and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new AuthenticationFilter(authenticationManager()))
+                .addFilter(new AuthorizationFilter(authenticationManager(),  this.userRepository))
+                .authorizeRequests()
+                .antMatchers("/drinks").permitAll()
+                .antMatchers("/scrape").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-            .formLogin()
-                .loginPage("/login")
-                .permitAll()
+                .formLogin()
+                .loginPage("/login").permitAll()
                 .and()
-            .logout()
-                .permitAll();
+                .httpBasic();
+
+                //.authenticationEntryPoint(authenticationEntryPoint);
     }
 
     @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()   //TODO: deprecated
-                        .username("user")
-                        .password("password")
-                        .roles("USER")
-                        .build();
+    DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(this.userPrincipalDetailsService);
 
-        return new InMemoryUserDetailsManager(user);
+        return daoAuthenticationProvider;
     }
-
-
-    //TODO: Detta ist?
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .passwordEncoder(passwordEncoder())
-                .withUser("user").password(ENCODED_PASSWORD).roles("USER");
-    }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}*/
+}
