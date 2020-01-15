@@ -171,7 +171,11 @@ public class FleggaardScraper implements ScraperService {
                     .replace("ø", "ö")
                     .replaceAll("[a-öA-Ö %]", "")
                     .replaceAll("[,]", ".");
-            return Float.parseFloat(substring) * packMultiplier;
+            if(!substring.isEmpty()) {
+                return Float.parseFloat(substring) * packMultiplier;
+            } else if (volumeString.contains("33 xl")) {
+                return Float.parseFloat("33") * packMultiplier / 100;
+            }
         } if(xIndex == -1 && lIndex >= 0) {
             substring = substring.substring(0, lIndex)
                     .replace("ø", "ö")
