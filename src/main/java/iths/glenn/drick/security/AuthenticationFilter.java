@@ -2,6 +2,7 @@ package iths.glenn.drick.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import iths.glenn.drick.entity.UserEntity;
 import iths.glenn.drick.model.UserModel;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,16 +33,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
 
-        UserModel userModel = null;
+        UserEntity user = null;
 
         try {
-            userModel = new ObjectMapper().readValue(request.getInputStream(), UserModel.class);
+            user = new ObjectMapper().readValue(request.getInputStream(), UserEntity.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                userModel.getUsername(),
-                userModel.getPassword(),
+                user.getUsername(),
+                user.getPassword(),
                 new ArrayList<>());
 
         Authentication auth = authenticationManager.authenticate(authenticationToken);
