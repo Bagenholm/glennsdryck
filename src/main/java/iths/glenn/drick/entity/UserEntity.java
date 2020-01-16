@@ -20,9 +20,10 @@ import java.util.List;
 public class UserEntity implements Serializable {
     static final long serialVersionUID = 1L;
 
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
+   // private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
 
     @Column(name = "username")
+    @Id
     String username;
 
     @Column(name = "password")
@@ -31,8 +32,8 @@ public class UserEntity implements Serializable {
     @Column(name = "enabled")
     boolean enabled;
 
-    @Column(name = "weight", nullable = true)
-    double weight = 72;
+    @Column(name = "weight")
+    float weight = 72f;
 
     private String roles = "USER";
 

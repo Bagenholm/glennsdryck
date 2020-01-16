@@ -37,13 +37,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userPrincipalDetailsService = userPrincipalDetailsService;
     }
 
-    @Autowired
+    /*@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(dataSource)
-                .withUser("user").password("password").roles("USER")
+                .withUser("zeuser").password("password").roles("USER")
                 .and()
-                .withUser("admin").password("password").roles("USER", "ADMIN");
-    }
+                .withUser("zeadmin").password("password").roles("USER", "ADMIN");
+    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
@@ -59,7 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthorizationFilter(authenticationManager(),  this.userRepository))
                 .authorizeRequests()
                 .antMatchers("/drinks").permitAll()
-                .antMatchers("/scrape").hasRole("ADMIN")
+                .antMatchers("/scrape").hasRole("USER")
+                .antMatchers("/users/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
