@@ -1,18 +1,20 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.TripEntity;
-import iths.glenn.drick.exception.DestinationDontExistException;
-import iths.glenn.drick.exception.NotAllowedToPatchKeyValuesException;
-import iths.glenn.drick.exception.TripAlreadyExistException;
-import iths.glenn.drick.exception.TripDontExistException;
+import iths.glenn.drick.exception.*;
 import iths.glenn.drick.model.TripModel;
 import iths.glenn.drick.repository.TripStorage;
-import iths.glenn.drick.trip.*;
+import iths.glenn.drick.trip.TripEntityModelConverter;
+import iths.glenn.drick.trip.TripId;
+import iths.glenn.drick.trip.UpdateTripRequest;
+import iths.glenn.drick.trip.WayOfTravel;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -67,17 +69,18 @@ public class TripServiceImplementation implements TripService {
             throw new DestinationDontExistException(String.format("Destination: %s do not exist", destination));
         }
 
-        return TripEntityModelConverter.tripListToModel(tripsToDestination);
+        return TripEntityModelConverter.tripListToModel(tripsToDestination);  //TODO: TripEntityModelConverter static eller instans VÄLJ!!
     }
 
     @Override
-    public TripModel getTripById(TripId tripId) {
+    public TripModel getTripById(Map<String, String> tripIdInput) {
 
+        TripId tripId = convertMapToTripId(tripIdInput);
         List<TripEntity> tripEntityList = listAllTrips();
 
         for (TripEntity tripEntity : tripEntityList) {
 
-            if(tripEntity.getTripId().equals(tripId)) {
+            if(tripEntity.getTripId() == (tripId)) {
                 return TripEntityModelConverter.tripEntityToModel(tripEntity);
             }
         }
@@ -103,8 +106,9 @@ public class TripServiceImplementation implements TripService {
     }
 
     @Override
-    public void removeTrip(TripId tripId) {
+    public void removeTrip(Map<String, String> tripIdInput) {
 
+        TripId tripId = convertMapToTripId(tripIdInput);
         List<TripEntity> tripEntityList = listAllTrips();
 
         for (TripEntity tripEntity : tripEntityList) {
@@ -121,12 +125,11 @@ public class TripServiceImplementation implements TripService {
     }
 
     @Override
-    public TripModel updateTrip(TripId tripId, TripEntity tripEntity) throws Exception {
+    public TripModel updateTrip(Map<String, String> tripIdInput, TripEntity tripEntity) throws Exception {
 
-        removeTrip(tripId);
+        removeTrip(tripIdInput);
 
         try {
-
             return addTrip(tripEntity);
 
         }catch(Exception e) {
@@ -137,8 +140,9 @@ public class TripServiceImplementation implements TripService {
     }
 
     @Override
-    public TripModel updateTripPartially(TripId tripId, UpdateTripRequest updateTripRequest) {
+    public TripModel updateTripPartially(Map<String, String> tripIdInput, UpdateTripRequest updateTripRequest) {
 
+        TripId tripId = convertMapToTripId(tripIdInput);
         List<TripEntity> tripEntityList = listAllTrips();
         TripEntity tripToUpdate;
         TripEntity updatedTrip;
@@ -181,6 +185,46 @@ public class TripServiceImplementation implements TripService {
         });
 
         return tripEntity;
+    }
+
+    private TripId convertMapToTripId(Map<String, String> tripIdInput) {
+
+        String startPoint;
+        String endPoint;
+        String tripInfo;
+        WayOfTravel wayOfTravel;
+
+        if(tripIdInput.containsKey("startPoint")) {
+            startPoint = tripIdInput.get("startPoint");
+        }
+        else {
+            throw new IncompleteTripIdException("startPoint Missing in tripId");
+        }
+        if(tripIdInput.containsKey("endPoint")) {
+            endPoint = tripIdInput.get("endPoint");
+        }
+        else {
+            throw new IncompleteTripIdException("endPoint Missing in tripId");
+        }
+        if(tripIdInput.containsKey("tripInfo")) {
+            tripInfo = tripIdInput.get("tripInfo");
+        }
+        else {
+            throw new IncompleteTripIdException("tripInfo Missing in tripId");
+        }
+        if(tripIdInput.containsKey("wayOfTravel")) {
+            if(EnumUtils.isValidEnum(WayOfTravel.class, tripIdInput.get("wayOfTravel").toUpperCase())) {
+                wayOfTravel = WayOfTravel.valueOf(tripIdInput.get("wayOfTravel").toUpperCase());
+            }
+            else {
+                throw new IncompleteTripIdException("tripId with that wayOfTravel do not exist!");
+            }
+        }
+        else {
+            throw new IncompleteTripIdException("wayOfTravel Missing in tripId");
+        }
+
+        return new TripId(startPoint, endPoint, tripInfo, wayOfTravel);
     }
 
     private void fillTripList() {

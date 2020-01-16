@@ -6,7 +6,6 @@ import iths.glenn.drick.exception.TripAlreadyExistException;
 import iths.glenn.drick.exception.TripDontExistException;
 import iths.glenn.drick.model.TripModel;
 import iths.glenn.drick.service.TripService;
-import iths.glenn.drick.trip.TripId;
 import iths.glenn.drick.trip.UpdateTripRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/trip")
@@ -49,7 +49,7 @@ public class TripController {
     }
 
     @GetMapping("/{tripId}")
-    public TripModel getTripById(@PathVariable(name = "tripId") TripId tripId) {
+    public TripModel getTripById(@PathVariable(name = "tripId") Map<String, String> tripId) {
 
         try {
             return tripService.getTripById(tripId);
@@ -73,7 +73,7 @@ public class TripController {
     }
 
     @DeleteMapping("/{tripId}")
-    public Response removeTrip(@PathVariable(name = "tripId") TripId tripId) {
+    public Response removeTrip(@PathVariable(name = "tripId") Map<String, String> tripId) {
 
         try {
             tripService.removeTrip(tripId);
@@ -86,7 +86,7 @@ public class TripController {
     }
 
     @PutMapping("/{tripId}")
-    public TripModel updateTrip(@PathVariable(name = "tripId") TripId tripId, @Valid @RequestBody TripEntity tripEntity) {
+    public TripModel updateTrip(@PathVariable(name = "tripId") Map<String, String> tripId, @Valid @RequestBody TripEntity tripEntity) {
 
         try {
             return tripService.updateTrip(tripId, tripEntity);
@@ -98,7 +98,7 @@ public class TripController {
     }
 
     @PatchMapping("/{tripId}")
-    public TripModel updateTripPartially(@PathVariable(name = "tripId") TripId tripId, @RequestBody UpdateTripRequest updateTripRequest) {
+    public TripModel updateTripPartially(@PathVariable(name = "tripId") Map<String, String> tripId, @RequestBody UpdateTripRequest updateTripRequest) {
 
         try{
             return tripService.updateTripPartially(tripId, updateTripRequest);
