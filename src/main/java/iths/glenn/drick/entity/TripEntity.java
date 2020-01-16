@@ -33,7 +33,7 @@ public class TripEntity implements Serializable {
     private TripId tripId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-   // @Pattern(message = "Wrong format of duration for minTravellingTime", regexp = "PTnHnM")
+   // @Pattern(message = "Wrong format of duration for minTravellingTime", regexp = "PTnHnM")  //TODO: Ersätta regex mot nåt programmet kan hantera, bokstäver och siffror typ
     private Duration minTravellingTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     //@Pattern(message = "Wrong format of duration for maxTravellingTime", regexp = "PTnHnM")
