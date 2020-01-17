@@ -1,6 +1,7 @@
 package iths.glenn.drick.controller;
 
 import iths.glenn.drick.entity.UserEntity;
+import iths.glenn.drick.model.UserModel;
 import iths.glenn.drick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,5 +30,15 @@ public class UserController {
     @GetMapping("/{username}")
     public UserEntity findUserByUsername(@PathVariable String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @GetMapping("/registeradmin/{username}")
+    public UserEntity registerAdmin(@PathVariable String username){
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
+        if(user.getRoles().contains("admin")){
+            return user;
+        }
+        user.addRole("admin");
+        return userRepository.save(user);
     }
 }
