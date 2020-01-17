@@ -22,14 +22,6 @@ public class ScrapeSender {
     @Autowired
     private Queue queue;
 
- /*   @Scheduled(fixedDelay = 86400000L * 2, initialDelay = 5000)
-    public void send() {
-        String message = "I'm scraping";
-        template.convertAndSend(queue.getName(), message);
-        System.out.println("Sent message: " + message);
-    }
- */
-
     public void sendAllForScrape(ArrayList<ScraperService> scraperServiceList) {
         scraperServiceList.forEach(scraper -> {
             System.out.println("Sending to queue: " + scraper.getClass().getSimpleName());
