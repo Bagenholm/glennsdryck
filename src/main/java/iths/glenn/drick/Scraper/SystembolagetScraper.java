@@ -1,4 +1,4 @@
-package iths.glenn.drick.service;
+package iths.glenn.drick.Scraper;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.StoreEntity;
@@ -8,57 +8,64 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Transient;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SystembolagetScraper implements ScraperService{
+public class SystembolagetScraper implements ScraperService {
+    static final long serialVersionUID = 1L;
 
-    public DrinkStorage drinkStorage;
-    public StoreStorage storeStorage;
+    @Autowired
+    DrinkStorage drinkStorage;
+    @Autowired
+    StoreStorage storeStorage;
+
     StoreEntity systembolaget;
 
-    public SystembolagetScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
-        this.drinkStorage = drinkStorage;
-        this.storeStorage = storeStorage;
+    @Override
+    public List<DrinkEntity> start() throws IOException {
+        systembolaget = getStore();
+
+        if (systembolaget.isScrapedRecently()) {
+            return drinkStorage.findByStore(systembolaget.getStoreName());
+        }
+        return scrape();
     }
 
-    @Override
+    public StoreEntity getStore() {
+        return storeStorage.findById("systembolaget")
+                .orElse(new StoreEntity("systembolaget", "SEK"));
+    }
+
     public List<DrinkEntity> scrape() throws IOException {
+        systembolaget = getStore();
         Document doc = Jsoup.connect("https://www.systembolaget.se/api/assortment/products/xml").get();
         Elements articles = doc.getElementsByTag("Artikel");
 
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
 
-        systembolaget = storeStorage.findById("systembolaget")
-                .orElse(new StoreEntity("systembolaget", "SEK"));
-
         articles.forEach(article -> drinks.add(makeDrink(article)));
 
         ArrayList<DrinkEntity> filteredDrinks =
-        (ArrayList<DrinkEntity>) drinks.stream()
-                .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
-                .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
-                .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
-                .collect(Collectors.toList());
+                (ArrayList<DrinkEntity>) drinks.stream()
+                        .filter(drinkEntity -> drinkEntity.getAlcoholPerPrice() != 0)
+                        .filter(drinkEntity -> !drinkEntity.getName().trim().isEmpty())
+                        .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
+                        .collect(Collectors.toList());
 
-        systembolaget.setDrinks(filteredDrinks);
-        filteredDrinks.forEach(drinkEntity ->
-        {
-            drinkStorage.save(drinkEntity);
-        });
+        filteredDrinks.forEach(drinkEntity ->  drinkStorage.save(drinkEntity));
+        systembolaget.setInstanceLastScrapedToNow();
+        storeStorage.save(systembolaget);
 
         return filteredDrinks;
-
-        /* return drinkStorage.saveAll(
-                drinks.stream()
-                        .filter(drink -> !drink.getName().trim().isEmpty())
-                        .filter(drink -> drink.getAlcoholPerPrice() != 0)
-                        .collect(Collectors.toList())); */
     }
 
     public DrinkEntity makeDrink(Element article) {

@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface DrinkStorage extends JpaRepository<DrinkEntity, String> {
+public interface DrinkStorage extends JpaRepository<DrinkEntity, String>, Serializable {
 
     /*@Query(value = "SELECT * FROM drinks WHERE productname IN (SELECT productname FROM drinks GROUP BY productname HAVING count(*) > 1)", nativeQuery = true))
     List<DrinkEntity> findAllSharedDrinks(); */
@@ -21,5 +22,11 @@ public interface DrinkStorage extends JpaRepository<DrinkEntity, String> {
 
     @Query(value = "Select d FROM DrinkEntity d")
     List<DrinkEntity> findAllDrinks(Sort sort);
+
+    @Query(value = "Select d FROM DrinkEntity d WHERE (INSTR(d.name, ?1) > 0 OR INSTR(?1, d.name) > 0 AND d.drinkKey NOT LIKE 'stena%')")
+    List<DrinkEntity> findByPartialNameNotStena(String name);
+
+    @Query(value = "Select d FROM DrinkEntity d WHERE d.drinkKey LIKE ?1%")
+    List<DrinkEntity> findByStore(String storeName);
 
 }

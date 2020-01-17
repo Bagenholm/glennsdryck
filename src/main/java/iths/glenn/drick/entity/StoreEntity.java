@@ -5,10 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
+import javax.management.InstanceAlreadyExistsException;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,7 +26,7 @@ public class StoreEntity implements Serializable {
     @Id String storeName;
     String currency;
     @JsonIgnore ArrayList<DrinkEntity> drinks;
-    Date lastDateScraped;
+    Instant instanceLastScraped = Instant.EPOCH;
 
     public String getStoreName() {
         return storeName;
@@ -43,5 +47,17 @@ public class StoreEntity implements Serializable {
 
     public String getCurrency() {
         return currency;
+    }
+
+    public long getSecondsSinceLastScraped() {
+        return Duration.between(Instant.now(), instanceLastScraped).getSeconds();
+    }
+
+    public boolean isScrapedRecently() {
+        return Math.abs(Duration.between(Instant.now(), instanceLastScraped).toDays()) < 1;
+    }
+
+    public void setInstanceLastScrapedToNow() {
+        this.instanceLastScraped = Instant.now();
     }
 }

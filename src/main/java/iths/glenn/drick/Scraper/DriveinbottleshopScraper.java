@@ -1,13 +1,17 @@
-package iths.glenn.drick.service;
+package iths.glenn.drick.Scraper;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.StoreEntity;
 import iths.glenn.drick.repository.DrinkStorage;
 import iths.glenn.drick.repository.StoreStorage;
+import iths.glenn.drick.service.CurrencyExchangeRateService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,21 +21,36 @@ import java.util.stream.Collectors;
 @Service
 public class DriveinbottleshopScraper implements ScraperService {
 
+    @Autowired
     DrinkStorage drinkStorage;
+
+    @Autowired
     StoreStorage storeStorage;
+
     StoreEntity driveinbottleshop;
 
     float currencyExchangeRate;
 
-    public DriveinbottleshopScraper(DrinkStorage drinkStorage, StoreStorage storeStorage) {
-        this.drinkStorage = drinkStorage;
-        this.storeStorage = storeStorage;
-    }
+    Logger logger = LoggerFactory.getLogger(DriveinbottleshopScraper.class);
 
     @Override
-    public List<DrinkEntity> scrape() throws IOException {
-        driveinbottleshop = storeStorage.findById("driveinbottleshop")
+    public List<DrinkEntity> start() throws IOException {
+        driveinbottleshop = getStore();
+
+        if(driveinbottleshop.isScrapedRecently()) {
+            logger.info("Driveinbottleshop scraped recently. Fetching from DB.");
+            return drinkStorage.findByStore("driveinbottleshop");
+        }
+        return scrape();
+    }
+
+    public StoreEntity getStore() {
+        return storeStorage.findById("driveinbottleshop")
                 .orElse(new StoreEntity("driveinbottleshop", "DKK"));
+    }
+
+    public List<DrinkEntity> scrape() throws IOException {
+        driveinbottleshop = getStore();
         currencyExchangeRate = CurrencyExchangeRateService.exchangeRate(driveinbottleshop.getCurrency());
 
         ArrayList<DrinkEntity> drinks = scrapeAllDrinks();
@@ -41,9 +60,9 @@ public class DriveinbottleshopScraper implements ScraperService {
                 .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
                 .collect(Collectors.toList());
 
-        driveinbottleshop.setDrinks(filteredDrinks);
-
         filteredDrinks.forEach(drinkEntity -> drinkStorage.save(drinkEntity));
+        driveinbottleshop.setInstanceLastScrapedToNow();
+        storeStorage.save(driveinbottleshop);
 
         return filteredDrinks;
     }
@@ -53,37 +72,37 @@ public class DriveinbottleshopScraper implements ScraperService {
         drinks.addAll(scrapeDrinks("Öl", "Mörk öl", "http://driveinbottleshop.dk/category/ol-cider/mork-ol/"));
         drinks.addAll(scrapeDrinks("Öl", "Ljus öl", "http://driveinbottleshop.dk/category/ol-cider/ljus-ol/"));
         drinks.addAll(scrapeDrinks("Öl", "Veteöl", "http://driveinbottleshop.dk/category/ol-cider/veteol/"));
-        drinks.addAll(scrapeDrinks("Alkoläsk och Cider", "", "http://driveinbottleshop.dk/category/ol-cider/alkolask-cider/"));
+        drinks.addAll(scrapeDrinks("Cider och alkoläsk", "", "http://driveinbottleshop.dk/category/ol-cider/alkolask-cider/"));
         drinks.addAll(scrapeDrinks("Mousserande vin", "Mousserande", "http://driveinbottleshop.dk/category/vin/mousserande-viner/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/argentina/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/australien/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/chile/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/frankrike/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/italien/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/nya-zeeland/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/osterrike-roda-viner/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/portugal/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/spanien/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/sydafrika/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/tyskland-roda-viner/"));
-        drinks.addAll(scrapeDrinks("Rött vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/usa/"));
-        drinks.addAll(scrapeDrinks("Rosévin", "Rosé", "http://driveinbottleshop.dk/category/vin/rose-viner/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/argentina-vita-viner/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/australien-vita-viner/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/chile-vita-viner/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/frankrike-vita-viner/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/italien-vita-viner/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/nya-zealand/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/osterrike/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/spanien-portugal/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/sydafrika-vita-viner/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/tyskland/"));
-        drinks.addAll(scrapeDrinks("Vitt vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/usa-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/argentina/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/australien/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/chile/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/frankrike/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/italien/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/nya-zeeland/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/osterrike-roda-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/portugal/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/spanien/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/sydafrika/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/tyskland-roda-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rött", "http://driveinbottleshop.dk/category/vin/roda-viner/usa/"));
+        drinks.addAll(scrapeDrinks("Vin", "Rosé", "http://driveinbottleshop.dk/category/vin/rose-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/argentina-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/australien-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/chile-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/frankrike-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/italien-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/nya-zealand/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/osterrike/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/spanien-portugal/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/sydafrika-vita-viner/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/tyskland/"));
+        drinks.addAll(scrapeDrinks("Vin", "Vitt", "http://driveinbottleshop.dk/category/vin/vita-viner/usa-vita-viner/"));
         drinks.addAll(scrapeDrinks("Anissprit", "Absint", "http://driveinbottleshop.dk/category/sprit/absint/"));
         drinks.addAll(scrapeDrinks("Aperitif och dessert", "", "http://driveinbottleshop.dk/category/sprit/apertif-digestif/"));
         drinks.addAll(scrapeDrinks("Sprit", "Bitter", "http://driveinbottleshop.dk/category/sprit/bitter/"));
         drinks.addAll(scrapeDrinks("Sprit", "Kryddad snaps", "http://driveinbottleshop.dk/category/sprit/brannvin/akvavit-ovrig-kryddad-snaps/"));
-        drinks.addAll(scrapeDrinks("Vodka", "Smaksatt", "http://driveinbottleshop.dk/category/sprit/brannvin/smaksatt-vodka/"));
+        drinks.addAll(scrapeDrinks("Sprit", "Smaksatt", "http://driveinbottleshop.dk/category/sprit/brannvin/smaksatt-vodka/"));
         drinks.addAll(scrapeDrinks("Sprit", "Cognac", "http://driveinbottleshop.dk/category/sprit/cognac-calvados-brandy/"));
         drinks.addAll(scrapeDrinks("Sprit", "Gin", "http://driveinbottleshop.dk/category/sprit/gin/"));
         drinks.addAll(scrapeDrinks("Sprit", "Grappa", "http://driveinbottleshop.dk/category/sprit/grappa/"));
@@ -109,45 +128,6 @@ public class DriveinbottleshopScraper implements ScraperService {
 
         return drinks;
     }
-
-    /* private void getElementsByTextForHtmlParse(String s) throws IOException {
-        Document doc;
-        doc = Jsoup.connect(s).get();
-        Elements articles = doc.getElementsByClass("product-search");
-
-        System.out.println(articles);
-    }
-
-    private ArrayList<DrinkEntity> scrapeDrinksTest(String type, String subtype) {
-        Document doc = Jsoup.parse("<article class=\"product-search\">\n" +
-                " <a class=\"thumbnail\" title=\"Amarula\" href=\"http://driveinbottleshop.dk/?attachment_id=70844\" style=\"background-image: url(http://driveinbottleshop.dk/wp-content/uploads/2011/03/Amarula-110x130.png)\"></a>\n" +
-                " <section class=\"info\"> \n" +
-                "  <h3><a href=\"http://driveinbottleshop.dk/?produkt=amarula-70-cl\">Amarula Cream 70 cl.</a></h3>\n" +
-                "  <h4>109.95 DKK</h4>\n" +
-                "  <p>Krämig likör, 17 % alk. 70 cl, Sydafrika En cremelikör som är smaksatt med den exotiska Amarulafrukten.... <a href=\"http://driveinbottleshop.dk/?produkt=amarula-70-cl\">Se detaljer</a></p> \n" +
-                "  <form class=\"add-to-cart\"> \n" +
-                "   <label for=\"qty\">Kvantitet</label> \n" +
-                "   <input type=\"text\" class=\"text\" name=\"qty\" value=\"1\"> \n" +
-                "   <input type=\"hidden\" name=\"product_id\" value=\"65124\"> \n" +
-                "   <input type=\"hidden\" name=\"ajaxurl\" value=\"http://driveinbottleshop.dk/wp-admin/admin-ajax.php\"> \n" +
-                "   <input type=\"submit\" class=\"submit\" name=\"submit_to_cart\" value=\"Lägg i shoppinglista\"> \n" +
-                "  </form> \n" +
-                " </section> \n" +
-                "</article");
-
-        Elements articles = doc.getElementsByClass("product-search");
-
-        ArrayList<DrinkEntity> drinks = new ArrayList<>();
-        articles.forEach(article -> {
-            System.err.println(article.getElementsByTag("p").text() + "\n" +
-                    "Name: " + extractNameFromText(article) + "\n" +
-                    "Price: " + extractPriceFromText(article) + "\n" +
-                    "Alcohol: " + extractAlcoholFromText(article) + "\n" +
-                    "Volume: " + extractVolumeFromText(article) );
-            drinks.add(makeDrink(article, type, subtype));
-        });
-        return drinks;
-    } */
 
     private ArrayList<DrinkEntity> scrapeDrinks(String type, String subtype, String url) throws IOException {
         Document doc = Jsoup.connect(url).get();

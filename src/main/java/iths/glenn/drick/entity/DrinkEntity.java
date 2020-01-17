@@ -54,4 +54,13 @@ public class DrinkEntity implements Serializable {
     public ArrayList<String> getStoresList() {
         return storesList;
     }
+
+    public void setAlcohol(float alcohol) {
+        this.alcohol = alcohol;
+        this.alcoholPerPrice = alcohol / pricePerLitre;
+    }
+
+    public float getAlcohol() {
+        return alcohol;
+    }
 }

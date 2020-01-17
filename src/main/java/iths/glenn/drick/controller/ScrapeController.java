@@ -1,9 +1,10 @@
 package iths.glenn.drick.controller;
 
+import iths.glenn.drick.Scraper.*;
 import iths.glenn.drick.entity.DrinkEntity;
-import iths.glenn.drick.service.DriveinbottleshopScraper;
-import iths.glenn.drick.service.FleggaardScraper;
-import iths.glenn.drick.service.SystembolagetScraper;
+import iths.glenn.drick.scrapequeue.ScrapeSender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,20 +17,35 @@ import java.util.List;
 @RequestMapping("/scrape")
 public class ScrapeController {
 
-    SystembolagetScraper systembolagetScraper;
-    DriveinbottleshopScraper driveinbottleshopScraper;
-    FleggaardScraper fleggaardScraper;
+    @Autowired
+    public SystembolagetScraper systembolagetScraper;
+    @Autowired
+    public DriveinbottleshopScraper driveinbottleshopScraper;
+    @Autowired
+    public FleggaardScraper fleggaardScraper;
+    @Autowired
+    public CalleScraper calleScraper;
+    @Autowired
+    public StenalineScraper stenalineScraper;
 
-    public ScrapeController(SystembolagetScraper systembolagetScraper, DriveinbottleshopScraper driveinbottleshopScraper, FleggaardScraper fleggaardScraper) {
-        this.systembolagetScraper = systembolagetScraper;
-        this.driveinbottleshopScraper = driveinbottleshopScraper;
-        this.fleggaardScraper = fleggaardScraper;
+    @Autowired
+    ScrapeSender messageSender;
+
+    //@Scheduled(fixedDelay = 172800000L, initialDelay = 10000L)
+    @GetMapping("/all")
+    public void scrapeAll() {
+        messageSender.sendScrapeToQueue(systembolagetScraper);
+        messageSender.sendScrapeToQueue(calleScraper);
+        messageSender.sendScrapeToQueue(fleggaardScraper);
+        messageSender.sendScrapeToQueue(driveinbottleshopScraper);
+        messageSender.sendScrapeToQueue(stenalineScraper);
     }
 
+
     @GetMapping("/systembolaget")
-    public List<DrinkEntity> scrapeAll() {
+    public List<DrinkEntity> scrapeSystembolaget() {
         try {
-            return systembolagetScraper.scrape();
+            return systembolagetScraper.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,7 +55,7 @@ public class ScrapeController {
     @GetMapping("/driveinbottleshop")
     public List<DrinkEntity> scrapeDriveinbottleshop() {
         try {
-            return driveinbottleshopScraper.scrape();
+            return driveinbottleshopScraper.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,12 +65,31 @@ public class ScrapeController {
     @GetMapping("/fleggaard")
     public List<DrinkEntity> scrapeFleggaard() {
         try {
-            return fleggaardScraper.scrape();
+            return fleggaardScraper.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return Collections.emptyList();
     }
 
+    @GetMapping("/calle")
+    public List<DrinkEntity> scrapeCalle() {
+        try {
+            return calleScraper.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+    @GetMapping("/stenaline")
+    public List<DrinkEntity> scrapeStenaline() {
+        try {
+            return stenalineScraper.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
 
 }
