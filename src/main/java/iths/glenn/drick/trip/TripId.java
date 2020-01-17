@@ -1,10 +1,15 @@
 package iths.glenn.drick.trip;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Embeddable
 public class TripId implements Serializable {
 
@@ -24,38 +29,6 @@ public class TripId implements Serializable {
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.tripInfo = tripInfo;
-        this.wayOfTravel = wayOfTravel;
-    }
-
-    public String getStartPoint() {
-        return startPoint;
-    }
-
-    public void setStartPoint(String startPoint) {
-        this.startPoint = startPoint;
-    }
-
-    public String getEndPoint() {
-        return endPoint;
-    }
-
-    public void setEndPoint(String endPoint) {
-        this.endPoint = endPoint;
-    }
-
-    public String getTripInfo() {
-        return tripInfo;
-    }
-
-    public void setTripInfo(String tripInfo) {
-        this.tripInfo = tripInfo;
-    }
-
-    public WayOfTravel getWayOfTravel() {
-        return wayOfTravel;
-    }
-
-    public void setWayOfTravel(WayOfTravel wayOfTravel) {
         this.wayOfTravel = wayOfTravel;
     }
 
