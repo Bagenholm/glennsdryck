@@ -2,6 +2,7 @@ package iths.glenn.drick.Scraper;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.StoreEntity;
+import iths.glenn.drick.exception.UnreadableProductException;
 import iths.glenn.drick.repository.DrinkStorage;
 import iths.glenn.drick.repository.StoreStorage;
 import iths.glenn.drick.service.CurrencyExchangeRateService;
@@ -149,7 +150,11 @@ public class CalleScraper implements ScraperService{
                 .replaceAll("[a-öA-Ö %]", "")
                 .replace(",", ".");
         if(volumeString.matches("[\\d]+")) {
-            return Float.parseFloat(volumeString) * volumeMultiplier;
+            try {
+                return Float.parseFloat(volumeString) * volumeMultiplier;
+            } catch(NumberFormatException e) {
+                throw new UnreadableProductException("Unable to parse volume from: [" + volumeString + "]");
+            }
         }
         return 0f;
     }
@@ -162,7 +167,6 @@ public class CalleScraper implements ScraperService{
         }
         return packMultiplier;
     }
-
     private int volumePrefixMultiplier(String volumeString, char volumePrefix) {
         if(volumePrefix == 'c') {
             return 10;
@@ -181,9 +185,18 @@ public class CalleScraper implements ScraperService{
         if(isUsualDescription(lIndex, percIndex)) {
             String alcoholSubString = alcoholString.substring(lIndex + 1, percIndex).trim();
             alcoholSubString = alcoholSubString.replace(",", ".").replaceAll("[a-zA-Z ]", "");
-            return Float.parseFloat(alcoholSubString);
+
+            try {
+                return Float.parseFloat(alcoholSubString);
+            } catch (NumberFormatException e) {
+                throw new UnreadableProductException("Unable to alcohol content from: [" + alcoholString + "]");
+            }
         } else {
-            return extractAlcoholFromOddCaseText(percIndex, lIndex, alcoholString);
+            try {
+                return extractAlcoholFromOddCaseText(percIndex, lIndex, alcoholString);
+            } catch (NumberFormatException e) {
+                throw new UnreadableProductException("Unable to alcohol content from: [" + alcoholString + "]");
+            }
         }
     }
 
@@ -213,7 +226,11 @@ public class CalleScraper implements ScraperService{
 
     private float extractPriceFromText(Element article) {
         String priceString = article.getElementsByClass("hind").text();
-        return Float.parseFloat(priceString);
+        try {
+            return Float.parseFloat(priceString);
+        } catch (NumberFormatException e) {
+            throw new UnreadableProductException("Unable to alcohol content from: [" + priceString + "]");
+        }
     }
 
 

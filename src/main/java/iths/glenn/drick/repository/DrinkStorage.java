@@ -20,13 +20,13 @@ public interface DrinkStorage extends JpaRepository<DrinkEntity, String>, Serial
     @Query("SELECT d FROM DrinkEntity d WHERE d.volume = ?1")
     List<DrinkEntity> findByVolume(float volume);
 
-    @Query(value = "Select d FROM DrinkEntity d")
+    @Query(value = "SELECT d FROM DrinkEntity d")
     List<DrinkEntity> findAllDrinks(Sort sort);
 
-    @Query(value = "Select d FROM DrinkEntity d WHERE (INSTR(d.name, ?1) > 0 OR INSTR(?1, d.name) > 0 AND d.drinkKey NOT LIKE 'stena%')")
+    @Query(value = "SELECT d FROM DrinkEntity d WHERE (INSTR(d.name, ?1) > 0 OR INSTR(?1, d.name) > 0 AND d.drinkKey NOT LIKE 'stena%')")
     List<DrinkEntity> findByPartialNameNotStena(String name);
 
-    @Query(value = "Select d FROM DrinkEntity d WHERE d.drinkKey LIKE ?1%")
+    @Query(value = "SELECT d FROM DrinkEntity d WHERE d.drinkKey LIKE ?1%")
     List<DrinkEntity> findByStore(String storeName);
 
 }

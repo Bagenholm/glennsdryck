@@ -5,6 +5,7 @@ import io.webfolder.ui4j.api.browser.BrowserFactory;
 import io.webfolder.ui4j.api.browser.Page;
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.StoreEntity;
+import iths.glenn.drick.exception.UnreadableProductException;
 import iths.glenn.drick.repository.DrinkStorage;
 import iths.glenn.drick.repository.StoreStorage;
 import iths.glenn.drick.service.CurrencyExchangeRateService;
@@ -87,14 +88,17 @@ public class FleggaardScraper implements ScraperService {
     }
 
     private DrinkEntity makeDrink(Element article, String type, String subtype) {
-        String name = extractNameFromText(article);
-        float alcohol = extractAlcoholFromText(article);
-        float volume = extractVolumeFromText(article) * 1000; //Product volume comes in litres
-        float price = extractPriceFromText(article) * currencyExchangeRate;
+        try {
+            String name = extractNameFromText(article);
+            float alcohol = extractAlcoholFromText(article);
+            float volume = extractVolumeFromText(article) * 1000; //Product volume comes in litres
+            float price = extractPriceFromText(article) * currencyExchangeRate;
+            float pricePerLitre = 1000 / volume * price;
+            return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume, fleggaard);
+        } catch (Exception e) {
+            throw new UnreadableProductException("Unreadable product from " + article);
+        }
 
-        float pricePerLitre = 1000 / volume * price;
-
-        return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume, fleggaard);
     }
 
     private float extractPriceFromText(Element article) {
@@ -171,7 +175,11 @@ public class FleggaardScraper implements ScraperService {
                     .replace("ø", "ö")
                     .replaceAll("[a-öA-Ö %]", "")
                     .replaceAll("[,]", ".");
-            return Float.parseFloat(substring) * packMultiplier;
+            if(!substring.isEmpty()) {
+                return Float.parseFloat(substring) * packMultiplier;
+            } else if (volumeString.contains("33 xl")) {
+                return Float.parseFloat("33") * packMultiplier / 100;
+            }
         } if(xIndex == -1 && lIndex >= 0) {
             substring = substring.substring(0, lIndex)
                     .replace("ø", "ö")
