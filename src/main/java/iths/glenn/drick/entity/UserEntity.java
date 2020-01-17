@@ -2,7 +2,6 @@ package iths.glenn.drick.entity;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
 @Getter
 @Setter
 public class UserEntity implements Serializable {
@@ -35,9 +33,14 @@ public class UserEntity implements Serializable {
     @Column(name = "weight")
     float weight = 72f;
 
-    private String roles = "USER";
+    @Column(name = "roles")
+    private String roles;
 
     private String permissions = "";
+
+    public UserEntity() {
+        this.roles = "user";
+    }
 
     public List<String> getPermissions(){
         if(this.permissions.length() > 0){
@@ -48,8 +51,12 @@ public class UserEntity implements Serializable {
 
     public List<String> getRoles(){
         if(this.roles.length() > 0){
-            return Arrays.asList(this.permissions.split(","));
+            return Arrays.asList(this.roles.split(","));
         }
         return new ArrayList<>();
+    }
+
+    public String addRole(String role) {
+        return roles += "," + role;
     }
 }

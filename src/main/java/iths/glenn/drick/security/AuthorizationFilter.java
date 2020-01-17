@@ -28,10 +28,9 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        System.out.println("Starting point");
-        String header = request.getHeader("Bearer");
+        String header = request.getHeader("Authorization");
 
-        if (header == null || !header.startsWith("Authorization")) {
+        if (header == null || !header.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -55,9 +54,6 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             if (userName != null) {
                 UserEntity user = userRepository.findByUsername(userName);
                 UserPrincipal principal = new UserPrincipal(user);
-
-                System.out.println(principal.getAuthorities());
-                System.out.println(principal.getUsername());
 
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userName, null, principal.getAuthorities());
                 return auth;
