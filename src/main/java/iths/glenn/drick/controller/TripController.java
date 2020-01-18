@@ -48,8 +48,8 @@ public class TripController {
         }
     }
 
-    @GetMapping("/{tripId}")
-    public TripModel getTripById(@PathVariable(name = "tripId") Map<String, String> tripId) {
+    @GetMapping("/{startPoint}/{endPoint}/{tripInfo}/{wayOfTravel}")
+    public TripModel getTripById(@PathVariable Map<String, String> tripId) {
 
         try {
             return tripService.getTripById(tripId);
@@ -60,6 +60,7 @@ public class TripController {
         }
     }
 
+    //TODO: Fixa så tripId skapas som de ska, och egna datatyper som Duration och WayOfTravel
     @PostMapping("/")
     public TripModel addTrip(@Valid @RequestBody TripEntity tripEntity) {
 
@@ -71,7 +72,7 @@ public class TripController {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Bad gateway", e);
         }
     }
-
+    //TODO: @ResponseStatus(value = HttpStatus.OK)   ???
     @DeleteMapping("/{tripId}")
     public Response removeTrip(@PathVariable(name = "tripId") Map<String, String> tripId) {
 
