@@ -96,6 +96,7 @@ public class FleggaardScraper implements ScraperService {
             float pricePerLitre = 1000 / volume * price;
             return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume, fleggaard);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnreadableProductException("Unreadable product from " + article);
         }
 
@@ -185,6 +186,9 @@ public class FleggaardScraper implements ScraperService {
                     .replace("ø", "ö")
                     .replaceAll("[a-öA-Ö. ]", "")
                     .replaceAll(",", ".");
+            if(substring.startsWith("0") && substring.charAt(1) != '.') {  //Prevents reading article with volume 0.7 as 07, making it 7 instead of 0.7.
+                substring = substring.replaceFirst("0", "0.");
+            }
             return Float.parseFloat(substring) * packMultiplier;
         }
 

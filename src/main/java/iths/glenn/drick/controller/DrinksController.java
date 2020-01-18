@@ -1,23 +1,18 @@
 package iths.glenn.drick.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.repository.DrinkStorage;
+import iths.glenn.drick.service.DrinksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import javax.ws.rs.Path;
 import java.util.*;
 
 @RestController
@@ -25,62 +20,49 @@ import java.util.*;
 public class DrinksController {
 
     @Autowired
+    DrinksService drinksService;
+
+    @Autowired
     DrinkStorage drinkStorage;
 
     @GetMapping("")
     public List<DrinkEntity> getAll() {
-        return drinkStorage.findAll();
-    }
-
-    @GetMapping("/bestAlcoholPrice/{amount}")
-    public List<DrinkEntity> getBestAlcoholPrice(@PathVariable int amount) {
-        return Collections.emptyList();
+        return drinksService.findAll();
     }
 
     @GetMapping("/volume/{volume}")
     public List<DrinkEntity> getByVolume(@PathVariable float volume) {
-        return drinkStorage.findByVolume(volume);
+        return drinksService.findAllByVolume(volume);
     }
 
     @GetMapping("/app/")
-    public List<DrinkEntity> getAllByAppAsc() {
-        return drinkStorage.findAllDrinks(JpaSort.unsafe("alcoholPerPrice").descending());
+    public List<DrinkEntity> getAllByApkDesc() {
+        return drinksService.findAllByApkDesc();
     }
 
     @GetMapping("/app/store/{store}/{limit}")
-    List<DrinkEntity> findTenBestApkFromStore(@PathVariable String store, @PathVariable int limit) {
-        return drinkStorage.findAllByStoreEquals(store, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice")));
+    public List<DrinkEntity> findAmountBestApkFromStore(@PathVariable String store, @PathVariable int limit) {
+        return drinksService.findAmountBestApkFromStore(store, limit);
     }
 
     @GetMapping("/app/store/all/{limit}")
-    List<DrinkEntity> findTenBestApkFromAllStores(@PathVariable int limit) {
-        ArrayList<DrinkEntity> drinks = new ArrayList<>();
-        Pageable limitAndsort = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice"));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("systembolaget", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("calle", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("stenaline", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("fleggaard", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("driveinbottleshop", limitAndsort));
-
-        return drinks;
+    public List<DrinkEntity> findTenBestApkFromAllStores(@PathVariable int limit) {
+        return drinksService.findAmountBestApkFromEachStore(limit);
     }
 
     @GetMapping("/app/store/all/{type}/{limit}")
-    List<DrinkEntity> findTenBestApkFromAllStoresByType(@PathVariable String type, @PathVariable int limit) {
-        ArrayList<DrinkEntity> drinks = new ArrayList<>();
-        Pageable limitAndsort = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice"));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("systembolaget", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("calle", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("stenaline", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("fleggaard", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("driveinbottleshop", type, limitAndsort));
-
-        return drinks;
+    public List<DrinkEntity> findTenBestApkFromAllStoresByType(@PathVariable String type, @PathVariable int limit) {
+        return drinksService.findAmountBestApkFromEachStoreByType(type, limit);
     }
 
     @GetMapping("/app/type/{type}/{limit}")
-    List<DrinkEntity> findTenBestApkByType(@PathVariable String type, @PathVariable int limit) {
-        return drinkStorage.findAllByTypeEquals(type, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice")));
+    public List<DrinkEntity> findTenBestApkByType(@PathVariable String type, @PathVariable int limit) {
+        return drinksService.findAmountBestApkByType(type, limit);
+    }
+
+    @GetMapping("/name/{name}")
+    public List<DrinkEntity> findByName(@PathVariable String name) {
+        return drinksService.findByName(name);
     }
 
     /* @GetMapping("/exchange/{currency}")
