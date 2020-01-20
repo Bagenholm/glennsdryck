@@ -19,7 +19,8 @@ public class DrinkEntity implements Serializable {
     private @Id String drinkKey;
 
     //Mapped by stores
-    ArrayList<String> storesList = new ArrayList<>();
+    @Column(name = "store")
+    String store;
     @Column(name = "productname")
     String name;
     @Column(name = "category")
@@ -38,7 +39,7 @@ public class DrinkEntity implements Serializable {
         this.alcohol = alcohol;
         this.volume = volume;
         this.price = price;
-        this.storesList.add(storeEntity.storeName);
+        this.store = storeEntity.getStoreName();
         this.alcoholPerPrice = alcohol / pricePerLitre;
         this.drinkKey = storeEntity.getStoreName() + "-" + name + "-" + volume + "-" + alcohol;
     }
@@ -51,9 +52,7 @@ public class DrinkEntity implements Serializable {
         return name;
     }
 
-    public ArrayList<String> getStoresList() {
-        return storesList;
-    }
+    public String getStore() { return store; }
 
     public void setAlcohol(float alcohol) {
         this.alcohol = alcohol;
