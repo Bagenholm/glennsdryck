@@ -51,7 +51,7 @@ public class FleggaardScraper implements ScraperService {
 
     public StoreEntity getStore() {
         return storeStorage.findById("fleggaard")
-                .orElse(new StoreEntity("fleggaard", "DKK"));
+                .orElse(new StoreEntity("fleggaard", "DKK", "puttgarden"));
     }
 
     public List<DrinkEntity> scrape() throws IOException {

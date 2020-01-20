@@ -5,16 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
-import javax.management.InstanceAlreadyExistsException;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -23,34 +20,41 @@ import java.util.Date;
 @NoArgsConstructor
 public class StoreEntity implements Serializable {
     static final long serialVersionUID = 1L;
+    @Column(name = "store_name")
     @Id String storeName;
     String currency;
-    @JsonIgnore ArrayList<DrinkEntity> drinks;
     Instant instanceLastScraped = Instant.EPOCH;
+    String city;
+
+    /*@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(name = "stores_drinks",
+        joinColumns =@JoinColumn(name = "store_name", referencedColumnName = "store_name"),
+        inverseJoinColumns = @JoinColumn(name = "drink_name", referencedColumnName = "productname"))
+    Set<DrinkEntity> drinks; */
+
+    /*@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "store_trip",
+        joinColumns = @JoinColumn(name = "store_city", referencedColumnName = "city"),
+        inverseJoinColumns = @JoinColumns ({
+                @JoinColumn(name = "trip_city", referencedColumnName = "endpoint"),
+                @JoinColumn(name = "trip_wayoftravel", referencedColumnName = "wayOfTravel"),
+                @JoinColumn(name = "trip_tripinfo", referencedColumnName = "tripInfo"),
+                @JoinColumn(name = "trip_start", referencedColumnName = "startPoint")
+        }) */
+    //Set<TripEntity> trips = new HashSet<>();
+
+    public StoreEntity(String storeName, String currency, String city) {
+        this.storeName = storeName;
+        this.currency = currency;
+        this.city = city;
+    }
 
     public String getStoreName() {
         return storeName;
     }
 
-    public ArrayList<DrinkEntity> getDrinks() {
-        return drinks;
-    }
-
-    public void setDrinks(ArrayList<DrinkEntity> drinks) {
-        this.drinks = drinks;
-    }
-
-    public StoreEntity(String storeName, String currency) {
-        this.storeName = storeName;
-        this.currency = currency;
-    }
-
     public String getCurrency() {
         return currency;
-    }
-
-    public long getSecondsSinceLastScraped() {
-        return Duration.between(Instant.now(), instanceLastScraped).getSeconds();
     }
 
     public boolean isScrapedRecently() {
