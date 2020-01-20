@@ -201,6 +201,9 @@ public class FleggaardScraper implements ScraperService {
         if(lIndex > 0) {
             volumePrefix = multipackStringWithVolume.charAt(lIndex - 1);
         }
+        if(multipackStringWithVolume.contains("4-pack")) {
+            return 20f / 100; //Odd case where they write 4-pack on a single product.
+        }
         if(volumePrefix == 'c') {
             return Float.parseFloat(multiString.replaceAll("[a-zA-Z]", "").trim()) / 100;
         } else if(volumePrefix == 'm') {
