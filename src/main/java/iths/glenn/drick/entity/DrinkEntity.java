@@ -3,12 +3,8 @@ package iths.glenn.drick.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 @Data
 @Entity
@@ -20,7 +16,9 @@ public class DrinkEntity implements Serializable {
 
     //Mapped by stores
     @Column(name = "store")
-    String store;
+    //@ManyToOne
+    //@JoinColumn(name = "store_name")
+    StoreEntity store;
     @Column(name = "productname")
     String name;
     @Column(name = "category")
@@ -39,7 +37,7 @@ public class DrinkEntity implements Serializable {
         this.alcohol = alcohol;
         this.volume = volume;
         this.price = price;
-        this.store = storeEntity.getStoreName();
+        this.store = storeEntity;
         this.alcoholPerPrice = alcohol / pricePerLitre;
         this.drinkKey = storeEntity.getStoreName() + "-" + name + "-" + volume + "-" + alcohol;
     }
@@ -52,7 +50,7 @@ public class DrinkEntity implements Serializable {
         return name;
     }
 
-    public String getStore() { return store; }
+    public StoreEntity getStore() { return store; }
 
     public void setAlcohol(float alcohol) {
         this.alcohol = alcohol;

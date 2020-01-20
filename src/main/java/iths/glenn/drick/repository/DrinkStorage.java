@@ -38,4 +38,6 @@ public interface DrinkStorage extends JpaRepository<DrinkEntity, String>, Serial
     List<DrinkEntity> findAllByStoreEquals(String store, Pageable alcoholPerPrice);
 
     List<DrinkEntity> findAllByStoreEqualsAndTypeEquals(String store, String type, Pageable alcoholPerPrice);
+
+    List<DrinkEntity> findAllByNameContaining(String name);
 }
