@@ -1,6 +1,5 @@
 package iths.glenn.drick.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import iths.glenn.drick.trip.TripId;
 import lombok.Data;
 import lombok.Getter;
@@ -32,10 +31,8 @@ public class TripEntity implements Serializable {
     @EmbeddedId
     private TripId tripId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
    // @Pattern(message = "Wrong format of duration for minTravellingTime", regexp = "PTnHnM")  //TODO: Ersätta regex mot nåt programmet kan hantera, bokstäver och siffror typ
     private Duration minTravellingTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     //@Pattern(message = "Wrong format of duration for maxTravellingTime", regexp = "PTnHnM")
     private Duration maxTravellingTime;
     private double totalDistanceInKM;

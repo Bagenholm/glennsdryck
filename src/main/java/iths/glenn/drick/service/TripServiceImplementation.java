@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class TripServiceImplementation implements TripService {
 
     TripStorage tripStorage;
-    TripEntityModelConverter TripEntityModelConverter;
 
     TripEntity deletedTrip;
 
@@ -53,8 +52,6 @@ public class TripServiceImplementation implements TripService {
         return tripEntityList;
     }
 
-
-
     //TODO: Skapa metod i tripStorage istället
     @Override
     public List<TripModel> listAllTripsToDestination(String destination) {
@@ -80,7 +77,7 @@ public class TripServiceImplementation implements TripService {
 
         for (TripEntity tripEntity : tripEntityList) {
 
-            if(tripEntity.getTripId() == (tripId)) {
+            if(tripEntity.getTripId().equals(tripId)) {
                 return TripEntityModelConverter.tripEntityToModel(tripEntity);
             }
         }
@@ -238,82 +235,66 @@ public class TripServiceImplementation implements TripService {
         maxTripTime = Duration.parse("PT4H15M");
         TripEntity fredrikshamn = new TripEntity(new TripId("göteborg", "fredrikshamn", "stenaline", WayOfTravel.BY_FOOT), minTripTime, maxTripTime, 104, 0, 50, 50, 0, 0);
         tempTripsList.add(fredrikshamn);
-        //addTrip(fredrikshamn);
         TripEntity fredrikshamnCar = new TripEntity(new TripId("göteborg", "fredrikshamn", "stenaline", WayOfTravel.CAR), minTripTime, maxTripTime, 104, 0, 380, 380, 450, 450);
         tempTripsList.add(fredrikshamnCar);
-        //addTrip(fredrikshamnCar);
         TripEntity fredrikshamnCarTrailer = new TripEntity(new TripId("göteborg", "fredrikshamn", "stenaline", WayOfTravel.CAR_WITH_TRAILER), minTripTime, maxTripTime, 104, 0, 555, 555, 800, 1140);
         tempTripsList.add(fredrikshamnCarTrailer);
-        //addTrip(fredrikshamnCarTrailer);
 
 
         minTripTime = Duration.parse("PT3H22M");
         maxTripTime = Duration.parse("PT3H22M");
         TripEntity copenhagenCar = new TripEntity(new TripId("göteborg", "köpenhamn", "öresundsbron", WayOfTravel.CAR), minTripTime, maxTripTime, 322, 322, 473, 473, 450, 450);
         tempTripsList.add(copenhagenCar);
-//        addTrip(copenhagenCar);
         minTripTime = Duration.parse("PT4H0M");
         maxTripTime = Duration.parse("PT4H0M");
         TripEntity copenhagenCarTrailer = new TripEntity(new TripId("göteborg", "köpenhamn", "öresundsbron", WayOfTravel.CAR_WITH_TRAILER), minTripTime, maxTripTime, 322, 322, 718, 718, 800, 1140);
         tempTripsList.add(copenhagenCarTrailer);
-//        addTrip(copenhagenCarTrailer);
         minTripTime = Duration.parse("PT4H15M");
         maxTripTime = Duration.parse("PT4H40M");
         TripEntity copenhagenBus = new TripEntity(new TripId("göteborg", "köpenhamn", "öresundsbron", WayOfTravel.BUS), minTripTime, maxTripTime, 322, 0, 130, 400, 20, 20);
         tempTripsList.add(copenhagenBus);
-//        addTrip(copenhagenBus);
         minTripTime = Duration.parse("PT3H25M");
         maxTripTime = Duration.parse("PT4H30M");
         TripEntity copenhagenTrain = new TripEntity(new TripId("göteborg", "köpenhamn", "öresundsbron", WayOfTravel.TRAIN), minTripTime, maxTripTime, 322, 0, 195, 480, 20, 20);
         tempTripsList.add(copenhagenTrain);
-//        addTrip(copenhagenTrain);
 
 
         minTripTime = Duration.parse("PT15H30M");
         maxTripTime = Duration.parse("PT15H30M");
         TripEntity kiel = new TripEntity(new TripId("göteborg", "kiel", "stenaline", WayOfTravel.BY_FOOT), minTripTime, maxTripTime, 0, 0, 400, 900, 0, 0);
         tempTripsList.add(kiel);
-//        addTrip(kiel);
         TripEntity kielCar = new TripEntity(new TripId("göteborg", "kiel", "stenaline", WayOfTravel.CAR), minTripTime, maxTripTime, 0, 0, 600, 2750, 450, 450);
         tempTripsList.add(kielCar);
-//        addTrip(kielCar);
         TripEntity kielCarTrailer = new TripEntity(new TripId("göteborg", "kiel", "stenaline", WayOfTravel.CAR_WITH_TRAILER), minTripTime, maxTripTime, 0, 0, 600, 3040, 800, 1140);
         tempTripsList.add(kielCarTrailer);
-//        addTrip(kielCarTrailer);
 
 
         minTripTime = Duration.parse("PT6H14M");
         maxTripTime = Duration.parse("PT6H14M");
         TripEntity puttgardenHelsingorCar = new TripEntity(new TripId("göteborg", "puttgarden", "helsingör", WayOfTravel.CAR), minTripTime, maxTripTime, 455, 431, 723, 852, 450, 450);
         tempTripsList.add(puttgardenHelsingorCar);
-//        addTrip(puttgardenHelsingorCar);
         minTripTime = Duration.parse("PT7H14M");
         maxTripTime = Duration.parse("PT7H14M");
         TripEntity puttgardenHelsingorCarTrailer = new TripEntity(new TripId("göteborg", "puttgarden", "helsingör", WayOfTravel.CAR_WITH_TRAILER), minTripTime, maxTripTime, 455, 431, 1073, 1266, 800, 1140);
         tempTripsList.add(puttgardenHelsingorCarTrailer);
-//        addTrip(puttgardenHelsingorCarTrailer);
         minTripTime = Duration.parse("PT9H0M");
         maxTripTime = Duration.parse("PT10H30M");
         TripEntity puttgardenHelsingorBus = new TripEntity(new TripId("göteborg", "puttgarden", "helsingör", WayOfTravel.BUS), minTripTime, maxTripTime, 455, 0, 375, 375, 100, 100);
         tempTripsList.add(puttgardenHelsingorBus);
-//        addTrip(puttgardenHelsingorBus);
 
 
         minTripTime = Duration.parse("PT5H47M");
         maxTripTime = Duration.parse("PT5H47M");
         TripEntity puttgardenMalmoCar = new TripEntity(new TripId("göteborg", "puttgarden", "malmö", WayOfTravel.CAR), minTripTime, maxTripTime, 494, 475, 808, 1568, 450, 450);
         tempTripsList.add(puttgardenMalmoCar);
-//        addTrip(puttgardenMalmoCar);
         minTripTime = Duration.parse("PT6H52M");
         maxTripTime = Duration.parse("PT6H52M");
         TripEntity puttgardenMalmoCarTrailer = new TripEntity(new TripId("göteborg", "puttgarden", "malmö", WayOfTravel.CAR_WITH_TRAILER), minTripTime, maxTripTime, 494, 475, 1318, 2078, 800, 1140);
         tempTripsList.add(puttgardenMalmoCarTrailer);
-//        addTrip(puttgardenMalmoCarTrailer);
         minTripTime = Duration.parse("PT8H25M");
         maxTripTime = Duration.parse("PT11H10M");
         TripEntity puttgardenMalmoBus = new TripEntity(new TripId("göteborg", "puttgarden", "malmö", WayOfTravel.BUS), minTripTime, maxTripTime, 494, 0, 260, 750, 20, 20);
         tempTripsList.add(puttgardenMalmoBus);
-//        addTrip(puttgardenMalmoBus);
 
         tripStorage.saveAll(tempTripsList);
     }
