@@ -42,7 +42,7 @@ public class SystembolagetScraper implements ScraperService {
 
     public StoreEntity getStore() {
         return storeStorage.findById("systembolaget")
-                .orElse(new StoreEntity("systembolaget", "SEK"));
+                .orElse(new StoreEntity("systembolaget", "SEK", "sverige"));
     }
 
     public List<DrinkEntity> scrape() throws IOException {

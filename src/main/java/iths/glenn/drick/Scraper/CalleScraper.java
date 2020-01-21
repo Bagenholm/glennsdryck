@@ -30,8 +30,8 @@ public class CalleScraper implements ScraperService{
     StoreStorage storeStorage;
     StoreEntity calle;
 
-    float currencyExchangeRate;
-    Logger logger = LoggerFactory.getLogger(CalleScraper.class);
+    private float currencyExchangeRate;
+    private Logger logger = LoggerFactory.getLogger(CalleScraper.class);
 
     @Override
     public List<DrinkEntity> start() throws IOException {
@@ -46,7 +46,7 @@ public class CalleScraper implements ScraperService{
 
     public StoreEntity getStore() {
         return storeStorage.findById("calle")
-                .orElse(new StoreEntity("calle", "EUR"));
+                .orElse(new StoreEntity("calle", "EUR", "kiel"));
     }
 
     public List<DrinkEntity> scrape() throws IOException {
