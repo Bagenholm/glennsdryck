@@ -1,5 +1,6 @@
-package iths.glenn.drick.trip;
+package iths.glenn.drick.entity;
 
+import iths.glenn.drick.trip.WayOfTravel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,6 @@ import java.util.Objects;
 public class TripId implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
 
     @NotNull(message = "startPoint of the trip must be included in request body")
     @Column(name = "startPoint")

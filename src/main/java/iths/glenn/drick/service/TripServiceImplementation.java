@@ -1,11 +1,12 @@
 package iths.glenn.drick.service;
 
+import iths.glenn.drick.entity.StoreEntity;
 import iths.glenn.drick.entity.TripEntity;
 import iths.glenn.drick.exception.*;
 import iths.glenn.drick.model.TripModel;
+import iths.glenn.drick.repository.StoreStorage;
 import iths.glenn.drick.repository.TripStorage;
-import iths.glenn.drick.trip.TripEntityModelConverter;
-import iths.glenn.drick.trip.TripId;
+import iths.glenn.drick.entity.TripId;
 import iths.glenn.drick.trip.UpdateTripRequest;
 import iths.glenn.drick.trip.WayOfTravel;
 import org.apache.commons.lang3.EnumUtils;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class TripServiceImplementation implements TripService {
 
     TripStorage tripStorage;
+    StoreStorage storeStorage;
 
     TripEntity deletedTrip;
 
@@ -36,8 +38,9 @@ public class TripServiceImplementation implements TripService {
     double fuelConsumptionLitrePerMile;*/
 
 
-    public TripServiceImplementation(TripStorage tripStorage) {
+    public TripServiceImplementation(TripStorage tripStorage, StoreStorage storeStorage) {
         this.tripStorage = tripStorage;
+        this.storeStorage = storeStorage;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class TripServiceImplementation implements TripService {
         List<TripEntity> tripEntityList = tripStorage.findAll();
 
         if(tripEntityList.isEmpty()) {
-            fillTripList();
+            tripEntityList = fillTripList();
         }
 
         return tripEntityList;
@@ -66,7 +69,7 @@ public class TripServiceImplementation implements TripService {
             throw new DestinationDontExistException(String.format("Destination: %s do not exist", destination));
         }
 
-        return TripEntityModelConverter.tripListToModel(tripsToDestination);  //TODO: TripEntityModelConverter static eller instans VÄLJ!!
+        return EntityModelConverter.tripListToModel(tripsToDestination);  //TODO: TripEntityModelConverter static eller instans VÄLJ!!
     }
 
     @Override
@@ -78,7 +81,7 @@ public class TripServiceImplementation implements TripService {
         for (TripEntity tripEntity : tripEntityList) {
 
             if(tripEntity.getTripId().equals(tripId)) {
-                return TripEntityModelConverter.tripEntityToModel(tripEntity);
+                return EntityModelConverter.tripEntityToModel(tripEntity);
             }
         }
 
@@ -98,8 +101,8 @@ public class TripServiceImplementation implements TripService {
             }
         }
 
-        TripEntity tripResponse = tripStorage.save(tripEntity);
-        return TripEntityModelConverter.tripEntityToModel(tripResponse);
+        TripEntity tripResponse = tripStorage.save(joinTripWithStoresInEndPointCity(tripEntity));
+        return EntityModelConverter.tripEntityToModel(tripResponse);
     }
 
     @Override
@@ -131,7 +134,7 @@ public class TripServiceImplementation implements TripService {
 
         }catch(Exception e) {
 
-            addTrip(deletedTrip);
+            addTrip(joinTripWithStoresInEndPointCity(deletedTrip));
             throw new Exception("Failed to add updated trip " + e.getMessage());
         }
     }
@@ -150,12 +153,39 @@ public class TripServiceImplementation implements TripService {
 
                 tripToUpdate = updateTripWithRequest(tripEntity, updateTripRequest);
                 updatedTrip = tripStorage.save(tripToUpdate);
-                return TripEntityModelConverter.tripEntityToModel(updatedTrip);
+                return EntityModelConverter.tripEntityToModel(updatedTrip);
             }
         }
 
         throw new TripDontExistException(String.format("Trip with id: %s do not exist", tripId));
     }
+
+
+    private TripEntity joinTripWithStoresInEndPointCity(TripEntity tripEntity) {
+
+        List<StoreEntity> storeEntityList = storeStorage.findAll();
+
+        for (StoreEntity storeEntity : storeEntityList) {
+
+            if(storeEntity.getCity().equals(tripEntity.getTripId().getEndPoint())) {
+                tripEntity.addStore(storeEntity);
+            }
+        }
+
+        return tripEntity;
+    }
+
+    private List<TripEntity> joinTripWithStoresInEndPointCity(List<TripEntity> tripEntityList) {
+
+        for (TripEntity tripEntity : tripEntityList) {
+
+            joinTripWithStoresInEndPointCity(tripEntity);
+        }
+
+        return tripEntityList;
+    }
+
+
 
     private TripEntity updateTripWithRequest(TripEntity tripEntity, UpdateTripRequest updateTripRequest) {
 
@@ -224,12 +254,11 @@ public class TripServiceImplementation implements TripService {
         return new TripId(startPoint, endPoint, tripInfo, wayOfTravel);
     }
 
-    private void fillTripList() {
-
-        Duration minTripTime;
-        Duration maxTripTime;
+    private List<TripEntity> fillTripList() {
 
         List<TripEntity> tempTripsList = new ArrayList<>();
+        Duration minTripTime;
+        Duration maxTripTime;
 
         minTripTime = Duration.parse("PT3H15M");
         maxTripTime = Duration.parse("PT4H15M");
@@ -296,6 +325,6 @@ public class TripServiceImplementation implements TripService {
         TripEntity puttgardenMalmoBus = new TripEntity(new TripId("göteborg", "puttgarden", "malmö", WayOfTravel.BUS), minTripTime, maxTripTime, 494, 0, 260, 750, 20, 20);
         tempTripsList.add(puttgardenMalmoBus);
 
-        tripStorage.saveAll(tempTripsList);
+        return tripStorage.saveAll(joinTripWithStoresInEndPointCity(tempTripsList));
     }
 }

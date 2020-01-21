@@ -1,6 +1,5 @@
 package iths.glenn.drick.entity;
 
-import iths.glenn.drick.trip.TripId;
 import lombok.*;
 
 import javax.persistence.*;
@@ -77,7 +76,7 @@ public class TripEntity implements Serializable {
     }
 
     @PreRemove
-    public void removeTripFromStore() {
+    public void removeTripFromStores() {
 
         for (StoreEntity storeEntity : stores) {
             storeEntity.getTrips().remove(this);
