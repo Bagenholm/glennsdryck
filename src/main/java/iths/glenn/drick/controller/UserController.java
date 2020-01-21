@@ -1,16 +1,13 @@
 package iths.glenn.drick.controller;
 
 import iths.glenn.drick.entity.UserEntity;
-import iths.glenn.drick.model.UserModel;
 import iths.glenn.drick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     UserRepository userRepository;
