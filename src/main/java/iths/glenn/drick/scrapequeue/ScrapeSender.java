@@ -1,16 +1,12 @@
 package iths.glenn.drick.scrapequeue;
 
-import iths.glenn.drick.Scraper.ScraperService;
-import iths.glenn.drick.Scraper.SystembolagetScraper;
+import iths.glenn.drick.scraper.ScraperService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.amqp.core.Queue;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.beans.Transient;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 @Component
