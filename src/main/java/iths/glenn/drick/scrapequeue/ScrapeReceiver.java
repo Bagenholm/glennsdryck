@@ -19,7 +19,7 @@ public class ScrapeReceiver {
 
     @RabbitListener(queues = "scrape")
     public void receiveScrape(String message) throws IOException {
-        switch(message) {
+   /*     switch(message) {
             case("SystembolagetScraper"):
                 logger.info("Scraping with" + message);
                 scrapeController.systembolagetScraper.scrape();
@@ -40,6 +40,6 @@ public class ScrapeReceiver {
                 logger.info("Scraping with" + message);
                 scrapeController.stenalineScraper.scrape();
                 break;
-        }
+        }*/
     }
 }
