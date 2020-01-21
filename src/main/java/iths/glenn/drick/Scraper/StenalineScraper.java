@@ -44,7 +44,7 @@ public class StenalineScraper implements ScraperService {
 
     public StoreEntity getStore() {
         return storeStorage.findById("stenaline")
-                .orElse(new StoreEntity("stenaline", "SEK"));
+                .orElse(new StoreEntity("stenaline", "SEK", "fredrikshamn"));
     }
 
     public List<DrinkEntity> scrape() throws IOException {

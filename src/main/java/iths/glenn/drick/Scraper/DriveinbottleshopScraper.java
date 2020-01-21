@@ -46,7 +46,7 @@ public class DriveinbottleshopScraper implements ScraperService {
 
     public StoreEntity getStore() {
         return storeStorage.findById("driveinbottleshop")
-                .orElse(new StoreEntity("driveinbottleshop", "DKK"));
+                .orElse(new StoreEntity("driveinbottleshop", "DKK", "köpenhamn"));
     }
 
     public List<DrinkEntity> scrape() throws IOException {
