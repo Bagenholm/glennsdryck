@@ -1,4 +1,4 @@
-package iths.glenn.drick.Scraper;
+package iths.glenn.drick.scraper;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.StoreEntity;
@@ -8,13 +8,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Transient;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,11 +29,14 @@ public class SystembolagetScraper implements ScraperService {
 
     StoreEntity systembolaget;
 
+    Logger logger = LoggerFactory.getLogger(SystembolagetScraper.class);
+
     @Override
     public List<DrinkEntity> start() throws IOException {
         systembolaget = getStore();
 
         if (systembolaget.isScrapedRecently()) {
+            logger.info("Systembolaget scraped recently. Fetching from DB.");
             return drinkStorage.findByStore(systembolaget.getStoreName());
         }
         return scrape();
@@ -61,9 +63,10 @@ public class SystembolagetScraper implements ScraperService {
                         .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
                         .collect(Collectors.toList());
 
-        filteredDrinks.forEach(drinkEntity ->  drinkStorage.save(drinkEntity));
         systembolaget.setInstanceLastScrapedToNow();
         storeStorage.save(systembolaget);
+        filteredDrinks.forEach(drinkEntity ->  drinkStorage.save(drinkEntity));
+
 
         return filteredDrinks;
     }

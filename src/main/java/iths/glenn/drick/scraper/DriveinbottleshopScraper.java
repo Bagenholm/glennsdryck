@@ -1,4 +1,4 @@
-package iths.glenn.drick.Scraper;
+package iths.glenn.drick.scraper;
 
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.StoreEntity;

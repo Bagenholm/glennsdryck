@@ -27,7 +27,7 @@ public class DrinkEntity implements Serializable {
     String subtype;
     float volume; // in millilitres
     float pricePerLitre, alcohol;
-    float price, alcoholPerPrice;
+    float price, alcoholPerPrice; // how many ml 100% alc for 1 crown?
 
     public DrinkEntity(String name, String type, String subtype, float price, float pricePerLitre, float alcohol, float volume, StoreEntity storeEntity) {
         this.name = name;
@@ -38,7 +38,7 @@ public class DrinkEntity implements Serializable {
         this.volume = volume;
         this.price = price;
         this.store = storeEntity;
-        this.alcoholPerPrice = alcohol / pricePerLitre;
+        this.alcoholPerPrice = alcohol / pricePerLitre * 10;
         this.drinkKey = storeEntity.getStoreName() + "-" + name + "-" + volume + "-" + alcohol;
     }
 

@@ -1,9 +1,8 @@
-package iths.glenn.drick.Scraper;
+package iths.glenn.drick.scraper;
 
 import iths.glenn.drick.entity.DrinkEntity;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
 public interface ScraperService {
