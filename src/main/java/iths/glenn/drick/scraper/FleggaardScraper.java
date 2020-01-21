@@ -1,4 +1,4 @@
-package iths.glenn.drick.Scraper;
+package iths.glenn.drick.scraper;
 
 import io.webfolder.ui4j.api.browser.BrowserEngine;
 import io.webfolder.ui4j.api.browser.BrowserFactory;

@@ -1,10 +1,9 @@
 package iths.glenn.drick.controller;
 
-import iths.glenn.drick.Scraper.*;
+import iths.glenn.drick.scraper.*;
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.scrapequeue.ScrapeSender;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
