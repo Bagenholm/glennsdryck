@@ -1,12 +1,13 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
+import iths.glenn.drick.entity.TripEntity;
 
 public class CalculationsService {
     public double priceToGetDrunk(DrinkEntity drink, int amountOfDrunks, double userWeight){
         double kronorToSpend = 0;
 
-        double apk = drink.getPricePerLitre() * (drink.getAlcohol() / 100); // ml alcohol per krona
+        double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
         double gramAlcoholPerPrice = apk * 0.8;
         double promillePerPrice = gramAlcoholPerPrice / userWeight * 0.65;
         System.out.println(promillePerPrice);
@@ -17,7 +18,6 @@ public class CalculationsService {
         return kronorToSpend;
     }
 
-    // Dra av för resa
     public int amountOfDrunksForPrice(DrinkEntity drink, double price, double userWeight){
         int drunks = 0;
 
@@ -28,8 +28,8 @@ public class CalculationsService {
         return drunks;
     }
 
-    public double fuelConsumptionForTrip(double distanceInKilometer, double fuelConsumptionPerMile){
-        return fuelConsumptionPerMile * distanceInKilometer * 10;
+    public double fuelConsumptionPriceForTrip(double distanceInKilometer, double fuelConsumptionPerMile){
+        return (fuelConsumptionPerMile * (distanceInKilometer / 10)) * 2;
     }
 
     /*

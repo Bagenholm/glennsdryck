@@ -26,7 +26,7 @@ public class CalculateController {
     DrinksService drinksService;
 
     @Autowired
-    TripService tripStoragee;
+    TripService tripService;
 
     @GetMapping("priceToGetDrunk/{drunks}")
     public List<ResultEntity> priceToGetDrunk(UserEntity user, @PathVariable int drunks){
@@ -61,8 +61,16 @@ public class CalculateController {
         return results;
     }
 
+    @GetMapping("drunksForPriceWithTrip/{price}/{tripDistance}/{fuelConsumption}")
+    public List<ResultEntity> drunksForPriceWithTrip(UserEntity user, @PathVariable double price,
+                                                     @PathVariable double tripDistance, @PathVariable double fuelConsumption){
+        price -= priceForTrip(tripDistance, fuelConsumption);
+
+        return drunksForPrice(user, price);
+    }
+
     @GetMapping("priceForTrip/{tripDistance}/{fuelConsumption}")
     public double priceForTrip(@PathVariable double tripDistance, @PathVariable double fuelConsumption){
-        return calculator.fuelConsumptionForTrip(tripDistance * 2, fuelConsumption);
+        return calculator.fuelConsumptionPriceForTrip(tripDistance, fuelConsumption);
     }
 }

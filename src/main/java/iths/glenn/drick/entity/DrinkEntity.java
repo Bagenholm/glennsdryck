@@ -19,6 +19,8 @@ public class DrinkEntity implements Serializable {
     //@ManyToOne
     //@JoinColumn(name = "store_name")
     StoreEntity store;
+    String storeName;
+    
     @Column(name = "productname")
     String name;
     @Column(name = "category")
@@ -38,7 +40,8 @@ public class DrinkEntity implements Serializable {
         this.volume = volume;
         this.price = price;
         this.store = storeEntity;
-        this.alcoholPerPrice = alcohol / pricePerLitre * 10;
+        this.storeName = storeEntity.getStoreName();
+        this.alcoholPerPrice = (alcohol / pricePerLitre) * 10; // in ml (alcohol is already * 100)
         this.drinkKey = storeEntity.getStoreName() + "-" + name + "-" + volume + "-" + alcohol;
     }
 
