@@ -31,17 +31,17 @@ public class DrinksController {
         return drinksService.findAllByVolume(volume);
     }
 
-    @GetMapping("/app/")
+    @GetMapping("/apk/")
     public List<DrinkEntity> getAllByApkDesc() {
         return drinksService.findAllByApkDesc();
     }
 
-    @GetMapping("/app/store/{store}/{limit}")
+    @GetMapping("/apk/store/{store}/{limit}")
     public List<DrinkEntity> findAmountBestApkFromStore(@PathVariable String store, @PathVariable int limit) {
         return drinksService.findAmountBestApkFromStore(store, limit);
     }
 
-    @GetMapping("/app/store/all/{limit}")
+    @GetMapping("/apk/store/all/{limit}")
     public List<DrinkEntity> findAmountBestApkFromAllStores(@PathVariable int limit) {
         return drinksService.findAmountBestApkFromEachStore(limit);
     }

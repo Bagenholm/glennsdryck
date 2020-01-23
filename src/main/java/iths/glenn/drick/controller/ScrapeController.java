@@ -6,6 +6,7 @@ import iths.glenn.drick.scrapequeue.ScrapeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,7 @@ public class ScrapeController {
     ScrapeSender messageSender;
 
     //@Scheduled(fixedDelay = 172800000L, initialDelay = 10000L)
-    @GetMapping("/all")
+    @PostMapping("/all")
     public ResponseEntity scrapeAll() {
         messageSender.sendScrapeToQueue(systembolagetScraper);
         messageSender.sendScrapeToQueue(calleScraper);

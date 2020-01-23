@@ -8,6 +8,7 @@ import iths.glenn.drick.model.TripModel;
 import iths.glenn.drick.service.TripService;
 import iths.glenn.drick.trip.UpdateTripRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/trip")
+@RequestMapping("/trips")
 public class TripController {
 
     TripService tripService;
@@ -28,7 +29,8 @@ public class TripController {
         this.tripService = tripService;
     }
 
-    @GetMapping("/")
+    @Scheduled(initialDelay = 1) //Want trips populated from the start
+    @GetMapping("")
     public List<TripEntity> listAllTrips() {
 
         try {
@@ -64,7 +66,7 @@ public class TripController {
     }
 
     //TODO: Fixa så tripId skapas som de ska, och egna datatyper som Duration och WayOfTravel
-    @PostMapping("/")
+    @PostMapping("")
     public TripModel addTrip(@Valid @RequestBody TripEntity tripEntity) {
 
         try {

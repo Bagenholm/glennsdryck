@@ -18,7 +18,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public void register(@RequestBody UserEntity user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -29,7 +29,7 @@ public class UserController {
         return userRepository.findByUsername(username);
     }
 
-    @GetMapping("/registeradmin/{username}")
+    @PostMapping("/registeradmin/{username}")
     public UserEntity registerAdmin(@PathVariable String username){
         UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
         if(user.getRoles().contains("admin")){
