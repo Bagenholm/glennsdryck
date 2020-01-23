@@ -47,7 +47,7 @@ public class StoreEntity implements Serializable {
     Set<TripEntity> trips = new HashSet<>();*/
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "store_trip",
             joinColumns = @JoinColumn(name = "store_name", referencedColumnName = "store_name"),
             inverseJoinColumns = @JoinColumn (name = "trip_city", referencedColumnName = "trip_city"))

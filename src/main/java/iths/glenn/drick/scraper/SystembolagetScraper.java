@@ -63,9 +63,9 @@ public class SystembolagetScraper implements ScraperService {
                         .filter(drinkEntity -> !Float.isNaN(drinkEntity.getAlcoholPerPrice()))
                         .collect(Collectors.toList());
 
+        filteredDrinks.forEach(drinkEntity ->  drinkStorage.save(drinkEntity));
         systembolaget.setInstanceLastScrapedToNow();
         storeStorage.save(systembolaget);
-        filteredDrinks.forEach(drinkEntity ->  drinkStorage.save(drinkEntity));
 
 
         return filteredDrinks;

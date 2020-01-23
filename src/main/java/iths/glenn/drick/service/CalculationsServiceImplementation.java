@@ -6,10 +6,7 @@ import iths.glenn.drick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,18 +54,24 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
         for(DrinkEntity drink : drinkList){
             int drunks = 0;
-            int drinkBudget = budget;
             ResultEntity result = makeResult(user, drink);
+
+            double drinkBudget = budget - result.getTotalPrice();
 
             while(result.getPriceToGetDrunk() < drinkBudget){
                 drinkBudget -= result.getPriceToGetDrunk();
                 drunks++;
             }
             result.setAmountOfDrunksForPrice(drunks);
+            if(result.getAmountOfDrunksForPrice() == 0) {
+                continue;
+            }
+            result.setTotalPrice(result.getPriceToGetDrunk() * drunks);
             resultList.add(result);
         }
 
-        return resultList;
+
+        return resultList.stream().sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder())).collect(Collectors.toList());
     }
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
