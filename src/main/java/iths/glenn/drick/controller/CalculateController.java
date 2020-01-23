@@ -28,14 +28,14 @@ public class CalculateController {
     @Autowired
     TripService tripService;
 
-    @GetMapping("/drunkPrice/user/{username}/drunks/{drunks}/amount/{amount}")
-    public List<ResultEntity> drunkPrice(@PathVariable String username, @PathVariable int drunks, @PathVariable int amount){
-        return calculator.priceForDrunks(username, drunks, amount);
+    @GetMapping("/drunkPrice/user/{username}/drunks/{drunks}/fetchAmount/{fetchAmount}")
+    public List<ResultEntity> drunkPrice(@PathVariable String username, @PathVariable int drunks, @PathVariable int fetchAmount){
+        return calculator.priceForDrunks(username, drunks, fetchAmount);
     }
 
-    @GetMapping("/drunksForBudget/user/{username}/budget/{budget}/amount/{amount}")
-    public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int amount){
-        return calculator.drunksForBudget(username, budget, amount);
+    @GetMapping("/drunksForBudget/user/{username}/budget/{budget}/fetchAmount/{fetchAmount}")
+    public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int fetchAmount){
+        return calculator.drunksForBudget(username, budget, fetchAmount);
     }
 /*
     @GetMapping("cheapestDrunks/{drunks}")
