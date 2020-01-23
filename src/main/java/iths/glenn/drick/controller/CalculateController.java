@@ -37,6 +37,11 @@ public class CalculateController {
     public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int fetchAmount){
         return calculator.drunksForBudget(username, budget, fetchAmount);
     }
+
+    @GetMapping("/drunksForBudget/user/{username}/budget/{budget}/fetchAmount/{fetchAmount}/type/{type}")
+    public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int fetchAmount, @PathVariable String type){
+        return calculator.drunksForBudgetByType(username, budget, fetchAmount, type);
+    }
 /*
     @GetMapping("cheapestDrunks/{drunks}")
     public List<ResultEntity> cheapestDrunks(UserEntity user, @PathVariable int drunks){
