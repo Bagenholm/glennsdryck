@@ -1,5 +1,7 @@
 package iths.glenn.drick.trip;
 
+import iths.glenn.drick.entity.TripId;
+
 import java.time.Duration;
 import java.util.Optional;
 

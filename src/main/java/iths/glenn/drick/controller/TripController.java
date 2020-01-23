@@ -73,8 +73,8 @@ public class TripController {
         }
     }
     //TODO: @ResponseStatus(value = HttpStatus.OK)   ???
-    @DeleteMapping("/{tripId}")
-    public Response removeTrip(@PathVariable(name = "tripId") Map<String, String> tripId) {
+    @DeleteMapping("/{startPoint}/{endPoint}/{tripInfo}/{wayOfTravel}")
+    public Response removeTrip(@PathVariable Map<String, String> tripId) {
 
         try {
             tripService.removeTrip(tripId);
@@ -86,8 +86,8 @@ public class TripController {
         }
     }
 
-    @PutMapping("/{tripId}")
-    public TripModel updateTrip(@PathVariable(name = "tripId") Map<String, String> tripId, @Valid @RequestBody TripEntity tripEntity) {
+    @PutMapping("/{startPoint}/{endPoint}/{tripInfo}/{wayOfTravel}")
+    public TripModel updateTrip(@PathVariable Map<String, String> tripId, @Valid @RequestBody TripEntity tripEntity) {
 
         try {
             return tripService.updateTrip(tripId, tripEntity);
@@ -98,8 +98,8 @@ public class TripController {
         }
     }
 
-    @PatchMapping("/{tripId}")
-    public TripModel updateTripPartially(@PathVariable(name = "tripId") Map<String, String> tripId, @RequestBody UpdateTripRequest updateTripRequest) {
+    @PatchMapping("/{startPoint}/{endPoint}/{tripInfo}/{wayOfTravel}")
+    public TripModel updateTripPartially(@PathVariable Map<String, String> tripId, @RequestBody UpdateTripRequest updateTripRequest) {
 
         try{
             return tripService.updateTripPartially(tripId, updateTripRequest);

@@ -1,8 +1,10 @@
-package iths.glenn.drick.trip;
+package iths.glenn.drick.entity;
 
+import iths.glenn.drick.trip.WayOfTravel;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -13,13 +15,19 @@ import java.util.Objects;
 @Embeddable
 public class TripId implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @NotNull(message = "startPoint of the trip must be included in request body")
+    @Column(name = "startPoint")
     private String startPoint;
     @NotNull(message = "endPoint of the trip must be included in request body")
+    @Column(name = "endPoint")
     private String endPoint;
     @NotNull(message = "tripInfo of the trip must be included in request body")
+    @Column(name = "tripInfo")
     private String tripInfo;
     @NotNull(message = "wayOfTravel of the trip must be included in request body")
+    @Column(name = "wayOfTravel")
     private WayOfTravel wayOfTravel;
 
     public TripId() {

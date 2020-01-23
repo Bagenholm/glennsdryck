@@ -1,10 +1,6 @@
 package iths.glenn.drick.entity;
 
-import iths.glenn.drick.trip.TripId;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,9 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "trips")
+@Table(name = "trip")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class TripEntity implements Serializable {
@@ -27,9 +24,13 @@ public class TripEntity implements Serializable {
     //TODO: ...räknas TripId som en sån extra klass?   den separata klassen ska va typ om relationen mellan 2 entiteter ska ha ett attribut
 
 
+    private static final long serialVersionUID = 1L;
 
-    @EmbeddedId
+   // @EmbeddedId
     private TripId tripId;
+    @Id
+    @Column(name = "trip_city")
+    private String city;
 
    // @Pattern(message = "Wrong format of duration for minTravellingTime", regexp = "PTnHnM")  //TODO: Ersätta regex mot nåt programmet kan hantera, bokstäver och siffror typ
     private Duration minTravellingTime;
@@ -44,8 +45,15 @@ public class TripEntity implements Serializable {
     private int minCapacityInKilos;
     private int maxCapacityInKilos;
 
-    //@ManyToMany(mappedBy = "trips", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    //Set<StoreEntity> stores = new HashSet<>();
+
+   /* @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "myId", referencedColumnName = "myId")
+    @MapsId("myId") // maps 'myId' attribute of embedded id CompositePK
+    private TableA tableA;*/
+
+    @ManyToMany(mappedBy = "trips", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<StoreEntity> stores = new HashSet<>();
+
 
     public TripEntity(TripId tripId, Duration minTravellingTime, Duration maxTravellingTime, double totalDistanceInKM, double distanceByCarInKM, double minTripCharges, double maxTripCharges, int minCapacityInKilos, int maxCapacityInKilos) {
         this.tripId = tripId;
@@ -57,6 +65,8 @@ public class TripEntity implements Serializable {
         this.maxTripCharges = maxTripCharges;
         this.minCapacityInKilos = minCapacityInKilos;
         this.maxCapacityInKilos = maxCapacityInKilos;
+
+        this.city = tripId.getEndPoint();
         //TODO: Ta bort?
         //this.id = startPoint + "-" + endPoint + "-" + tripInfo + "-" + wayOfTravel;  //TODO: Enums för resväg?
         //TODO: använda en egen string för key??  typ göteborg-helsingör-puttgarden
@@ -65,9 +75,23 @@ public class TripEntity implements Serializable {
         // ...av den servicen för att hämta ut med de långa id:t
     }
 
-   // @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "stores")   //TODO: Detta??
-   // private StoreEntity storEntity;
+    @PreRemove
+    public void removeTripFromStores() {
 
-    //TODO: implementera hashcode och equals metoder??
+        for (StoreEntity storeEntity : stores) {
+            storeEntity.getTrips().remove(this);
+        }
+    }
+
+    public void addStore(StoreEntity storeEntity) {
+
+        this.stores.add(storeEntity);
+        storeEntity.getTrips().add(this);
+    }
+
+    public void removeStore(StoreEntity storeEntity) {
+
+        this.stores.remove(storeEntity);
+        storeEntity.getTrips().remove(this);
+    }
 }
