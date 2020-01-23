@@ -33,7 +33,7 @@ public class TripController {
 
         try {
             List<TripEntity> trips = tripService.listAllTrips();
-            return Collections.emptyList();
+            return trips;
         }catch(Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Bad gateway", e);
         }

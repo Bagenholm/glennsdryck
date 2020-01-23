@@ -56,7 +56,9 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
         ResultEntity result = new ResultEntity();
-        Set<TripEntity> trips = tripStorage.findAllByCityEquals(drink.getStoreName());
+        List<TripEntity> trips = tripStorage.findAll();
+        trips = trips.stream().filter(trip -> trip.getCity().equals(drink.getStore().getCity()) ).collect(Collectors.toList()); //Fullösning. Ska hämta direkt från tripStorage, men vill inte. Varför?
+        //Set<TripEntity> trips = tripStorage.findAllByCityContains(drink.getStore().getCity());
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
         double alcoholForOnePromille = user.getWeight() * 0.875;

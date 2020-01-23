@@ -9,6 +9,7 @@ import org.hibernate.annotations.GeneratorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,5 +29,5 @@ public class ResultEntity {
     double cheapestTravelTime;
     double totalDrinkVolume;
     String store;
-    List<TripResultEntity> tripOptions;
+    List<TripResultEntity> tripOptions = new ArrayList<>();
 }

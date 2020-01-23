@@ -10,4 +10,5 @@ import java.util.Set;
 @Repository
 public interface TripStorage extends JpaRepository<TripEntity, String> {
     Set<TripEntity> findAllByCityEquals(String title);
+    Set<TripEntity> findAllByCityContains(String cityName);
 }

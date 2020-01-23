@@ -325,6 +325,12 @@ public class TripServiceImplementation implements TripService {
         TripEntity puttgardenMalmoBus = new TripEntity(new TripId("göteborg", "puttgarden", "malmö", WayOfTravel.BUS), minTripTime, maxTripTime, 494, 0, 260, 750, 20, 20);
         tempTripsList.add(puttgardenMalmoBus);
 
-        return tripStorage.saveAll(joinTripWithStoresInEndPointCity(tempTripsList));
+        minTripTime = Duration.parse("PT0H01M");
+        maxTripTime = Duration.parse("PT1H00M");
+        TripEntity systembolagetByFoot = new TripEntity(new TripId("göteborg", "göteborg", "", WayOfTravel.BY_FOOT), minTripTime, maxTripTime, 0, 0, 0, 0, 0, 0);
+        tempTripsList.add(systembolagetByFoot);
+
+        return tripStorage.saveAll(tempTripsList);
+                //joinTripWithStoresInEndPointCity(tempTripsList));
     }
 }
