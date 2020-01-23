@@ -1,6 +1,7 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.*;
+import iths.glenn.drick.exception.UserNotFoundException;
 import iths.glenn.drick.repository.TripStorage;
 import iths.glenn.drick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
     @Override
     public List<ResultEntity> priceForDrunks(String username, int drunks, int fetchAmount) {
-        UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new UserNotFoundException("Could'nt find " + username));
         List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(fetchAmount);
         List<ResultEntity> resultList = new ArrayList<>();
 
@@ -35,13 +36,12 @@ public class CalculationsServiceImplementation implements CalculationsService {
             result.setTotalPrice(result.getTotalPrice() * drunks);
             resultList.add(result);
         }
-
         return resultList;
     }
 
     @Override
     public List<ResultEntity> drunksForBudget(String username, int budget, int fetchAmount) {
-        UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new UserNotFoundException("Could'nt find " + username));
         List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(fetchAmount);
         List<ResultEntity> resultList = new ArrayList<>();
 
