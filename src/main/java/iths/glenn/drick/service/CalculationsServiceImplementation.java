@@ -1,6 +1,7 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.*;
+import iths.glenn.drick.repository.TripStorage;
 import iths.glenn.drick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
     @Autowired
     DrinksService drinksService;
+
+    @Autowired
+    TripStorage tripStorage;
 
     static final int FUEL_PRICE = 16;
 
@@ -52,7 +56,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
         ResultEntity result = new ResultEntity();
-        Set<TripEntity> trips = drink.getStore().getTrips();
+        List<TripEntity> trips = tripStorage.findAllByCityEquals(drink.getStoreName());
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
         double alcoholForOnePromille = user.getWeight() * 0.875;
