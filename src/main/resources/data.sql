@@ -1,0 +1,1 @@
+ALTER TABLE glenn.drinks MODIFY COLUMN store MEDIUMBLOB;

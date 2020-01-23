@@ -71,13 +71,15 @@ public class CalculationsServiceImplementation implements CalculationsService {
         }
 
 
-        return resultList.stream().sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder())).collect(Collectors.toList());
+        return resultList.stream()
+                .sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder()))
+                .collect(Collectors.toList());
     }
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
         ResultEntity result = new ResultEntity();
         List<TripEntity> trips = tripStorage.findAll();
-        trips = trips.stream().filter(trip -> trip.getCity().equals(drink.getStore().getCity()) ).collect(Collectors.toList()); //Fullösning. Ska hämta direkt från tripStorage, men vill inte. Varför?
+        trips = trips.stream().filter(trip -> trip.getCity().equals(drink.getStore().getCity())).collect(Collectors.toList()); //Fullösning. Ska hämta direkt från tripStorage, men vill inte. Varför?
         //Set<TripEntity> trips = tripStorage.findAllByCityContains(drink.getStore().getCity());
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
