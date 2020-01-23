@@ -56,7 +56,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
         ResultEntity result = new ResultEntity();
-        List<TripEntity> trips = tripStorage.findAllByCityEquals(drink.getStoreName());
+        Set<TripEntity> trips = tripStorage.findAllByCityEquals(drink.getStoreName());
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
         double alcoholForOnePromille = user.getWeight() * 0.875;
