@@ -97,7 +97,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
         trips = trips.stream().filter(trip -> trip.getCity().equals(drink.getStore().getCity()) ).collect(Collectors.toList()); //Fullösning. Ska hämta direkt från tripStorage, men vill inte. Varför?
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
-        double alcoholForOnePromille = user.getWeight() * 0.875;
+        double alcoholForOnePromille = user.getWeight() * user.getGenderMultiplier();
         double price = alcoholForOnePromille / apk;
 
         trips.forEach((trip) -> {

@@ -1,5 +1,6 @@
 package iths.glenn.drick.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,9 @@ public class UserEntity implements Serializable {
 
     @Column(name = "password")
     String password;
+
+    @JsonIgnore
+    char gender;
 
     @Column(name = "enabled")
     boolean enabled;
@@ -61,5 +65,15 @@ public class UserEntity implements Serializable {
 
     public String addRole(String role) {
         return roles += "," + role;
+    }
+
+    public double getGenderMultiplier() {
+        if(gender == 'm') {
+            return 0.875;
+        } else if(gender == 'f') {
+            return 0.75;
+        } else {
+            return 0.875;
+        }
     }
 }

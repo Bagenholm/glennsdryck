@@ -95,7 +95,6 @@ public class FleggaardScraper implements ScraperService {
             float pricePerLitre = 1000 / volume * price;
             return new DrinkEntity(name, type, subtype, price, pricePerLitre, alcohol, volume, fleggaard);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new UnreadableProductException("Unreadable product from " + article);
         }
 
@@ -113,7 +112,7 @@ public class FleggaardScraper implements ScraperService {
         float returnNumber = 0f;
         try {returnNumber = Float.parseFloat(priceString);
         } catch (NumberFormatException e){
-            System.err.println(priceTagText + " " + priceString);
+            throw new UnreadableProductException("Unable to parse price from " + priceString);
         }
 
         return returnNumber;
