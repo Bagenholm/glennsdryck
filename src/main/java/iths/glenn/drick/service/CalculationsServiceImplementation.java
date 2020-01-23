@@ -34,10 +34,9 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
     @Override
     public List<ResultEntity> priceForDrunks(String username, int drunks, int amount) {
-        double kronorToSpend = 0;
         UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
-        List<DrinkEntity> drinkList = findAmountOfDrinks(amount);
-        List<ResultEntity> resultList = new ArrayList<ResultEntity>();
+        List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(amount);
+        List<ResultEntity> resultList = new ArrayList<>();
 
         drinkList.forEach(drink -> {
             resultList.add(makeResult(user, drink));
@@ -49,10 +48,6 @@ public class CalculationsServiceImplementation implements CalculationsService {
     @Override
     public List<ResultEntity> drunksForBudget(String username, int budget, int amount) {
         return null;
-    }
-
-    private List<DrinkEntity> findAmountOfDrinks(int amount){
-        return drinksService.findAmountBestApkFromEachStore(amount);
     }
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
