@@ -2,6 +2,7 @@ package iths.glenn.drick.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,8 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class DrinkEntity implements Serializable {
     static final long serialVersionUID = 1L;
-    private @Id String drinkKey;
 
+    @JsonIgnore
+    private @Id String drinkKey;
     //Mapped by stores
     @Column(name = "store")
     //@ManyToOne
