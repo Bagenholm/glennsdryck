@@ -1,7 +1,6 @@
 package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.DrinkEntity;
-import iths.glenn.drick.entity.TripEntity;
 
 public class CalculationsService {
     public double priceToGetDrunk(DrinkEntity drink, int amountOfDrunks, double userWeight){

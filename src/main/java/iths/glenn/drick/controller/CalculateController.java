@@ -28,8 +28,8 @@ public class CalculateController {
     @Autowired
     TripService tripService;
 
-    @GetMapping("priceToGetDrunk/{drunks}")
-    public List<ResultEntity> priceToGetDrunk(UserEntity user, @PathVariable int drunks){
+    @GetMapping("cheapestDrunks/{drunks}")
+    public List<ResultEntity> cheapestDrunks(UserEntity user, @PathVariable int drunks){
         List<ResultEntity> results = new ArrayList<>();
         List<DrinkEntity> top10Drinks = drinksService.findAmountBestApkFromEachStore(10);
 
@@ -41,7 +41,6 @@ public class CalculateController {
             result.setDrinkName(top10Drinks.get(i).getName());
             results.add(result);
         }
-
         return results;
     }
 
@@ -57,7 +56,6 @@ public class CalculateController {
             result.setAmountOfDrunksForPrice(drunks);
             results.add(result);
         }
-
         return results;
     }
 
