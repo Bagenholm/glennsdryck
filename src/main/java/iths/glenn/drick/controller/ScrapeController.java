@@ -4,6 +4,7 @@ import iths.glenn.drick.scraper.*;
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.scrapequeue.ScrapeSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,63 +33,61 @@ public class ScrapeController {
 
     //@Scheduled(fixedDelay = 172800000L, initialDelay = 10000L)
     @GetMapping("/all")
-    public void scrapeAll() {
+    public ResponseEntity scrapeAll() {
         messageSender.sendScrapeToQueue(systembolagetScraper);
         messageSender.sendScrapeToQueue(calleScraper);
         messageSender.sendScrapeToQueue(fleggaardScraper);
         messageSender.sendScrapeToQueue(driveinbottleshopScraper);
         messageSender.sendScrapeToQueue(stenalineScraper);
+        return ResponseEntity.accepted().build();
     }
 
 
     @GetMapping("/systembolaget")
-    public List<DrinkEntity> scrapeSystembolaget() {
+    public ResponseEntity scrapeSystembolaget() {
         try {
-            return systembolagetScraper.start();
+            return ResponseEntity.ok().body(systembolagetScraper.start());
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return Collections.emptyList();
     }
 
     @GetMapping("/driveinbottleshop")
-    public List<DrinkEntity> scrapeDriveinbottleshop() {
+    public ResponseEntity scrapeDriveinbottleshop() {
         try {
-            return driveinbottleshopScraper.start();
+            return ResponseEntity.ok().body(driveinbottleshopScraper.start());
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return Collections.emptyList();
     }
 
     @GetMapping("/fleggaard")
-    public List<DrinkEntity> scrapeFleggaard() {
+    public ResponseEntity scrapeFleggaard() {
         try {
-            return fleggaardScraper.start();
+            return ResponseEntity.ok().body(fleggaardScraper.start());
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return Collections.emptyList();
     }
 
     @GetMapping("/calle")
-    public List<DrinkEntity> scrapeCalle() {
+    public ResponseEntity scrapeCalle() {
         try {
-            return calleScraper.start();
+            return ResponseEntity.ok().body(calleScraper.start());
+
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return Collections.emptyList();
     }
 
     @GetMapping("/stenaline")
-    public List<DrinkEntity> scrapeStenaline() {
+    public ResponseEntity scrapeStenaline() {
         try {
-            return stenalineScraper.start();
+            return ResponseEntity.ok().body(stenalineScraper.start());
+
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return Collections.emptyList();
     }
 
 }

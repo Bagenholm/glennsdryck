@@ -91,7 +91,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
         //Set<TripEntity> trips = tripStorage.findAllByCityContains(drink.getStore().getCity());
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
-        double alcoholForOnePromille = user.getWeight() * 0.875;
+        double alcoholForOnePromille = user.getWeight() * user.getGenderMultiplier();
         double price = alcoholForOnePromille / apk;
 
         trips.forEach((trip) -> {

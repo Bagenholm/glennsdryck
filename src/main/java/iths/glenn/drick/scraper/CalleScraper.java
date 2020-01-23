@@ -188,13 +188,13 @@ public class CalleScraper implements ScraperService{
             try {
                 return Float.parseFloat(alcoholSubString);
             } catch (NumberFormatException e) {
-                throw new UnreadableProductException("Unable to alcohol content from: [" + alcoholString + "]");
+                throw new UnreadableProductException("Unable to parse alcohol content from: [" + alcoholString + "]");
             }
         } else {
             try {
                 return extractAlcoholFromOddCaseText(percIndex, lIndex, alcoholString);
             } catch (NumberFormatException e) {
-                throw new UnreadableProductException("Unable to alcohol content from: [" + alcoholString + "]");
+                throw new UnreadableProductException("Unable to parse alcohol content from: [" + alcoholString + "]");
             }
         }
     }
@@ -228,7 +228,7 @@ public class CalleScraper implements ScraperService{
         try {
             return Float.parseFloat(priceString);
         } catch (NumberFormatException e) {
-            throw new UnreadableProductException("Unable to alcohol content from: [" + priceString + "]");
+            throw new UnreadableProductException("Unable to parse alcohol content from: [" + priceString + "]");
         }
     }
 

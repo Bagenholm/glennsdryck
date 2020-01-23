@@ -18,7 +18,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/")
     public void register(@RequestBody UserEntity user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
