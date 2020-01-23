@@ -37,9 +37,9 @@ public class CalculationsServiceImplementation implements CalculationsService {
     }*/
 
     @Override
-    public List<ResultEntity> priceForDrunks(String username, int drunks, int amount) {
+    public List<ResultEntity> priceForDrunks(String username, int drunks, int fetchAmount) {
         UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
-        List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(amount);
+        List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(fetchAmount);
         List<ResultEntity> resultList = new ArrayList<>();
 
         drinkList.forEach(drink -> {
@@ -50,8 +50,25 @@ public class CalculationsServiceImplementation implements CalculationsService {
     }
 
     @Override
-    public List<ResultEntity> drunksForBudget(String username, int budget, int amount) {
-        return null;
+    public List<ResultEntity> drunksForBudget(String username, int budget, int fetchAmount) {
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
+        List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(fetchAmount);
+        List<ResultEntity> resultList = new ArrayList<>();
+
+        for(DrinkEntity drink : drinkList){
+            int drunks = 0;
+            int drinkBudget = budget;
+            ResultEntity result = makeResult(user, drink);
+
+            while(result.getPriceToGetDrunk() < drinkBudget){
+                drinkBudget -= result.getPriceToGetDrunk();
+                drunks++;
+            }
+            result.setAmountOfDrunksForPrice(drunks);
+            resultList.add(result);
+        }
+
+        return resultList;
     }
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
