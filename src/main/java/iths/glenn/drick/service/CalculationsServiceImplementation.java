@@ -34,6 +34,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
             ResultEntity result = makeResult(user, drink);
             result.setTotalDrunks(drunks);
             result.setTotalPrice(result.getTotalPrice() * drunks);
+            result.setTotalDrinkVolume(drink.getVolume() * drunks);
             resultList.add(result);
         }
         return resultList;
@@ -46,7 +47,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
         List<ResultEntity> resultList = calculateDrunksFromBudget(budget, user, drinkList);
 
         return resultList.stream()
-                .sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder()))
+                .sorted(Comparator.comparing(ResultEntity::getTotalDrunks, Collections.reverseOrder()))
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +63,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
         List<ResultEntity> resultList = calculateDrunksFromBudget(budget, user, drinkList);
 
         return resultList.stream()
-                .sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder()))
+                .sorted(Comparator.comparing(ResultEntity::getTotalDrunks, Collections.reverseOrder()))
                 .collect(Collectors.toList());
     }
 
@@ -78,14 +79,15 @@ public class CalculationsServiceImplementation implements CalculationsService {
                 drinkBudget -= result.getPriceToGetDrunk();
                 drunks++;
             }
-            result.setAmountOfDrunksForPrice(drunks);
-            if (result.getAmountOfDrunksForPrice() == 0) {
+            result.setTotalDrunks(drunks);
+            if (result.getTotalDrunks() == 0) {
                 continue;
             }
             result.setTotalPrice(result.getPriceToGetDrunk() * drunks);
+            result.setTotalDrinkVolume(drink.getVolume() * drunks);
             resultList.add(result);
         }
-        return resultList.stream().sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder())).collect(Collectors.toList());
+        return resultList.stream().sorted(Comparator.comparing(ResultEntity::getTotalDrunks, Collections.reverseOrder())).collect(Collectors.toList());
     }
 
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
@@ -112,6 +114,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
         result.setPriceToGetDrunk(price);
         result.setDrinkPrice(drink.getPrice());
         result.setStore(drink.getStoreName());
+
         result.setTotalPrice(result.getTripOptions().get(0).getTotalPrice() + price);
 
         return result;
