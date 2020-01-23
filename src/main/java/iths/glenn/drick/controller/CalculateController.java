@@ -3,9 +3,8 @@ package iths.glenn.drick.controller;
 import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.ResultEntity;
 import iths.glenn.drick.entity.UserEntity;
-import iths.glenn.drick.repository.DrinkStorage;
-import iths.glenn.drick.repository.UserRepository;
 import iths.glenn.drick.service.CalculationsService;
+import iths.glenn.drick.service.CalculationsServiceImplementation;
 import iths.glenn.drick.service.DrinksService;
 import iths.glenn.drick.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/calculate")
 public class CalculateController {
-    CalculationsService calculator = new CalculationsService();
+    @Autowired
+    CalculationsService calculator;
 
     @Autowired
     DrinksService drinksService;
@@ -28,6 +28,16 @@ public class CalculateController {
     @Autowired
     TripService tripService;
 
+    @GetMapping("/drunkPrice/user/{username}/drunks/{drunks}/amount/{amount}")
+    public List<ResultEntity> drunkPrice(@PathVariable String username, @PathVariable int drunks, @PathVariable int amount){
+        return calculator.priceForDrunks(username, drunks, amount);
+    }
+
+    @GetMapping("/drunksForBudget/user/{username}/budget/{budget}/amount/{amount}")
+    public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int amount){
+        return calculator.drunksForBudget(username, budget, amount);
+    }
+/*
     @GetMapping("cheapestDrunks/{drunks}")
     public List<ResultEntity> cheapestDrunks(UserEntity user, @PathVariable int drunks){
         List<ResultEntity> results = new ArrayList<>();
@@ -65,10 +75,5 @@ public class CalculateController {
         price -= priceForTrip(tripDistance, fuelConsumption);
 
         return drunksForPrice(user, price);
-    }
-
-    @GetMapping("priceForTrip/{tripDistance}/{fuelConsumption}")
-    public double priceForTrip(@PathVariable double tripDistance, @PathVariable double fuelConsumption){
-        return calculator.fuelConsumptionPriceForTrip(tripDistance, fuelConsumption);
-    }
+    }*/
 }

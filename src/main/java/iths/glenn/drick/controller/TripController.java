@@ -13,6 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +32,8 @@ public class TripController {
     public List<TripEntity> listAllTrips() {
 
         try {
-            return tripService.listAllTrips();
+            List<TripEntity> trips = tripService.listAllTrips();
+            return Collections.emptyList();
         }catch(Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Bad gateway", e);
         }

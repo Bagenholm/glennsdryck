@@ -1,5 +1,6 @@
 package iths.glenn.drick.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -51,7 +52,8 @@ public class TripEntity implements Serializable {
     @MapsId("myId") // maps 'myId' attribute of embedded id CompositePK
     private TableA tableA;*/
 
-    @ManyToMany(mappedBy = "trips", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "trips", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<StoreEntity> stores = new HashSet<>();
 
 

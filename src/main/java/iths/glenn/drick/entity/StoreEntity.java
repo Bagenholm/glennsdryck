@@ -1,5 +1,6 @@
 package iths.glenn.drick.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -45,8 +46,8 @@ public class StoreEntity implements Serializable {
         })
     Set<TripEntity> trips = new HashSet<>();*/
 
-
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "store_trip",
             joinColumns = @JoinColumn(name = "store_name", referencedColumnName = "store_name"),
             inverseJoinColumns = @JoinColumn (name = "trip_city", referencedColumnName = "trip_city"))

@@ -33,6 +33,9 @@ public class UserEntity implements Serializable {
     @Column(name = "weight")
     float weight = 72f;
 
+    @Column(name = "fuelconsumptionrate")
+    float fuelConsumptionRate = 1;
+
     @Column(name = "roles")
     private String roles;
 

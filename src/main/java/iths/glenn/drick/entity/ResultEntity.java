@@ -4,27 +4,29 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.List;
+import java.util.Set;
 
-@Data
-@Entity
 @NoArgsConstructor
 @Getter
 @Setter
 public class ResultEntity {
-    private @Id
+    private @Id @GeneratedValue long id;
 
-    String drinkKey;
+    double totalPrice;
     String drinkName;
     double drinkPrice;
     double priceToGetDrunk;
+    double totalDrunks;
     int amountOfDrunksForPrice;
-    double totalTravelPrice;
-    double totalMaxTravelTime;
-    double totalMinTravelTime;
+    double cheapestTravelPrice;
+    double cheapestTravelTime;
     double totalDrinkVolume;
-    String travelDescription;
     String store;
+    List<TripResultEntity> tripOptions;
 }
