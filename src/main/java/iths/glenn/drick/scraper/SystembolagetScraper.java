@@ -120,12 +120,15 @@ public class SystembolagetScraper implements ScraperService {
     }
 
     private String extractTypeFromText(Element article) {
-        return article.getElementsByTag("Varugrupp").text();
+        String typeText = article.getElementsByTag("Varugrupp").text();
+        if(typeText.contains("vin")) {
+            typeText = "Vin";
+        }
+        return typeText;
     }
 
     private String extractNameFromText(Element article) {
         return (article.getElementsByTag("Namn").text().trim()
                     + " " + article.getElementsByTag("Namn2").text()).trim();
     }
-
 }

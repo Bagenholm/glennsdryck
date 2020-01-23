@@ -43,20 +43,43 @@ public class CalculationsServiceImplementation implements CalculationsService {
     public List<ResultEntity> drunksForBudget(String username, int budget, int fetchAmount) {
         UserEntity user = userRepository.findById(username).orElseThrow(() -> new UserNotFoundException("Could'nt find " + username));
         List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(fetchAmount);
-        List<ResultEntity> resultList = new ArrayList<>();
+        List<ResultEntity> resultList = calculateDrunksFromBudget(budget, user, drinkList);
 
-        for(DrinkEntity drink : drinkList){
+        return resultList.stream()
+                .sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ResultEntity> drunksToBeWorthIt(String username) {
+        return null;
+    }
+
+    @Override
+    public List<ResultEntity> drunksForBudgetByType(String username, int budget, int fetchAmount, String type) {
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
+        List<DrinkEntity> drinkList = drinksService.findAmountBestApkByType(type, fetchAmount);
+        List<ResultEntity> resultList = calculateDrunksFromBudget(budget, user, drinkList);
+
+        return resultList.stream()
+                .sorted(Comparator.comparing(ResultEntity::getAmountOfDrunksForPrice, Collections.reverseOrder()))
+                .collect(Collectors.toList());
+    }
+
+    private List<ResultEntity> calculateDrunksFromBudget(int budget, UserEntity user, List<DrinkEntity> drinkList) {
+        List<ResultEntity> resultList = new ArrayList<>();
+        for (DrinkEntity drink : drinkList) {
             int drunks = 0;
             ResultEntity result = makeResult(user, drink);
 
             double drinkBudget = budget - result.getTotalPrice();
 
-            while(result.getPriceToGetDrunk() < drinkBudget){
+            while (result.getPriceToGetDrunk() < drinkBudget) {
                 drinkBudget -= result.getPriceToGetDrunk();
                 drunks++;
             }
             result.setAmountOfDrunksForPrice(drunks);
-            if(result.getAmountOfDrunksForPrice() == 0) {
+            if (result.getAmountOfDrunksForPrice() == 0) {
                 continue;
             }
             result.setTotalPrice(result.getPriceToGetDrunk() * drunks);
@@ -68,6 +91,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
     private ResultEntity makeResult(UserEntity user, DrinkEntity drink){
         ResultEntity result = new ResultEntity();
         List<TripEntity> trips = tripStorage.findAll();
+
         trips = trips.stream().filter(trip -> trip.getCity().equals(drink.getStore().getCity()) ).collect(Collectors.toList()); //Fullösning. Ska hämta direkt från tripStorage, men vill inte. Varför?
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona

@@ -1,10 +1,7 @@
 package iths.glenn.drick.controller;
 
-import iths.glenn.drick.entity.DrinkEntity;
 import iths.glenn.drick.entity.ResultEntity;
-import iths.glenn.drick.entity.UserEntity;
 import iths.glenn.drick.service.CalculationsService;
-import iths.glenn.drick.service.CalculationsServiceImplementation;
 import iths.glenn.drick.service.DrinksService;
 import iths.glenn.drick.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.NotAuthorizedException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -61,5 +57,10 @@ public class CalculateController {
         catch(Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Endpoint error", e);
         }
+    }
+
+    @GetMapping("/drunksForBudget/user/{username}/budget/{budget}/fetchAmount/{fetchAmount}/type/{type}")
+    public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int fetchAmount, @PathVariable String type){
+        return calculator.drunksForBudgetByType(username, budget, fetchAmount, type);
     }
 }
