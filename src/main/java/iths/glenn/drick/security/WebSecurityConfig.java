@@ -59,7 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthenticationFilter(authenticationManager()))
                 .addFilter(new AuthorizationFilter(authenticationManager(), this.userRepository))
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/scrape/all").hasRole("admin")
+                .anyRequest().permitAll()
+          /*      .antMatchers(HttpMethod.POST, "/scrape/all").hasRole("admin")
                 .antMatchers("/scrape/**").hasRole("user")
                 .antMatchers("/users/**").hasRole("user")
                 .antMatchers("/drinks/**").hasRole("user")
@@ -71,9 +72,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/calculate/drunksForBudget/{username}/{budget}/{fetchAmount}").hasRole("user")
                 .antMatchers("/calculate/drunksForBudget/{username}/{budget}/{fetchAmount}/{type}").hasRole("user")
                 .anyRequest().authenticated()
+                */
                 .and()
                 .formLogin()
                 .loginPage("/login").permitAll()
+
                 .and()
                 .httpBasic();
 
