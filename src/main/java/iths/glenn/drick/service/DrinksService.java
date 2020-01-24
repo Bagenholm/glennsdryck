@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +31,17 @@ public class DrinksService {
     }
 
     public List<DrinkEntity> findAmountBestApkFromStore(String store, int limit) {
-        return drinkStorage.findAllByStoreEquals(store, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice")));
+        return drinkStorage.findAllByStoreNameEquals(store, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice")));
     }
 
     public List<DrinkEntity> findAmountBestApkFromEachStore(int limit) {
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
         Pageable limitAndsort = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice"));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("systembolaget", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("calle", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("stenaline", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("fleggaard", limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEquals("driveinbottleshop", limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEquals("systembolaget", limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEquals("calle", limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEquals("stenaline", limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEquals("fleggaard", limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEquals("driveinbottleshop", limitAndsort));
 
         return drinks;
     }
@@ -50,11 +49,11 @@ public class DrinksService {
     public List<DrinkEntity> findAmountBestApkFromEachStoreByType(String type, int limit) {
         ArrayList<DrinkEntity> drinks = new ArrayList<>();
         Pageable limitAndsort = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "alcoholPerPrice"));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("systembolaget", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("calle", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("stenaline", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("fleggaard", type, limitAndsort));
-        drinks.addAll(drinkStorage.findAllByStoreEqualsAndTypeEquals("driveinbottleshop", type, limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEqualsAndTypeEquals("systembolaget", type, limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEqualsAndTypeEquals("calle", type, limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEqualsAndTypeEquals("stenaline", type, limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEqualsAndTypeEquals("fleggaard", type, limitAndsort));
+        drinks.addAll(drinkStorage.findAllByStoreNameEqualsAndTypeEquals("driveinbottleshop", type, limitAndsort));
 
         return drinks;
     }

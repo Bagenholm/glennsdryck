@@ -6,9 +6,10 @@ public class CalculationsService {
     public double priceToGetDrunk(DrinkEntity drink, int amountOfDrunks, double userWeight){
         double kronorToSpend = 0;
 
-        float apk = drink.getAlcoholPerPrice() * 1000;// Get MillilitreAlcoholPerPrice
+        double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
         double gramAlcoholPerPrice = apk * 0.8;
         double promillePerPrice = gramAlcoholPerPrice / userWeight * 0.65;
+        System.out.println(promillePerPrice);
 
         for(double i = 0; i < amountOfDrunks; i += promillePerPrice){
             kronorToSpend++;
@@ -26,18 +27,25 @@ public class CalculationsService {
         return drunks;
     }
 
-    public double fuelConsumptionForTrip(double distanceInKilometer, double fuelConsumptionPerKilometer){
-        return fuelConsumptionPerKilometer * distanceInKilometer;
+    public double fuelConsumptionPriceForTrip(double distanceInKilometer, double fuelConsumptionPerMile){
+        return (fuelConsumptionPerMile * (distanceInKilometer / 10)) * 2;
     }
 
     /*
     Kvinna: Alkohol i g/(kroppsvikten i kg x 60 %) - (0,15 x timmar från intagets början) = promille
     Man:    Alkohol i g/(kroppsvikten i kg x 70 %) - (0,15 x timmar från intagets början) = promille
 
+    Man:    if(Alkohol i ML = din vikt * 0.875) = 1 promille
+    Kvinna: if(Alkohol i ML = din vikt * 0.75) = 1 promille
+
     Basic test formula: Gram alkohol / 52 = promille
 
     ML alkohol * 0.8 = gram alkohol
 
+    Vodka shot = 6 cl, 40%
+    24 ml alkohol / vodka shot.
+    19.2 g alkohol / vodka shot.
+    0.36923076923 promille / vodka shot.
 
     (mängdmått) Alkohol Per Krona
 
