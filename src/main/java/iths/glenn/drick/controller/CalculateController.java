@@ -38,9 +38,6 @@ public class CalculateController {
         catch(IllegalArgumentException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal argument", e);
         }
-        catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Endpoint error", e);
-        }
     }
 
     @GetMapping("/drunksForBudget/{username}/{budget}/{fetchAmount}")
@@ -53,9 +50,6 @@ public class CalculateController {
         }
         catch(IllegalArgumentException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal argument", e);
-        }
-        catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Endpoint error", e);
         }
     }
 

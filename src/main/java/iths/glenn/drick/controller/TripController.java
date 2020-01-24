@@ -29,10 +29,10 @@ public class TripController {
 
     @Scheduled(fixedDelay = 1780000000, initialDelay = 1)
     @GetMapping("")
-    public List<TripEntity> listAllTrips() {
+    public List<TripModel> listAllTrips() {
 
         try {
-            List<TripEntity> trips = tripService.listAllTrips();
+            List<TripModel> trips = tripService.listAllTrips();
             return trips;
         }catch(Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Bad gateway", e);

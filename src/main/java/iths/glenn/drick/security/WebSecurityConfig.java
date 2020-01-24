@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthenticationFilter(authenticationManager()))
                 .addFilter(new AuthorizationFilter(authenticationManager(), this.userRepository))
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/scrape/all").hasRole("admin")
+                .antMatchers("/scrape/all").hasRole("admin")
                 .antMatchers("/scrape/**").hasRole("user")
                 .antMatchers(HttpMethod.POST, "/user/").permitAll()
                 .antMatchers("/user/**").hasRole("user")

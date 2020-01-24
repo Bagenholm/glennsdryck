@@ -34,7 +34,7 @@ public class ScrapeController {
     ScrapeSender messageSender;
 
     @Scheduled(fixedDelay = 172800000L, initialDelay = 100000000L)
-    @PostMapping("/all")
+    @GetMapping("/all")
     public ResponseEntity scrapeAll() {
         messageSender.sendScrapeToQueue(systembolagetScraper);
         messageSender.sendScrapeToQueue(calleScraper);
