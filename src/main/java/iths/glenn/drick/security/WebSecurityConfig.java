@@ -4,6 +4,7 @@ import iths.glenn.drick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -59,9 +60,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthorizationFilter(authenticationManager(), this.userRepository))
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
-//                .antMatchers("/drinks/**").hasRole("user")
-//                .antMatchers("/scrape/**").hasRole("admin")
-//                .antMatchers("/users/**").permitAll()
+                .antMatchers("/scrape/all").hasRole("admin")
+                .antMatchers("/scrape/**").hasRole("user")
+                .antMatchers("/users/**").hasRole("user")
+                .antMatchers("/drinks/**").hasRole("user")
+                .antMatchers("/trips/**").hasRole("user")
+                .antMatchers(HttpMethod.POST, "/trips").hasRole("admin")
+                .antMatchers(HttpMethod.DELETE, "/trips/{startpoint}/{endpoint}/{tripinfo}/{wayoftravel}").hasRole("admin")
+                .antMatchers(HttpMethod.PUT, "/trips/{startpoint}/{endpoint}/{tripinfo}/{wayoftravel}").hasRole("admin")
+                .antMatchers("/trips/{startpoint}/{endpoint}/{tripinfo}/{wayoftravel}").hasRole("user")
+                .antMatchers("/calculate/drunksForBudget/{username}/{budget}/{fetchAmount}").hasRole("user")
+                .antMatchers("/calculate/drunksForBudget/{username}/{budget}/{fetchAmount}/{type}").hasRole("user")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
