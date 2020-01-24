@@ -31,7 +31,7 @@ public class DrinksController {
         return drinksService.findAllByVolume(volume);
     }
 
-    @GetMapping("/apk/")
+    @GetMapping("/apk")
     public List<DrinkEntity> getAllByApkDesc() {
         return drinksService.findAllByApkDesc();
     }
@@ -46,12 +46,12 @@ public class DrinksController {
         return drinksService.findAmountBestApkFromEachStore(limit);
     }
 
-    @GetMapping("/app/store/all/{type}/{limit}")
+    @GetMapping("/apk/store/all/{type}/{limit}")
     public List<DrinkEntity> findAmountBestApkFromAllStoresByType(@PathVariable String type, @PathVariable int limit) {
         return drinksService.findAmountBestApkFromEachStoreByType(type, limit);
     }
 
-    @GetMapping("/app/type/{type}/{limit}")
+    @GetMapping("/apk/{type}/{limit}")
     public List<DrinkEntity> findAmountBestApkByType(@PathVariable String type, @PathVariable int limit) {
         return drinksService.findAmountBestApkByType(type, limit);
     }

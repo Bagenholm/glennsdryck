@@ -29,7 +29,7 @@ public class TripController {
         this.tripService = tripService;
     }
 
-    @Scheduled(initialDelay = 1) //Want trips populated from the start
+    @Scheduled(fixedDelay = 1780000000, initialDelay = 1) //Want trips populated from the start
     @GetMapping("")
     public List<TripEntity> listAllTrips() {
 
