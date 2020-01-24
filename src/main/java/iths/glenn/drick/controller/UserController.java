@@ -1,6 +1,7 @@
 package iths.glenn.drick.controller;
 
 import iths.glenn.drick.entity.UserEntity;
+import iths.glenn.drick.exception.UserNotFoundException;
 import iths.glenn.drick.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,12 +27,12 @@ public class UserController {
 
     @GetMapping("/{username}")
     public UserEntity findUserByUsername(@PathVariable String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findById(username).orElseThrow(() -> new UserNotFoundException("Couldn't find " + username));
     }
 
     @PostMapping("/registeradmin/{username}")
     public UserEntity registerAdmin(@PathVariable String username){
-        UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("No such user"));
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new IllegalArgumentException("Couldn't find " + username));
         if(user.getRoles().contains("admin")){
             return user;
         }
