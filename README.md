@@ -3,7 +3,9 @@
 #Usage
 Glenns Dryck can scrape five different stores for their alcohol-based products and gives you the cheapest alternatives for getting roughly 1 promille (or 0.5 promille, over roughly 3 hours).
 
-MySQL and RabbitMQ running on default ports.
+Can't be run on JDK 11 or later without also bundling it with JavaFX due to a scraper using JavaFX webkit - either run it with JDK 1.8 or bundle it with JavaFX.
+
+MySQL and RabbitMQ running on default ports. Use root/root for MySQL and guest/guest for RabbitMQ, or change username and password in application.properties.
 
 #Endpoints
 
