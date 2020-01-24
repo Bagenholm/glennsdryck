@@ -45,3 +45,5 @@ MySQL and RabbitMQ running on default ports. Use root/root for MySQL and guest/g
 | /store/{storeName}                                                  | GET    | Get store by {storeName}.
                                     | All           |
 | /store                                                              | PATCH  | Create joins between all stores and trips.
+                                    | All           |
+                                    
