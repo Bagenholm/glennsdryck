@@ -89,6 +89,9 @@ public class FleggaardScraper implements ScraperService {
     private DrinkEntity makeDrink(Element article, String type, String subtype) {
         try {
             String name = extractNameFromText(article);
+            if(name.equals("Koskenkorva Salmiakk") || name.equals("Hancock Gambrinus Mörk")) {
+                return new DrinkEntity();
+            }
             float alcohol = extractAlcoholFromText(article);
             float volume = extractVolumeFromText(article) * 1000; //Product volume comes in litres
             float price = extractPriceFromText(article) * currencyExchangeRate;

@@ -26,8 +26,8 @@ public class TripResultEntity {
 
     public TripResultEntity(TripEntity tripEntity, long totalFuelPrice){
         totalPrice = tripEntity.getMinTripCharges() * 2 + totalFuelPrice;
-        minTravelTime = tripEntity.getMinTravellingTime();
-        maxTravelTime = tripEntity.getMaxTravellingTime();
+        minTravelTime = tripEntity.getMinTravellingTime().plus(tripEntity.getMinTravellingTime());
+        maxTravelTime = tripEntity.getMaxTravellingTime().plus(tripEntity.getMaxTravellingTime());
         travelDescription = getTravelDescription(tripEntity);
     }
 

@@ -144,6 +144,9 @@ public class DriveinbottleshopScraper implements ScraperService {
 
     private DrinkEntity makeDrink(Element article, String type, String subtype) {
         String name = extractNameFromText(article);
+        if(name.equals("Diamond Hill Shiraz/Merlot")) {
+            return new DrinkEntity();
+        }
         float alcohol = extractAlcoholFromText(article);
         float volume = extractVolumeFromText(article) * 10;
         float price = extractPriceFromText(article) * currencyExchangeRate;

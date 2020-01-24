@@ -26,18 +26,19 @@ public class CalculationsServiceImplementation implements CalculationsService {
 
     @Override
     public List<ResultEntity> priceForDrunks(String username, int drunks, int fetchAmount) {
-        UserEntity user = userRepository.findById(username).orElseThrow(() -> new UserNotFoundException("Could'nt find " + username));
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new UserNotFoundException("Couldn't find " + username));
         List<DrinkEntity> drinkList = drinksService.findAmountBestApkFromEachStore(fetchAmount);
         List<ResultEntity> resultList = new ArrayList<>();
 
         for(DrinkEntity drink : drinkList){
             ResultEntity result = makeResult(user, drink);
             result.setTotalDrunks(drunks);
-            result.setTotalPrice(result.getTotalPrice() * drunks);
-            result.setTotalDrinkVolume(drink.getVolume() * drunks);
+            result.setTotalPrice(drunks * result.getPriceToGetDrunk() + result.getCheapestTravelPrice());
+            result.setTotalDrinkVolume(drink.getVolume() / (result.getDrinkPrice() / result.getPriceToGetDrunk()) * drunks);
             resultList.add(result);
         }
-        return resultList;
+        return resultList.stream()
+                .sorted(Comparator.comparing(ResultEntity::getTotalPrice)).collect(Collectors.toList());
     }
 
     @Override
@@ -73,7 +74,7 @@ public class CalculationsServiceImplementation implements CalculationsService {
             int drunks = 0;
             ResultEntity result = makeResult(user, drink);
 
-            double drinkBudget = budget - result.getTotalPrice();
+            double drinkBudget = budget - result.getCheapestTravelPrice();
 
             while (result.getPriceToGetDrunk() < drinkBudget) {
                 drinkBudget -= result.getPriceToGetDrunk();
@@ -83,8 +84,9 @@ public class CalculationsServiceImplementation implements CalculationsService {
             if (result.getTotalDrunks() == 0) {
                 continue;
             }
-            result.setTotalPrice(result.getPriceToGetDrunk() * drunks);
-            result.setTotalDrinkVolume(drink.getVolume() * drunks);
+            result.setTotalPrice(result.getPriceToGetDrunk() * drunks + result.getCheapestTravelPrice());
+            result.setTotalDrinkVolume(drink.getVolume() / (result.getDrinkPrice() / result.getPriceToGetDrunk()) * drunks);
+            result.setAlcohol(drink.getAlcohol());
             resultList.add(result);
         }
         return resultList.stream().sorted(Comparator.comparing(ResultEntity::getTotalDrunks, Collections.reverseOrder())).collect(Collectors.toList());
@@ -94,12 +96,11 @@ public class CalculationsServiceImplementation implements CalculationsService {
         ResultEntity result = new ResultEntity();
         List<TripEntity> trips = tripStorage.findAll();
 
-        trips = trips.stream().filter(trip -> trip.getCity().equals(drink.getStore().getCity()) ).collect(Collectors.toList()); //Fullösning. Ska hämta direkt från tripStorage, men vill inte. Varför?
+        trips = trips.stream().filter(trip -> trip.getCity().equals(drink.getStore().getCity())).collect(Collectors.toList()); //Fullösning. Ska hämta direkt från tripStorage, men vill inte. Varför?
 
         double apk = drink.getAlcoholPerPrice(); // ml alcohol per krona
         double alcoholForOnePromille = user.getWeight() * user.getGenderMultiplier();
         double price = alcoholForOnePromille / apk;
-
         trips.forEach((trip) -> {
             long fuelConsumption = fuelConsumptionPriceForTrip(trip.getDistanceByCarInKM(), user.getFuelConsumptionRate());
             result.getTripOptions().add(makeTripResult(trip, fuelConsumption));
@@ -114,8 +115,11 @@ public class CalculationsServiceImplementation implements CalculationsService {
         result.setPriceToGetDrunk(price);
         result.setDrinkPrice(drink.getPrice());
         result.setStore(drink.getStoreName());
-
-        result.setTotalPrice(result.getTripOptions().get(0).getTotalPrice() + price);
+        result.setDrinkVolume(drink.getVolume());
+        result.setAlcohol(drink.getAlcohol());
+        TripResultEntity cheapestTravelOption = result.getTripOptions().get(0);
+        result.setCheapestTravelPrice(cheapestTravelOption.getTotalPrice());
+        result.setCheapestTravelTime(cheapestTravelOption.getMinTravelTime());
 
         return result;
     }
