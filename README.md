@@ -15,7 +15,7 @@ MySQL and RabbitMQ running on default ports. Use root/root for MySQL and guest/g
 | /login                                                              | POST   | Logs in with user. Requires username and password.                                      | All           |
 | /user/{username}                                                    | GET    | Finds user.                                                                             | User, Admin   |
 | /user/registeradmin/{username}                                      | POST   | Registers user as admin. Trust your users to decide if they're worthy.                  | User, Admin   |
-| /scrape/all                                                         | POST   | Scrapes all stores. Overrides schedule and when store was last scraped.                 | Admin         |
+| /scrape/all                                                         | GET   | Scrapes all stores. Overrides schedule and when store was last scraped.                 | Admin         |
 | /scrape/systembolaget                                               | GET    | Scrapes Systembolaget, or gets from DB if scraped recently.                             | User, Admin   |
 | /scrape/calle                                                       | GET    | Scrapes Calle, or gets from DB if scraped recently.                                     | User, Admin   |
 | /scrape/fleggaard                                                   | GET    | Scrapes Fleggaard, or gets from DB if scraped recently.                                 | User, Admin   |
