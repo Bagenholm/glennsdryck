@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "trip")
-@Data
+//@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,16 +20,14 @@ import java.util.Set;
 public class TripEntity implements Serializable {
 
 
-    //TODO: Sätta @Column(name = {name}) på alla fält?   t.ex. name = trip_id   eller  min_travelling_time
-    //TODO: behövs @MapsId??    för composite keys    eller är detta bara när man behöver en till separat klass? i databasen
-    //TODO: ...räknas TripId som en sån extra klass?   den separata klassen ska va typ om relationen mellan 2 entiteter ska ha ett attribut
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
 
     private static final long serialVersionUID = 1L;
 
-   // @EmbeddedId
     private TripId tripId;
-    @Id
     @Column(name = "trip_city")
     private String city;
 
@@ -45,7 +43,6 @@ public class TripEntity implements Serializable {
     private double maxTripCharges;
     private int minCapacityInKilos;
     private int maxCapacityInKilos;
-
 
    /* @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "myId", referencedColumnName = "myId")
@@ -69,12 +66,7 @@ public class TripEntity implements Serializable {
         this.maxCapacityInKilos = maxCapacityInKilos;
 
         this.city = tripId.getEndPoint();
-        //TODO: Ta bort?
-        //this.id = startPoint + "-" + endPoint + "-" + tripInfo + "-" + wayOfTravel;  //TODO: Enums för resväg?
-        //TODO: använda en egen string för key??  typ göteborg-helsingör-puttgarden
-        //TODO: använda nån förkortning som id så de inte blir så långt
-        // ...eller bara ta emot en förkortning eller siffra eller nåt som alternativ av användaren som sedan hanteras
-        // ...av den servicen för att hämta ut med de långa id:t
+
     }
 
     @PreRemove
@@ -88,7 +80,7 @@ public class TripEntity implements Serializable {
     public void addStore(StoreEntity storeEntity) {
 
         this.stores.add(storeEntity);
-        storeEntity.getTrips().add(this);
+       // storeEntity.getTrips().add(this);
     }
 
     public void removeStore(StoreEntity storeEntity) {

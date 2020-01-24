@@ -29,7 +29,7 @@ public class TripController {
     }
 
     @GetMapping("/")
-    public List<TripEntity> listAllTrips() {
+    public List<TripModel> listAllTrips() {
 
         try {
             List<TripEntity> trips = tripService.listAllTrips();

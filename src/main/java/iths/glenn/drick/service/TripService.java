@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface TripService {
 
-    List<TripEntity> listAllTrips();
+    List<TripModel> listAllTrips();
     List<TripModel> listAllTripsToDestination(String destination);
     TripModel getTripById(Map<String, String> tripId);
     TripModel addTrip(TripEntity tripEntity);

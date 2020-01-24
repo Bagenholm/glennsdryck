@@ -33,9 +33,7 @@ public class TripServiceImplementation implements TripService {
         put("wine", 90);
         put("fortified wine", 20);
         put("beer", 110);
-    }};
-
-    double fuelConsumptionLitrePerMile;*/
+    }};*/
 
 
     public TripServiceImplementation(TripStorage tripStorage, StoreStorage storeStorage) {
@@ -43,8 +41,7 @@ public class TripServiceImplementation implements TripService {
         this.storeStorage = storeStorage;
     }
 
-    @Override
-    public List<TripEntity> listAllTrips() {
+    public List<TripEntity> getAllTripEntities() {
 
         List<TripEntity> tripEntityList = tripStorage.findAll();
 
@@ -55,11 +52,17 @@ public class TripServiceImplementation implements TripService {
         return tripEntityList;
     }
 
-    //TODO: Skapa metod i tripStorage istället
+    @Override
+    public List<TripModel> listAllTrips() {
+
+        List<TripEntity> tripEntityList = getAllTripEntities();
+        return EntityModelConverter.tripListToModel(tripEntityList);
+    }
+
     @Override
     public List<TripModel> listAllTripsToDestination(String destination) {
 
-        List<TripEntity> tripEntityList = listAllTrips();
+        List<TripEntity> tripEntityList = getAllTripEntities();
 
         List<TripEntity> tripsToDestination = tripEntityList.stream()
                 .filter(tripEntity -> tripEntity.getTripId().getEndPoint().equals(destination))
@@ -69,14 +72,14 @@ public class TripServiceImplementation implements TripService {
             throw new DestinationDontExistException(String.format("Destination: %s do not exist", destination));
         }
 
-        return EntityModelConverter.tripListToModel(tripsToDestination);  //TODO: TripEntityModelConverter static eller instans VÄLJ!!
+        return EntityModelConverter.tripListToModel(tripsToDestination);
     }
 
     @Override
     public TripModel getTripById(Map<String, String> tripIdInput) {
 
         TripId tripId = convertMapToTripId(tripIdInput);
-        List<TripEntity> tripEntityList = listAllTrips();
+        List<TripEntity> tripEntityList = getAllTripEntities();
 
         for (TripEntity tripEntity : tripEntityList) {
 
@@ -109,7 +112,7 @@ public class TripServiceImplementation implements TripService {
     public void removeTrip(Map<String, String> tripIdInput) {
 
         TripId tripId = convertMapToTripId(tripIdInput);
-        List<TripEntity> tripEntityList = listAllTrips();
+        List<TripEntity> tripEntityList = getAllTripEntities();
 
         for (TripEntity tripEntity : tripEntityList) {
 
@@ -143,7 +146,7 @@ public class TripServiceImplementation implements TripService {
     public TripModel updateTripPartially(Map<String, String> tripIdInput, UpdateTripRequest updateTripRequest) {
 
         TripId tripId = convertMapToTripId(tripIdInput);
-        List<TripEntity> tripEntityList = listAllTrips();
+        List<TripEntity> tripEntityList = getAllTripEntities();
         TripEntity tripToUpdate;
         TripEntity updatedTrip;
 
@@ -167,8 +170,8 @@ public class TripServiceImplementation implements TripService {
 
         for (StoreEntity storeEntity : storeEntityList) {
 
-            if(storeEntity.getCity().equals(tripEntity.getTripId().getEndPoint())) {
-                tripEntity.addStore(storeEntity);
+            if(storeEntity.getCity().equals(tripEntity.getCity())) {   //TODO: getTripId().getEndPoint()
+                storeEntity.addTrip(tripEntity);
             }
         }
 
