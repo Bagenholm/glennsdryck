@@ -29,7 +29,9 @@ MySQL and RabbitMQ running on default ports. Use root/root for MySQL and guest/g
 | /drinks/apk/{type}/{limit}                                          | GET    | Fetches {limit} amount of drinks by {type}.                                             | All           |
 | /drinks/name/{name}                                                 | GET    | Fetches drinks containing {name}.                                                       | All           |
 | /trips                                                              | GET    | Fetches all trips, or populates with pre-made trips if empty.                           | User, Admin   |
-| /trips/destination/{destination}                                    | GET    | Fetches all trips to {destination}                                                      | User, Admin   |
+| /trips/destination/{destination}                                    | GET    | Fetches all trips to {destination}  .                                                    | User, Admin   |
+| /trips/{startpoint}/{endpoint}/{tripinfo}/{wayoftravel}             | GET    | Get trip by tripId.
+                                 | User, Admin   |
 | /trips                                                              | POST   | Adds trip.                                                                              | Admin         |
 | /trips/{startpoint}/{endpoint}/{tripinfo}/{wayoftravel}             | DELETE | Deletes trip matching the parameters.                                                   | Admin         |
 | /trips/{startpoint}/{endpoint}/{tripinfo}/{wayoftravel}             | PUT    | Replaces trip matching the parameters with Json body.                                   | Admin         |
@@ -37,3 +39,9 @@ MySQL and RabbitMQ running on default ports. Use root/root for MySQL and guest/g
 | /calculate/drunkPrice/{username}/{drunks}/{fetchAmount}             | GET    | {fetchAmount} from stores, returns user's cheapest way to get {drunks}.                 | User, Admin   |
 | /calculate/drunksForBudget/{username}/{budget}/{fetchAmount}        | GET    | {fetchAmount} from stores, returns user's amount of drunks based on {budget}.           | User, Admin   |
 | /calculate/drunksForBudget/{username}/{budget}/{fetchAmount}/{type} | GET    | {fetchAmount} of {type} from stores, returns user's amount of drunks based on {budget}. | User, Admin   |
+| /store                                                              | GET    | Fetches all stores.
+                                    | All           |          
+| /store/city/{city}                                                  | GET    | Fetches all stores placed in {city}.                                                       | All           |
+| /store/{storeName}                                                  | GET    | Get store by {storeName}.
+                                    | All           |
+| /store                                                              | PATCH  | Create joins between all stores and trips.
