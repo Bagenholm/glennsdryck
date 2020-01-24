@@ -27,7 +27,7 @@ public class CalculateController {
     @Autowired
     TripService tripService;
 
-    @GetMapping("/drunkPrice/user/{username}/drunks/{drunks}/fetchAmount/{fetchAmount}")
+    @GetMapping("/drunkPrice/{username}/{drunks}/{fetchAmount}")
     public List<ResultEntity> drunkPrice(@PathVariable String username, @PathVariable int drunks, @PathVariable int fetchAmount){
         try {
             return calculator.priceForDrunks(username, drunks, fetchAmount);
@@ -43,7 +43,7 @@ public class CalculateController {
         }
     }
 
-    @GetMapping("/drunksForBudget/user/{username}/budget/{budget}/fetchAmount/{fetchAmount}")
+    @GetMapping("/drunksForBudget/{username}/{budget}/{fetchAmount}")
     public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int fetchAmount){
         try {
             return calculator.drunksForBudget(username, budget, fetchAmount);
@@ -59,7 +59,7 @@ public class CalculateController {
         }
     }
 
-    @GetMapping("/drunksForBudget/user/{username}/budget/{budget}/fetchAmount/{fetchAmount}/type/{type}")
+    @GetMapping("/drunksForBudget/{username}/{budget}/{fetchAmount}/{type}")
     public List<ResultEntity> drunksForBudget(@PathVariable String username, @PathVariable int budget, @PathVariable int fetchAmount, @PathVariable String type){
         return calculator.drunksForBudgetByType(username, budget, fetchAmount, type);
     }
