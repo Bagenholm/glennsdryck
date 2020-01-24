@@ -14,8 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +27,7 @@ public class TripController {
         this.tripService = tripService;
     }
 
-    @Scheduled(fixedDelay = 1780000000, initialDelay = 1) //Want trips populated from the start
+    @Scheduled(fixedDelay = 1780000000, initialDelay = 1)
     @GetMapping("")
     public List<TripEntity> listAllTrips() {
 

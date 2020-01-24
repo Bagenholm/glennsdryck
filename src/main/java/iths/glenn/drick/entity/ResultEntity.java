@@ -24,7 +24,6 @@ public class ResultEntity {
     double drinkPrice;
     double priceToGetDrunk;
     double totalDrunks;
-    int amountOfDrunksForPrice;
     double cheapestTravelPrice;
     double cheapestTravelTime;
     double totalDrinkVolume;

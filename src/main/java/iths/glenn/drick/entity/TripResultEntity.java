@@ -32,7 +32,7 @@ public class TripResultEntity {
     }
 
     private String getTravelDescription(TripEntity trip){
-        return "To: " + trip.getTripId().getEndPoint() + " Transportation: " + trip.getTripId().getWayOfTravel() +
-                " Other: " + trip.getTripId().getTripInfo();
+        return "To: " + trip.getTripId().getEndPoint() + ", Transportation: " + trip.getTripId().getWayOfTravel() +
+                ", Other: " + trip.getTripId().getTripInfo();
     }
 }
