@@ -29,5 +29,5 @@ public class TripModel {
     double maxTripCharges;
     int minCapacityInKilos;
     int maxCapacityInKilos;
-    List<StoreModel> stores = new ArrayList<>();
+    List<String> stores = new ArrayList<>();
 }

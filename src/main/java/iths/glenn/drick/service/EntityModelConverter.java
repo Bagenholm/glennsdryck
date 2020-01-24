@@ -2,6 +2,7 @@ package iths.glenn.drick.service;
 
 import iths.glenn.drick.entity.StoreEntity;
 import iths.glenn.drick.entity.TripEntity;
+import iths.glenn.drick.entity.TripId;
 import iths.glenn.drick.model.StoreModel;
 import iths.glenn.drick.model.TripModel;
 
@@ -13,7 +14,7 @@ public class EntityModelConverter {
     public static TripModel tripEntityToModel(TripEntity tripEntity) {
 
         TripModel tripModel = new TripModel();
-        List<StoreModel> stores = new ArrayList<>();
+        List<String> stores = new ArrayList<>();
 
         tripModel.setStartPoint(tripEntity.getTripId().getStartPoint());
         tripModel.setEndPoint(tripEntity.getTripId().getEndPoint());
@@ -28,7 +29,7 @@ public class EntityModelConverter {
         tripModel.setMinCapacityInKilos(tripEntity.getMinCapacityInKilos());
         tripModel.setMaxCapacityInKilos(tripEntity.getMaxCapacityInKilos());
 
-        tripEntity.getStores().forEach(storeEntity -> stores.add(storeEntityToModel(storeEntity)));
+        tripEntity.getStores().forEach(storeEntity -> stores.add(storeEntity.getStoreName()));
         tripModel.setStores(stores);
 
         return tripModel;
@@ -45,13 +46,13 @@ public class EntityModelConverter {
     public static StoreModel storeEntityToModel(StoreEntity storeEntity) {
 
         StoreModel storeModel = new StoreModel();
-        List<TripModel> trips = new ArrayList<>();
+        List<TripId> trips = new ArrayList<>();
 
         storeModel.setStoreName(storeEntity.getStoreName());
         storeModel.setCurrency(storeEntity.getCurrency());
         storeModel.setCity(storeEntity.getCity());
 
-        storeEntity.getTrips().forEach(tripEntity -> trips.add(tripEntityToModel(tripEntity)));
+        storeEntity.getTrips().forEach(tripEntity -> trips.add(tripEntity.getTripId()));
         storeModel.setTrips(trips);
         return storeModel;
     }
